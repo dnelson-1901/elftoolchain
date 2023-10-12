@@ -328,8 +328,10 @@ struct _Dwarf_CU {
 	int		cu_abbrev_loaded; /* Abbrev table parsed. */
 	uint64_t	cu_abbrev_cnt;	/* Abbrev entry count. */
 	uint64_t	cu_lineno_offset; /* Offset into .debug_lineno. */
+	uint64_t	cu_dwo_id;	/* DWARF5 dwo id. */
 	uint8_t		cu_pointer_size;/* Number of bytes in pointer. */
 	uint8_t		cu_dwarf_size;	/* CU section dwarf size. */
+	uint8_t		cu_unit_type;	/* DWARF5 unit type. */
 	Dwarf_Sig8	cu_type_sig;	/* Type unit's signature. */
 	uint64_t	cu_type_offset; /* Type unit's type offset. */
 	Dwarf_Off	cu_next_offset; /* Offset to the next CU. */
