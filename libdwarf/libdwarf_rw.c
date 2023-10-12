@@ -155,7 +155,6 @@ _dwarf_decode_msb(uint8_t **data, int bytes_to_read)
 		break;
 	default:
 		return (0);
-		break;
 	}
 
 	*data += bytes_to_read;
