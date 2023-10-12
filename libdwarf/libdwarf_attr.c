@@ -148,10 +148,12 @@ _dwarf_attr_init(Dwarf_Debug dbg, Dwarf_Section *ds, uint64_t *offsetp,
 		break;
 	case DW_FORM_data4:
 	case DW_FORM_ref4:
+	case DW_FORM_ref_sup4:
 		atref.u[0].u64 = dbg->read(ds->ds_data, offsetp, 4);
 		break;
 	case DW_FORM_data8:
 	case DW_FORM_ref8:
+	case DW_FORM_ref_sup8:
 		atref.u[0].u64 = dbg->read(ds->ds_data, offsetp, 8);
 		break;
 	case DW_FORM_indirect:
@@ -168,6 +170,8 @@ _dwarf_attr_init(Dwarf_Debug dbg, Dwarf_Section *ds, uint64_t *offsetp,
 		break;
 	case DW_FORM_ref_udata:
 	case DW_FORM_udata:
+	case DW_FORM_loclistx:
+	case DW_FORM_rnglistx:
 		atref.u[0].u64 = _dwarf_read_uleb128(ds->ds_data, offsetp);
 		break;
 	case DW_FORM_sdata:
@@ -193,6 +197,65 @@ _dwarf_attr_init(Dwarf_Debug dbg, Dwarf_Section *ds, uint64_t *offsetp,
 		/* This form has no value encoded in the DIE. */
 		atref.u[0].u64 = 1;
 		break;
+	case DW_FORM_strx:
+		atref.u[0].u64 = _dwarf_read_uleb128(ds->ds_data, offsetp);
+		/* TODO: .debug_str_offsets */
+		break;
+	case DW_FORM_addrx:
+		atref.u[0].u64 = _dwarf_read_uleb128(ds->ds_data, offsetp);
+		/* TODO: .debug_addr */
+		break;
+	case DW_FORM_strp_sup:
+		atref.u[0].u64 = dbg->read(ds->ds_data, offsetp, dwarf_size);
+		/* TODO: supplementary object file. */
+		break;
+	case DW_FORM_data16:
+		/* 128bit read not yet supported. TODO. */
+		atref.u[0].u64 = 0;
+		*offsetp += 16;
+		break;
+	case DW_FORM_line_strp:
+		atref.u[0].u64 = dbg->read(ds->ds_data, offsetp, dwarf_size);
+		/* TODO: the string is in .debug_line_str table */
+		break;
+	case DW_FORM_implicit_const:
+		/* DWARF5 7.5.3 Implicit constant stored in attrdef.
+		   This form has no value encoded in the DIE. */
+		atref.u[0].s64 = ad->ad_const;
+		break;
+	case DW_FORM_strx1:
+		atref.u[0].u64 = dbg->read(ds->ds_data, offsetp, 1);
+		/* TODO: .debug_str_offsets */
+		break;
+	case DW_FORM_strx2:
+		atref.u[0].u64 = dbg->read(ds->ds_data, offsetp, 1);
+		/* TODO: .debug_str_offsets */
+		break;
+	case DW_FORM_strx3:
+		atref.u[0].u64 = dbg->read(ds->ds_data, offsetp, 3);
+		/* TODO: .debug_str_offsets */
+		break;
+	case DW_FORM_strx4:
+		atref.u[0].u64 = dbg->read(ds->ds_data, offsetp, 4);
+		/* TODO: .debug_str_offsets */
+		break;
+	case DW_FORM_addrx1:
+		atref.u[0].u64 = dbg->read(ds->ds_data, offsetp, 1);
+		/* TODO: .debug_addr */
+		break;
+	case DW_FORM_addrx2:
+		atref.u[0].u64 = dbg->read(ds->ds_data, offsetp, 2);
+		/* TODO: .debug_addr */
+		break;
+	case DW_FORM_addrx3:
+		atref.u[0].u64 = dbg->read(ds->ds_data, offsetp, 3);
+		/* TODO: .debug_addr */
+		break;
+	case DW_FORM_addrx4:
+		atref.u[0].u64 = dbg->read(ds->ds_data, offsetp, 4);
+		/* TODO: .debug_addr */
+		break;
+
 	default:
 		DWARF_SET_ERROR(dbg, error, DW_DLE_ATTR_FORM_BAD);
 		ret = DW_DLE_ATTR_FORM_BAD;
