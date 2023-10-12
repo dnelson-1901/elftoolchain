@@ -65,7 +65,8 @@ _dwarf_abbrev_add(Dwarf_CU cu, uint64_t entry, uint64_t tag, uint8_t children,
 
 int
 _dwarf_attrdef_add(Dwarf_Debug dbg, Dwarf_Abbrev ab, uint64_t attr,
-    uint64_t form, uint64_t adoff, Dwarf_AttrDef *adp, Dwarf_Error *error)
+    uint64_t form, int64_t ic, uint64_t adoff, Dwarf_AttrDef *adp,
+    Dwarf_Error *error)
 {
 	Dwarf_AttrDef ad;
 
@@ -82,6 +83,7 @@ _dwarf_attrdef_add(Dwarf_Debug dbg, Dwarf_Abbrev ab, uint64_t attr,
 	/* Initialise the attribute definition structure. */
 	ad->ad_attrib	= attr;
 	ad->ad_form	= form;
+	ad->ad_const	= ic;
 	ad->ad_offset	= adoff;
 
 	/* Add the attribute definition to the list in the abbrev. */
@@ -107,6 +109,7 @@ _dwarf_abbrev_parse(Dwarf_Debug dbg, Dwarf_CU cu, Dwarf_Unsigned *offset,
 	uint64_t aboff;
 	uint64_t adoff;
 	uint64_t tag;
+	int64_t ic;
 	uint8_t children;
 	int ret;
 
@@ -140,9 +143,19 @@ _dwarf_abbrev_parse(Dwarf_Debug dbg, Dwarf_CU cu, Dwarf_Unsigned *offset,
 		adoff = *offset;
 		attr = _dwarf_read_uleb128(ds->ds_data, offset);
 		form = _dwarf_read_uleb128(ds->ds_data, offset);
+		if (form == DW_FORM_implicit_const) {
+			/*
+			 * DWARF5 7.5.3: atrribute definition with the form
+			 * DW_FORM_implicit_const contains a third part, a
+			 * signed LEB128 value indicating a constant value.
+			 * No value is needed to store in the .debug_info
+			 * as a result.
+			 */
+			ic = _dwarf_read_sleb128(ds->ds_data, offset);
+		}
 		if (attr != 0)
 			if ((ret = _dwarf_attrdef_add(dbg, *abp, attr,
-			    form, adoff, NULL, error)) != DW_DLE_NONE)
+			    form, ic, adoff, NULL, error)) != DW_DLE_NONE)
 				return (ret);
 	} while (attr != 0);
 

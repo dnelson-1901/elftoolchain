@@ -95,6 +95,7 @@ struct _Dwarf_AttrDef {
 	Dwarf_Half	ad_attrib;		/* DW_AT_XXX */
 	Dwarf_Half	ad_form;		/* DW_FORM_XXX */
 	uint64_t	ad_offset;		/* Offset in abbrev section. */
+	int64_t		ad_const;		/* Implicit constant */
 	STAILQ_ENTRY(_Dwarf_AttrDef) ad_next;	/* Next attribute define. */
 };
 
@@ -506,7 +507,8 @@ int		_dwarf_attr_init(Dwarf_Debug, Dwarf_Section *, uint64_t *, int,
 		    Dwarf_CU, Dwarf_Die, Dwarf_AttrDef, uint64_t, int,
 		    Dwarf_Error *);
 int		_dwarf_attrdef_add(Dwarf_Debug, Dwarf_Abbrev, uint64_t,
-		    uint64_t, uint64_t, Dwarf_AttrDef *, Dwarf_Error *);
+		    uint64_t, int64_t, uint64_t, Dwarf_AttrDef *,
+		    Dwarf_Error *);
 uint64_t	_dwarf_decode_lsb(uint8_t **, int);
 uint64_t	_dwarf_decode_msb(uint8_t **, int);
 int64_t		_dwarf_decode_sleb128(uint8_t **);
