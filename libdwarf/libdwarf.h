@@ -1,6 +1,6 @@
 /*-
  * Copyright (c) 2007 John Birrell (jb@freebsd.org)
- * Copyright (c) 2009-2011,2014 Kai Wang
+ * Copyright (c) 2009-2011,2014,2023 Kai Wang
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -599,6 +599,7 @@ int		dwarf_get_MACINFO_name(unsigned, const char **);
 int		dwarf_get_OP_name(unsigned, const char **);
 int		dwarf_get_ORD_name(unsigned, const char **);
 int		dwarf_get_TAG_name(unsigned, const char **);
+int		dwarf_get_UT_name(unsigned, const char **);
 int		dwarf_get_VIRTUALITY_name(unsigned, const char **);
 int		dwarf_get_VIS_name(unsigned, const char **);
 int		dwarf_get_abbrev(Dwarf_Debug, Dwarf_Unsigned, Dwarf_Abbrev *,
