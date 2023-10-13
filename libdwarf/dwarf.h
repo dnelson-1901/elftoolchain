@@ -283,9 +283,9 @@
 #define	DW_AT_call_all_calls		0x7a
 #define	DW_AT_call_all_source_calls	0x7b
 #define	DW_AT_call_all_tail_calls	0x7c
-#define	DW_AT_call_all_return_pc	0x7d
-#define	DW_AT_call_all_value		0x7e
-#define	DW_AT_call_all_origin		0x7f
+#define	DW_AT_call_return_pc		0x7d
+#define	DW_AT_call_value		0x7e
+#define	DW_AT_call_origin		0x7f
 #define	DW_AT_call_parameter		0x80
 #define	DW_AT_call_pc			0x81
 #define	DW_AT_call_tail_call		0x82
