@@ -1,6 +1,6 @@
 /*-
  * Copyright (c) 2007 John Birrell (jb@freebsd.org)
- * Copyright (c) 2010,2011,2014 Kai Wang
+ * Copyright (c) 2010,2011,2014,2023 Kai Wang
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -224,7 +224,7 @@ _dwarf_info_load(Dwarf_Debug dbg, Dwarf_Bool load_all, Dwarf_Bool is_info,
 			    dwarf_size);
 		} else {
 			/* DWARF4 or lower. */
-			cu->cu_unit_type = 0;
+			cu->cu_unit_type = is_info ? DW_UT_compile : DW_UT_type;
 			cu->cu_abbrev_offset = dbg->read(ds->ds_data, &offset,
 			    dwarf_size);
 			cu->cu_pointer_size = dbg->read(ds->ds_data, &offset,
