@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2009-2015 Kai Wang
+ * Copyright (c) 2009-2018,2023 Kai Wang
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -5270,14 +5270,15 @@ dump_dwarf_info(struct readelf *re, Dwarf_Bool is_info)
 	struct section *s;
 	Dwarf_Die die;
 	Dwarf_Error de;
-	Dwarf_Half tag, version, pointer_size, off_size;
+	Dwarf_Half tag, version, pointer_size, off_size, cu_type;
 	Dwarf_Off cu_offset, cu_length;
 	Dwarf_Off aboff;
 	Dwarf_Unsigned typeoff;
 	Dwarf_Sig8 sig8;
 	Dwarf_Unsigned sig;
 	uint8_t *p;
-	const char *sn;
+	const char *sn, *ut;
+	char unk_ut[32];
 	int i, ret;
 
 	sn = is_info ? ".debug_info" : ".debug_types";
@@ -5294,9 +5295,9 @@ dump_dwarf_info(struct readelf *re, Dwarf_Bool is_info)
 	do {
 		printf("\nDump of debug contents of section %s:\n", sn);
 
-		while ((ret = dwarf_next_cu_header_c(re->dbg, is_info, NULL,
+		while ((ret = dwarf_next_cu_header_d(re->dbg, is_info, NULL,
 		    &version, &aboff, &pointer_size, &off_size, NULL, &sig8,
-		    &typeoff, NULL, &de)) == DW_DLV_OK) {
+		    &typeoff, NULL, &cu_type, &de)) == DW_DLV_OK) {
 			set_cu_context(re, pointer_size, off_size, version);
 			die = NULL;
 			while (dwarf_siblingof_b(re->dbg, die, &die, is_info,
@@ -5335,11 +5336,22 @@ dump_dwarf_info(struct readelf *re, Dwarf_Bool is_info)
 				sig = re->dw_decode(&p, 8);
 			}
 
-			printf("\n  Type Unit @ offset 0x%jx:\n",
+			printf("\n  %s Unit @ offset 0x%jx:\n",
+			    is_info ? "Compilation" : "Type",
 			    (uintmax_t) cu_offset);
 			printf("    Length:\t\t%#jx (%d-bit)\n",
 			    (uintmax_t) cu_length, off_size == 4 ? 32 : 64);
 			printf("    Version:\t\t%u\n", version);
+			if (version == 5) {
+				if (dwarf_get_UT_name(cu_type, &ut) !=
+				    DW_DLV_OK) {
+					snprintf(unk_ut, sizeof(unk_ut),
+					    "[Unknown UT: %#x]", cu_type);
+					ut = unk_ut;
+				}
+				printf("    Unit Type:\t\t%s (%u)\n",
+				    ut, cu_type);
+			}
 			printf("    Abbrev Offset:\t0x%jx\n",
 			    (uintmax_t) aboff);
 			printf("    Pointer Size:\t%u\n", pointer_size);
