@@ -1,6 +1,6 @@
 /*-
  * Copyright (c) 2007 John Birrell (jb@freebsd.org)
- * Copyright (c) 2009-2014 Kai Wang
+ * Copyright (c) 2009-2014,2023 Kai Wang
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -430,6 +430,7 @@ struct _Dwarf_Debug {
 	char		*dbg_strtab;	/* Dwarf string table. */
 	Dwarf_Unsigned	dbg_strtab_cap; /* Dwarf string table capacity. */
 	Dwarf_Unsigned	dbg_strtab_size; /* Dwarf string table size. */
+	char		*dbg_line_strtab;/* Dwarf line info string table. */
 	STAILQ_HEAD(, _Dwarf_MacroSet) dbg_mslist; /* List of macro set. */
 	STAILQ_HEAD(, _Dwarf_Rangelist) dbg_rllist; /* List of rangelist. */
 	uint64_t	(*read)(uint8_t *, uint64_t *, int);
@@ -643,6 +644,7 @@ int		_dwarf_strtab_add(Dwarf_Debug, char *, uint64_t *,
 void		_dwarf_strtab_cleanup(Dwarf_Debug);
 int		_dwarf_strtab_gen(Dwarf_P_Debug, Dwarf_Error *);
 char		*_dwarf_strtab_get_table(Dwarf_Debug);
+char		*_dwarf_strtab_get_line_table(Dwarf_Debug);
 int		_dwarf_strtab_init(Dwarf_Debug, Dwarf_Error *);
 void		_dwarf_type_unit_cleanup(Dwarf_Debug);
 void		_dwarf_write_block(void *, uint64_t *, uint8_t *, uint64_t);

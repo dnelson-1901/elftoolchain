@@ -1,6 +1,6 @@
 /*-
  * Copyright (c) 2007 John Birrell (jb@freebsd.org)
- * Copyright (c) 2009-2011 Kai Wang
+ * Copyright (c) 2009-2011,2023 Kai Wang
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -216,7 +216,8 @@ _dwarf_attr_init(Dwarf_Debug dbg, Dwarf_Section *ds, uint64_t *offsetp,
 		break;
 	case DW_FORM_line_strp:
 		atref.u[0].u64 = dbg->read(ds->ds_data, offsetp, dwarf_size);
-		/* TODO: the string is in .debug_line_str table */
+		atref.u[1].s = _dwarf_strtab_get_line_table(dbg) +
+		    atref.u[0].u64;
 		break;
 	case DW_FORM_implicit_const:
 		/* DWARF5 7.5.3 Implicit constant stored in attrdef.

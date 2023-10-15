@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2009,2010 Kai Wang
+ * Copyright (c) 2009,2010,2023 Kai Wang
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -68,6 +68,15 @@ _dwarf_strtab_get_table(Dwarf_Debug dbg)
 	return (dbg->dbg_strtab);
 }
 
+char *
+_dwarf_strtab_get_line_table(Dwarf_Debug dbg)
+{
+
+	assert(dbg != NULL);
+
+	return (dbg->dbg_line_strtab);
+}
+
 int
 _dwarf_strtab_init(Dwarf_Debug dbg, Dwarf_Error *error)
 {
@@ -94,6 +103,11 @@ _dwarf_strtab_init(Dwarf_Debug dbg, Dwarf_Error *error)
 			memcpy(dbg->dbg_strtab, ds->ds_data, ds->ds_size);
 		} else
 			dbg->dbg_strtab = (char *) ds->ds_data;
+
+		ds = _dwarf_find_section(dbg, ".debug_line_str");
+		if (ds != NULL) {
+			dbg->dbg_line_strtab = (char *) ds->ds_data;
+		}
 	} else {
 		/* DW_DLC_WRITE */
 

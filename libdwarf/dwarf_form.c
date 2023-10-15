@@ -1,6 +1,6 @@
 /*-
  * Copyright (c) 2007 John Birrell (jb@freebsd.org)
- * Copyright (c) 2009,2010 Kai Wang
+ * Copyright (c) 2009,2010,2023 Kai Wang
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -387,6 +387,7 @@ dwarf_formstring(Dwarf_Attribute at, char **return_string,
 		ret = DW_DLV_OK;
 		break;
 	case DW_FORM_strp:
+	case DW_FORM_line_strp:
 		*return_string = (char *) at->u[1].s;
 		ret = DW_DLV_OK;
 		break;
