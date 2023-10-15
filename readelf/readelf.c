@@ -217,6 +217,11 @@ struct mips_option {
 	const char *desc;
 };
 
+struct lnct {
+	unsigned type;
+	unsigned form;
+};
+
 static void add_dumpop(struct readelf *re, size_t si, const char *sn, int op,
     int t);
 static const char *aeabi_adv_simd_arch(uint64_t simd);
@@ -4646,42 +4651,425 @@ dwarf_regname(struct readelf *re, unsigned int num)
 	return (rx);
 }
 
+static const char *
+get_lnct_path(struct readelf *re, unsigned form, uint8_t **p, const char *st,
+    const char *ls, int dwarf_size)
+{
+	const char *s = NULL;
+	Dwarf_Unsigned sp;
+
+	switch (form) {
+	case DW_FORM_string:
+		s = (char *) *p;
+		*p += strlen((char *) *p) + 1;
+		break;
+	case DW_FORM_strp:
+		sp = re->dw_decode(p, dwarf_size);
+		if (st == NULL) {
+			warnx(".debug_str not present");
+			break;
+		}
+		s = st + sp;
+		break;
+	case DW_FORM_line_strp:
+		sp = re->dw_decode(p, dwarf_size);
+		if (ls == NULL) {
+			warnx(".debug_line_str not present");
+			break;
+		}
+		s = ls + sp;
+		break;
+	case DW_FORM_strp_sup:
+		sp = re->dw_decode(p, dwarf_size);
+		warnx("DW_FORM_strp_sup not supported");
+		break;
+	default:
+		warnx("Unrecgonized Form: %u", form);
+		break;
+	}
+
+	return (s);
+}
+
+static Dwarf_Unsigned
+get_lnct_dirndx(struct readelf *re, unsigned form, uint8_t **p, uint8_t *pe)
+{
+
+	switch (form) {
+	case DW_FORM_data1:
+		return (re->dw_decode(p, 1));
+	case DW_FORM_data2:
+		return (re->dw_decode(p, 2));
+	case DW_FORM_udata:
+		return (_decode_uleb128(p, pe));
+	default:
+		warnx("Unrecgonized Form: %u", form);
+		return (0);
+	}
+}
+
+static void
+dump_dwarf_line_cu(struct readelf *re, Elf_Data *d, Elf_Data *ds, Elf_Data *dl,
+    Dwarf_Unsigned offset, Dwarf_Unsigned length, int dwarf_size)
+{
+	struct lnct lnct[10];
+	Dwarf_Unsigned endoff, hdrlen, dirndx, mtime, fsize;
+	Dwarf_Half version, pointer_size;
+	Dwarf_Small minlen, maxop, defstmt, lrange, opbase, oplen;
+	Dwarf_Error de;
+	uint64_t address, file, line, column, isa, opsize, udelta;
+	int64_t sdelta;
+	uint8_t *p, *pp, *pe;
+	char *pn, *st, *ls;
+	const char *path;
+	int8_t lbase;
+	int i, j, is_stmt, fmt_cnt, dir_cnt, file_cnt;
+
+	st = ds ? (char *) ds->d_buf : NULL;
+	ls = dl ? (char *) dl->d_buf : NULL;
+	endoff = offset + length;
+	pe = (uint8_t *) d->d_buf + endoff;
+	version = re->dw_read(d, &offset, 2);
+	if (version == 5) {
+		pointer_size = re->dw_read(d, &offset, 1);
+		(void) re->dw_read(d, &offset, 1);
+	} else {
+		(void) dwarf_get_address_size(re->dbg, &pointer_size, &de);
+	}
+	hdrlen = re->dw_read(d, &offset, dwarf_size);
+	minlen = re->dw_read(d, &offset, 1);
+	if (version >= 4)
+		maxop = re->dw_read(d, &offset, 1);
+	defstmt = re->dw_read(d, &offset, 1);
+	lbase = re->dw_read(d, &offset, 1);
+	lrange = re->dw_read(d, &offset, 1);
+	opbase = re->dw_read(d, &offset, 1);
+
+	printf("\n");
+	printf("  Length:\t\t\t%ju\n", (uintmax_t) length);
+	printf("  DWARF version:\t\t%u\n", version);
+	printf("  Prologue Length:\t\t%ju\n", (uintmax_t) hdrlen);
+	printf("  Minimum Instruction Length:\t%u\n", minlen);
+	if (version >= 4)
+		printf("  Maximum Ops per Instruction:\t%u\n", maxop);
+	printf("  Initial value of 'is_stmt':\t%u\n", defstmt);
+	printf("  Line Base:\t\t\t%d\n", lbase);
+	printf("  Line Range:\t\t\t%u\n", lrange);
+	printf("  Opcode Base:\t\t\t%u\n", opbase);
+	printf("  (Pointer size:\t\t%u)\n", pointer_size);
+
+	printf("\n");
+	printf(" Opcodes:\n");
+	for (i = 1; i < opbase; i++) {
+		oplen = re->dw_read(d, &offset, 1);
+		printf("  Opcode %d has %u %s\n", i, oplen,
+		    oplen == 1 ? "arg" : "args");
+	}
+
+	if (version == 5) {
+		/* DWARF5. */
+		fmt_cnt = re->dw_read(d, &offset, 1);
+		if (fmt_cnt != 1) {
+			warnx("Too many content descriptors for dir");
+			return;
+		}
+		pp = p = (uint8_t *) d->d_buf + offset;
+		lnct[0].type = _decode_uleb128(&p, pe);
+		if (lnct[0].type != DW_LNCT_path) {
+			warnx("Invalid content descriptors for dir");
+			return;
+		}
+		lnct[0].form = _decode_uleb128(&p, pe);
+		dir_cnt = _decode_uleb128(&p, pe);
+		offset += p - pp;
+		pp = p;
+		printf("\n");
+		printf(" The Directory Table (offset %#jx):\n",
+		    (uintmax_t) offset);
+		for (i = 0; i < dir_cnt; i++) {
+			path = get_lnct_path(re, lnct[0].form, &p, st, ls,
+			    dwarf_size);
+			printf("  %d\t%s\n", i, path);
+		}
+
+	} else {
+		/* DWARF4 or below. */
+		printf("\n");
+		printf(" The Directory Table (offset %#jx):\n",
+		    (uintmax_t) offset);
+		pp = p = (uint8_t *) d->d_buf + offset;
+		i = 0;
+		while (*p != '\0') {
+			i++;
+			printf("  %d\t%s\n", i, (char *) p);
+			p += strlen((char *) p) + 1;
+		}
+		p++;
+	}
+
+	offset += p - pp;
+	pp = p;
+
+	if (version == 5) {
+		/* DWARF5. */
+		fmt_cnt = re->dw_read(d, &offset, 1);
+		pp = p = (uint8_t *) d->d_buf + offset;
+		for (i = 0; i < fmt_cnt; i++) {
+			lnct[i].type = _decode_uleb128(&p, pe);
+			lnct[i].form = _decode_uleb128(&p, pe);
+		}
+		file_cnt = _decode_uleb128(&p, pe);
+		offset += p - pp;
+		pp = p;
+		printf("\n");
+		printf(" The File Name Table (offset %#jx):\n",
+		    (uintmax_t) offset);
+		printf("  Entry\tDir\tName\n");
+		for (i = 0; i < file_cnt; i++) {
+			for (j = 0; j < fmt_cnt; j++) {
+				switch (lnct[j].type) {
+				case DW_LNCT_path:
+					path = get_lnct_path(re, lnct[j].form,
+					    &p, st, ls, dwarf_size);
+					break;
+				case DW_LNCT_directory_index:
+					dirndx = get_lnct_dirndx(re,
+					    lnct[j].form, &p, pe);
+					break;
+				default:
+					warnx("Unhandled type: %u",
+					    lnct[j].type);
+					break;
+				}
+			}
+			printf("  %d\t%ju\t%s\n", i, (uintmax_t) dirndx, path);
+		}
+	} else {
+		/* DWARF4 or below. */
+		printf("\n");
+		printf(" The File Name Table (offset %#jx):\n",
+		    (uintmax_t) offset);
+		printf("  Entry\tDir\tTime\tSize\tName\n");
+		i = 0;
+		while (*p != '\0') {
+			i++;
+			pn = (char *) p;
+			p += strlen(pn) + 1;
+			dirndx = _decode_uleb128(&p, pe);
+			mtime = _decode_uleb128(&p, pe);
+			fsize = _decode_uleb128(&p, pe);
+			printf("  %d\t%ju\t%ju\t%ju\t%s\n", i,
+			    (uintmax_t) dirndx, (uintmax_t) mtime,
+			    (uintmax_t) fsize, pn);
+		}
+		p++;
+	}
+
+#define	RESET_REGISTERS				\
+	do {					\
+		address	       = 0;		\
+		file	       = 1;		\
+		line	       = 1;		\
+		column	       = 0;		\
+		is_stmt	       = defstmt;	\
+	} while(0)
+
+#define	LINE(x) (lbase + (((x) - opbase) % lrange))
+#define	ADDRESS(x) ((((x) - opbase) / lrange) * minlen)
+
+	printf("\n");
+	printf(" Line Number Statements:\n");
+
+	RESET_REGISTERS;
+
+	while (p < pe) {
+
+		offset += p - pp;
+		pp = p;
+		printf("  [0x%08jx]" , (uintmax_t) offset);
+
+		if (*p == 0) {
+			/*
+			 * Extended Opcodes.
+			 */
+			p++;
+			opsize = _decode_uleb128(&p, pe);
+			printf("  Extended opcode %u: ", *p);
+			switch (*p) {
+			case DW_LNE_end_sequence:
+				p++;
+				RESET_REGISTERS;
+				printf("End of Sequence\n");
+				break;
+			case DW_LNE_set_address:
+				p++;
+				address = re->dw_decode(&p,
+				    pointer_size);
+				printf("set Address to %#jx\n",
+				    (uintmax_t) address);
+				break;
+			case DW_LNE_define_file:
+				p++;
+				pn = (char *) p;
+				p += strlen(pn) + 1;
+				dirndx = _decode_uleb128(&p, pe);
+				mtime = _decode_uleb128(&p, pe);
+				fsize = _decode_uleb128(&p, pe);
+				printf("define new file: %s\n", pn);
+				break;
+			default:
+				/* Unrecognized extened opcodes. */
+				p += opsize;
+				printf("unknown opcode\n");
+			}
+		} else if (*p > 0 && *p < opbase) {
+			/*
+			 * Standard Opcodes.
+			 */
+			switch(*p++) {
+			case DW_LNS_copy:
+				printf("  Copy\n");
+				break;
+			case DW_LNS_advance_pc:
+				udelta = _decode_uleb128(&p, pe) *
+					minlen;
+				address += udelta;
+				printf("  Advance PC by %ju to %#jx\n",
+				    (uintmax_t) udelta,
+				    (uintmax_t) address);
+				break;
+			case DW_LNS_advance_line:
+				sdelta = _decode_sleb128(&p, pe);
+				line += sdelta;
+				printf("  Advance Line by %jd to %ju\n",
+				    (intmax_t) sdelta,
+				    (uintmax_t) line);
+				break;
+			case DW_LNS_set_file:
+				file = _decode_uleb128(&p, pe);
+				printf("  Set File to %ju\n",
+				    (uintmax_t) file);
+				break;
+			case DW_LNS_set_column:
+				column = _decode_uleb128(&p, pe);
+				printf("  Set Column to %ju\n",
+				    (uintmax_t) column);
+				break;
+			case DW_LNS_negate_stmt:
+				is_stmt = !is_stmt;
+				printf("  Set is_stmt to %d\n", is_stmt);
+				break;
+			case DW_LNS_set_basic_block:
+				printf("  Set basic block flag\n");
+				break;
+			case DW_LNS_const_add_pc:
+				address += ADDRESS(255);
+				printf("  Advance PC by constant %ju"
+				    " to %#jx\n",
+				    (uintmax_t) ADDRESS(255),
+				    (uintmax_t) address);
+				break;
+			case DW_LNS_fixed_advance_pc:
+				udelta = re->dw_decode(&p, 2);
+				address += udelta;
+				printf("  Advance PC by fixed value "
+				    "%ju to %#jx\n",
+				    (uintmax_t) udelta,
+				    (uintmax_t) address);
+				break;
+			case DW_LNS_set_prologue_end:
+				printf("  Set prologue end flag\n");
+				break;
+			case DW_LNS_set_epilogue_begin:
+				printf("  Set epilogue begin flag\n");
+				break;
+			case DW_LNS_set_isa:
+				isa = _decode_uleb128(&p, pe);
+				printf("  Set isa to %ju\n",
+				    (uintmax_t) isa);
+				break;
+			default:
+				/* Unrecognized extended opcodes. */
+				printf("  Unknown extended opcode %u\n",
+				    *(p - 1));
+				break;
+			}
+
+		} else {
+			/*
+			 * Special Opcodes.
+			 */
+			line += LINE(*p);
+			address += ADDRESS(*p);
+			printf("  Special opcode %u: advance Address "
+			    "by %ju to %#jx and Line by %jd to %ju\n",
+			    *p - opbase, (uintmax_t) ADDRESS(*p),
+			    (uintmax_t) address, (intmax_t) LINE(*p),
+			    (uintmax_t) line);
+			p++;
+		}
+
+
+	}
+
+}
+
 static void
 dump_dwarf_line(struct readelf *re)
 {
 	struct section *s;
 	Dwarf_Die die;
 	Dwarf_Error de;
-	Dwarf_Half tag, version, pointer_size;
-	Dwarf_Unsigned offset, endoff, length, hdrlen, dirndx, mtime, fsize;
-	Dwarf_Small minlen, defstmt, lrange, opbase, oplen;
-	Elf_Data *d;
-	char *pn;
-	uint64_t address, file, line, column, isa, opsize, udelta;
-	int64_t sdelta;
-	uint8_t *p, *pe;
-	int8_t lbase;
-	int i, is_stmt, dwarf_size, elferr, ret;
+	Dwarf_Half tag;
+	Dwarf_Unsigned offset, length;
+	Elf_Data *d, *ds, *dl;
+	int elferr, ret, i, dwarf_size;
 
 	printf("\nDump of debug contents of section .debug_line:\n");
 
+	d = ds = dl = NULL;
 	s = NULL;
 	for (i = 0; (size_t) i < re->shnum; i++) {
 		s = &re->sl[i];
-		if (s->name != NULL && !strcmp(s->name, ".debug_line"))
-			break;
+		if (s->name == NULL)
+			continue;
+		if (!strcmp(s->name, ".debug_line")) {
+			(void) elf_errno();
+			if ((d = elf_getdata(s->scn, NULL)) == NULL) {
+				elferr = elf_errno();
+				if (elferr != 0)
+					warnx("elf_getdata .debug_line "
+					    "failed: %s", elf_errmsg(-1));
+				return;
+			}
+			if (d->d_size <= 0)
+				return;
+		} else if (!strcmp(s->name, ".debug_str")) {
+			(void) elf_errno();
+			if ((ds = elf_getdata(s->scn, NULL)) == NULL) {
+				elferr = elf_errno();
+				if (elferr != 0)
+					warnx("elf_getdata .debug_str "
+					    "failed: %s", elf_errmsg(-1));
+				return;
+			}
+			if (ds->d_size <= 0)
+				ds = NULL;
+		} else if (!strcmp(s->name, ".debug_line_str")) {
+			(void) elf_errno();
+			if ((dl = elf_getdata(s->scn, NULL)) == NULL) {
+				elferr = elf_errno();
+				if (elferr != 0)
+					warnx("elf_getdata .debug_str_line "
+					    "failed: %s", elf_errmsg(-1));
+				return;
+			}
+			if (dl->d_size <= 0)
+				dl = NULL;
+		}
 	}
-	if ((size_t) i >= re->shnum)
-		return;
 
-	(void) elf_errno();
-	if ((d = elf_getdata(s->scn, NULL)) == NULL) {
-		elferr = elf_errno();
-		if (elferr != 0)
-			warnx("elf_getdata failed: %s", elf_errmsg(-1));
-		return;
-	}
-	if (d->d_size <= 0)
+	if (d == NULL)
 		return;
 
 	while ((ret = dwarf_next_cu_header(re->dbg, NULL, NULL, NULL, NULL,
@@ -4717,203 +5105,7 @@ dump_dwarf_line(struct readelf *re)
 			continue;
 		}
 
-		endoff = offset + length;
-		pe = (uint8_t *) d->d_buf + endoff;
-		version = re->dw_read(d, &offset, 2);
-		hdrlen = re->dw_read(d, &offset, dwarf_size);
-		minlen = re->dw_read(d, &offset, 1);
-		defstmt = re->dw_read(d, &offset, 1);
-		lbase = re->dw_read(d, &offset, 1);
-		lrange = re->dw_read(d, &offset, 1);
-		opbase = re->dw_read(d, &offset, 1);
-
-		printf("\n");
-		printf("  Length:\t\t\t%ju\n", (uintmax_t) length);
-		printf("  DWARF version:\t\t%u\n", version);
-		printf("  Prologue Length:\t\t%ju\n", (uintmax_t) hdrlen);
-		printf("  Minimum Instruction Length:\t%u\n", minlen);
-		printf("  Initial value of 'is_stmt':\t%u\n", defstmt);
-		printf("  Line Base:\t\t\t%d\n", lbase);
-		printf("  Line Range:\t\t\t%u\n", lrange);
-		printf("  Opcode Base:\t\t\t%u\n", opbase);
-		(void) dwarf_get_address_size(re->dbg, &pointer_size, &de);
-		printf("  (Pointer size:\t\t%u)\n", pointer_size);
-
-		printf("\n");
-		printf(" Opcodes:\n");
-		for (i = 1; i < opbase; i++) {
-			oplen = re->dw_read(d, &offset, 1);
-			printf("  Opcode %d has %u args\n", i, oplen);
-		}
-
-		printf("\n");
-		printf(" The Directory Table:\n");
-		p = (uint8_t *) d->d_buf + offset;
-		while (*p != '\0') {
-			printf("  %s\n", (char *) p);
-			p += strlen((char *) p) + 1;
-		}
-
-		p++;
-		printf("\n");
-		printf(" The File Name Table:\n");
-		printf("  Entry\tDir\tTime\tSize\tName\n");
-		i = 0;
-		while (*p != '\0') {
-			i++;
-			pn = (char *) p;
-			p += strlen(pn) + 1;
-			dirndx = _decode_uleb128(&p, pe);
-			mtime = _decode_uleb128(&p, pe);
-			fsize = _decode_uleb128(&p, pe);
-			printf("  %d\t%ju\t%ju\t%ju\t%s\n", i,
-			    (uintmax_t) dirndx, (uintmax_t) mtime,
-			    (uintmax_t) fsize, pn);
-		}
-
-#define	RESET_REGISTERS						\
-	do {							\
-		address	       = 0;				\
-		file	       = 1;				\
-		line	       = 1;				\
-		column	       = 0;				\
-		is_stmt	       = defstmt;			\
-	} while(0)
-
-#define	LINE(x) (lbase + (((x) - opbase) % lrange))
-#define	ADDRESS(x) ((((x) - opbase) / lrange) * minlen)
-
-		p++;
-		printf("\n");
-		printf(" Line Number Statements:\n");
-
-		RESET_REGISTERS;
-
-		while (p < pe) {
-
-			if (*p == 0) {
-				/*
-				 * Extended Opcodes.
-				 */
-				p++;
-				opsize = _decode_uleb128(&p, pe);
-				printf("  Extended opcode %u: ", *p);
-				switch (*p) {
-				case DW_LNE_end_sequence:
-					p++;
-					RESET_REGISTERS;
-					printf("End of Sequence\n");
-					break;
-				case DW_LNE_set_address:
-					p++;
-					address = re->dw_decode(&p,
-					    pointer_size);
-					printf("set Address to %#jx\n",
-					    (uintmax_t) address);
-					break;
-				case DW_LNE_define_file:
-					p++;
-					pn = (char *) p;
-					p += strlen(pn) + 1;
-					dirndx = _decode_uleb128(&p, pe);
-					mtime = _decode_uleb128(&p, pe);
-					fsize = _decode_uleb128(&p, pe);
-					printf("define new file: %s\n", pn);
-					break;
-				default:
-					/* Unrecognized extened opcodes. */
-					p += opsize;
-					printf("unknown opcode\n");
-				}
-			} else if (*p > 0 && *p < opbase) {
-				/*
-				 * Standard Opcodes.
-				 */
-				switch(*p++) {
-				case DW_LNS_copy:
-					printf("  Copy\n");
-					break;
-				case DW_LNS_advance_pc:
-					udelta = _decode_uleb128(&p, pe) *
-					    minlen;
-					address += udelta;
-					printf("  Advance PC by %ju to %#jx\n",
-					    (uintmax_t) udelta,
-					    (uintmax_t) address);
-					break;
-				case DW_LNS_advance_line:
-					sdelta = _decode_sleb128(&p, pe);
-					line += sdelta;
-					printf("  Advance Line by %jd to %ju\n",
-					    (intmax_t) sdelta,
-					    (uintmax_t) line);
-					break;
-				case DW_LNS_set_file:
-					file = _decode_uleb128(&p, pe);
-					printf("  Set File to %ju\n",
-					    (uintmax_t) file);
-					break;
-				case DW_LNS_set_column:
-					column = _decode_uleb128(&p, pe);
-					printf("  Set Column to %ju\n",
-					    (uintmax_t) column);
-					break;
-				case DW_LNS_negate_stmt:
-					is_stmt = !is_stmt;
-					printf("  Set is_stmt to %d\n", is_stmt);
-					break;
-				case DW_LNS_set_basic_block:
-					printf("  Set basic block flag\n");
-					break;
-				case DW_LNS_const_add_pc:
-					address += ADDRESS(255);
-					printf("  Advance PC by constant %ju"
-					    " to %#jx\n",
-					    (uintmax_t) ADDRESS(255),
-					    (uintmax_t) address);
-					break;
-				case DW_LNS_fixed_advance_pc:
-					udelta = re->dw_decode(&p, 2);
-					address += udelta;
-					printf("  Advance PC by fixed value "
-					    "%ju to %#jx\n",
-					    (uintmax_t) udelta,
-					    (uintmax_t) address);
-					break;
-				case DW_LNS_set_prologue_end:
-					printf("  Set prologue end flag\n");
-					break;
-				case DW_LNS_set_epilogue_begin:
-					printf("  Set epilogue begin flag\n");
-					break;
-				case DW_LNS_set_isa:
-					isa = _decode_uleb128(&p, pe);
-					printf("  Set isa to %ju\n",
-					    (uintmax_t) isa);
-					break;
-				default:
-					/* Unrecognized extended opcodes. */
-					printf("  Unknown extended opcode %u\n",
-					    *(p - 1));
-					break;
-				}
-
-			} else {
-				/*
-				 * Special Opcodes.
-				 */
-				line += LINE(*p);
-				address += ADDRESS(*p);
-				printf("  Special opcode %u: advance Address "
-				    "by %ju to %#jx and Line by %jd to %ju\n",
-				    *p - opbase, (uintmax_t) ADDRESS(*p),
-				    (uintmax_t) address, (intmax_t) LINE(*p),
-				    (uintmax_t) line);
-				p++;
-			}
-
-
-		}
+		dump_dwarf_line_cu(re, d, ds, dl, offset, length, dwarf_size);
 	}
 	if (ret == DW_DLV_ERROR)
 		warnx("dwarf_next_cu_header: %s", dwarf_errmsg(de));
