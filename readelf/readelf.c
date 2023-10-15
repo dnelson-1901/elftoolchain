@@ -5132,6 +5132,7 @@ dump_dwarf_die(struct readelf *re, Dwarf_Die die, int level)
 
 		case DW_FORM_string:
 		case DW_FORM_strp:
+		case DW_FORM_line_strp:
 			if (dwarf_formstring(attr_list[i], &v_str, &de) !=
 			    DW_DLV_OK) {
 				warnx("dwarf_formstring failed: %s",
@@ -5140,8 +5141,10 @@ dump_dwarf_die(struct readelf *re, Dwarf_Die die, int level)
 			}
 			if (form == DW_FORM_string)
 				printf("%s", v_str);
-			else
+			else if (form == DW_FORM_strp)
 				printf("(indirect string) %s", v_str);
+			else if (form == DW_FORM_line_strp)
+				printf("(indirect line string) %s", v_str);
 			break;
 
 		case DW_FORM_block:
