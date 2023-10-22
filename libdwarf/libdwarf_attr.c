@@ -210,9 +210,9 @@ _dwarf_attr_init(Dwarf_Debug dbg, Dwarf_Section *ds, uint64_t *offsetp,
 		/* TODO: supplementary object file. */
 		break;
 	case DW_FORM_data16:
-		/* 128bit read not yet supported. TODO. */
-		atref.u[0].u64 = 0;
-		*offsetp += 16;
+		atref.u[0].u64 = 16;
+		atref.u[1].u8p = _dwarf_read_block(ds->ds_data, offsetp,
+		    atref.u[0].u64);
 		break;
 	case DW_FORM_line_strp:
 		atref.u[0].u64 = dbg->read(ds->ds_data, offsetp, dwarf_size);

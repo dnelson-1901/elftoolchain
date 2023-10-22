@@ -183,6 +183,7 @@ struct _Dwarf_LineFile {
 	Dwarf_Unsigned	lf_dirndx;	/* Dir index. */
 	Dwarf_Unsigned	lf_mtime;	/* Modification time. */
 	Dwarf_Unsigned	lf_size;	/* File size. */
+	Dwarf_Form_Data16 lf_md5;	/* File md5 digest. */
 	STAILQ_ENTRY(_Dwarf_LineFile) lf_next; /* Next file in list. */
 };
 

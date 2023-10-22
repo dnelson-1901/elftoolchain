@@ -127,6 +127,10 @@ typedef struct {
 } Dwarf_Sig8;
 
 typedef struct {
+	unsigned char fd_data[16];
+} Dwarf_Form_Data16;
+
+typedef struct {
 	Dwarf_Unsigned	bl_len;
 	Dwarf_Ptr	bl_data;
 } Dwarf_Block;
@@ -335,6 +339,9 @@ enum {
 	DW_DLE_ARANGE_OFFSET_BAD,	/* Invalid arange offset. */
 	DW_DLE_DEBUG_MACRO_INCONSISTENT,/* Invalid macinfo data. */
 	DW_DLE_ELF_SECT_ERR,		/* Application callback failed. */
+	DW_DLE_DIR_COUNT_BAD,		/* Invalid directory count. */
+	DW_DLE_FILE_COUNT_BAD,		/* Invalid filename count. */
+	DW_DLE_LNCT_DESC_BAD,		/* Invalid LNCT descriptor. */
 	DW_DLE_NUM			/* Max error number. */
 };
 
