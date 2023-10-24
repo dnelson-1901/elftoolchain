@@ -99,6 +99,12 @@ ELFTC_VCSID("$Id$");
  */
 #define	DISPLAY_FILENAME	0x0001
 
+/* Space for printing a prefix, a 4 byte value, and a trailing NUL. */
+#define REGISTER_NAME_BUFFER_SIZE	16
+
+/* Space for printing an 8 byte value and a trailing NUL. */
+#define DWARF_ADDR_BUFFER_SIZE		24
+
 /*
  * Internal data structure for sections.
  */
@@ -4640,7 +4646,7 @@ dump_arch_specific_info(struct readelf *re)
 static const char *
 dwarf_regname(struct readelf *re, unsigned int num)
 {
-	static char rx[32];
+	static char rx[REGISTER_NAME_BUFFER_SIZE];
 	const char *rn;
 
 	if ((rn = dwarf_reg(re->ehdr.e_machine, num)) != NULL)
@@ -6061,7 +6067,7 @@ dump_dwarf_frame_inst(struct readelf *re, Dwarf_Cie cie, uint8_t *insts,
 static char *
 get_regoff_str(struct readelf *re, Dwarf_Half reg, Dwarf_Addr off)
 {
-	static char rs[16];
+	static char rs[REGISTER_NAME_BUFFER_SIZE + DWARF_ADDR_BUFFER_SIZE - 1];
 
 	if (reg == DW_FRAME_UNDEFINED_VAL || reg == DW_FRAME_REG_INITIAL_VALUE)
 		snprintf(rs, sizeof(rs), "%c", 'u');
