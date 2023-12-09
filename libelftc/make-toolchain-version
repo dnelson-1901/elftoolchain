@@ -45,12 +45,13 @@ get_revision_string()
     v="unknown:unknown"
     if [ -d CVS ]; then     # Look for CVS (NetBSD).
         v="cvs:unknown"
-    elif [ -d .svn ]; then  # An SVN checkout (SourceForge or FreeBSD).
+    elif [ -d .svn -o -d ../.svn ]; then
+	# An SVN checkout (SourceForge or FreeBSD prior to r368820).
         svnversion="$(svnversion 2>/dev/null)"
         if [ -n "${svnversion}" ]; then
             v="svn:${svnversion}"
         fi
-    else        # Try git (DragonflyBSD).
+    else        # Try git (DragonflyBSD, FreeBSD).
         gitversion="$(git describe --all --dirty --long 2> /dev/null)"
         if [ -n "${gitversion}" ]; then
             v="git:${gitversion}"
