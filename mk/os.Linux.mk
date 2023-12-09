@@ -12,7 +12,7 @@ OS_DISTRIBUTION_VERSION != lsb_release -s -r || echo unknown
 
 MKDOC?=		yes	# Build documentation.
 MKLINT?=	no
-MKPIC?=		no
+NOPIC?=		yes	# Do not build shared libraries.
 MKNOWEB?=	yes	# Build literate programs.
 MKTESTS?=	yes	# Enable the test suites.
 MKTEX?=		yes	# Build TeX-based documentation.
