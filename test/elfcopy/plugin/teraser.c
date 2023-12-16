@@ -1,4 +1,5 @@
-/* 1. Erase archive symbol table's timestamp from ar archives,
+/**
+ * 1. Erase archive symbol table's timestamp from ar archives,
  * make it easy to `diff'.  (option -e)
  * 2. Check the sanity of timestamp. (option -c)
  *

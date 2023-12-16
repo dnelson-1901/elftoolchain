@@ -1,4 +1,6 @@
-/* Selectively compare two ar archives.
+/**
+ * Selectively compare two ar archives.
+ *
  * Usage:
  * 	ardiff [-ni] [-t name] ar1 ar2
  * Options:
