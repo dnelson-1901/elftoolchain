@@ -3,6 +3,7 @@
 TOP = ..
 
 SUBDIR =
+SUBDIR+= atf			# ATF based test suites.
 SUBDIR+= tet			# TET based test suites.
 
 SUBDIR+= libtest
