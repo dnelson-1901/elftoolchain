@@ -1,66 +1,27 @@
-#
-# Build TET from source.
-#
 # $Id$
 #
-
-TOP=	../..
-
-.include "${TOP}/mk/elftoolchain.tetvars.mk"
-
-TET_BUILD_MARKER=	.tet-build-done
-TET_PATCH_MARKER=	.tet-patch-done
-
-.MAIN:	all
-
-.PHONY:	all clean cleandepend clobber depend test
-
-.if exists(${TET_ROOT}/configure)
-
-#
-# The TET source tree was present.
+# TET-based test suites used by the Elftoolchain project.
 #
 
-all: ${TET_BUILD_MARKER}
+TOP=		../..
 
-${TET_BUILD_MARKER}: ${TET_PATCH_MARKER}
-	cd ${TET_ROOT} && sh ./configure -t lite
-	cd ${TET_ROOT}/src && ${MAKE} all install
-	touch ${TET_BUILD_MARKER}
+# Build TET and LIBTEST first.
+SUBDIR+=	tet
 
-${TET_PATCH_MARKER}:
-	for f in patches/*.patch; do	\
-		patch -p0 < $${f};	\
-	done
-	touch ${TET_PATCH_MARKER}
+# Build tests for libraries.
+SUBDIR+=	libelf
+SUBDIR+=	libelftc
+SUBDIR+=	libdwarf
 
-clean:
-	cd ${TET_ROOT}/src && ${MAKE} clean
-	rm -f ${TET_BUILD_MARKER}
+# Build tests for tools.
+SUBDIR+=	ar
+SUBDIR+=	elfcopy
+SUBDIR+=	elfdump
+SUBDIR+=	nm
 
-clobber:
-	rm -rf ${TET_ROOT} ${TET_BUILD_MARKER} ${TET_PATCH_MARKER}
-
-cleandepend depend test:	.SILENT
-	true
-
+.if !make(install)
+.include "$(TOP)/mk/elftoolchain.subdir.mk"
 .else
-
-#
-# The TET source tree was not detected.
-#
-
-all depend test:	.SILENT
-	echo "ERROR: The distribution of TET v${TET_VERSION} is missing."
-	echo
-	echo "Please download the distribution from:"
-	echo "	${TET_DOWNLOAD_URL}"
-	echo "and unpack it into directory \"${TET_ROOT}\"."
-	echo
-	false
-
-clean clobber:
-	rm -f ${TET_BUILD_MARKER} ${TET_PATCH_MARKER}
-
-cleandepend:	# Nothing to do.
+install:	.SILENT .PHONY
+	echo Nothing to install.
 .endif
