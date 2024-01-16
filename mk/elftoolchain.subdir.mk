@@ -10,7 +10,9 @@
 SUBDIR_TARGETS+=	clobber test
 .elif ${OS_HOST} == OpenBSD
 clobber: _SUBDIRUSE
-.else		# NetBSD, pmake on Linux
+.elif ${OS_HOST} == Linux  # Ubuntu 'bmake' version 20200710-15.
+SUBDIR_TARGETS+=	cleandepend clobber test
+.else		# NetBSD
 TARGETS+=	cleandepend clobber test
 .endif
 
