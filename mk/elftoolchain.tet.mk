@@ -15,7 +15,7 @@
 TS_ROOT?=	${.CURDIR:H}
 TS_OBJROOT?=	${.OBJDIR:H}
 
-TS_BASE=	${TOP}/test/tet/tet
+TS_BASE=	${TOP}/tests/tet/tet
 
 TET_LIBS=	${TET_ROOT}/lib/tet3
 TET_OBJS=	${TET_LIBS}/tcm.o

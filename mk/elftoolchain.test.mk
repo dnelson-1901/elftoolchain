@@ -7,7 +7,7 @@
 .error Make variable \"TOP\" has not been defined.
 .endif
 
-TEST_BASE=	$(TOP)/test/libtest
+TEST_BASE=	$(TOP)/tests/libtest
 TEST_LIB=	$(TEST_BASE)/lib	# The test(3) API.
 TEST_DRIVER=	${TEST_BASE}/driver	# A command-line driver for tests.
 

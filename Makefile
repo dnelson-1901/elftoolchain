@@ -38,8 +38,8 @@ SUBDIR += size
 SUBDIR += strings
 
 # Build the test suites.
-.if exists(${.CURDIR}/test) && defined(WITH_TESTS) && ${WITH_TESTS} == "yes"
-SUBDIR += test
+.if exists(${.CURDIR}/tests) && defined(WITH_TESTS) && ${WITH_TESTS} == "yes"
+SUBDIR += tests
 .endif
 
 # Build additional build tooling.
@@ -61,7 +61,7 @@ SUBDIR += documentation
 #
 
 # Run the test suites.
-.if exists(${.CURDIR}/test) && defined(WITH_TESTS) && ${WITH_TESTS} == "yes"
-run-tests:	all .PHONY
-	(cd ${.CURDIR}/test; ${MAKE} test)
+.if exists(${.CURDIR}/tests) && defined(WITH_TESTS) && ${WITH_TESTS} == "yes"
+test:	all .PHONY
+	(cd ${.CURDIR}/tests && ${MAKE} test)
 .endif

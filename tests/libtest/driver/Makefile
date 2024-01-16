@@ -4,7 +4,7 @@
 
 TOP=	../../..
 
-INCDIR=		-I${TOP}/test/libtest/lib
+INCDIR=		-I${TOP}/tests/libtest/lib
 CFLAGS+=	${INCDIR}
 LINTFLAGS+=	${INCDIR}
 
