@@ -14,8 +14,6 @@ SUBDIR+=	libelftc
 SUBDIR+=	libdwarf
 
 # Build tests for tools.
-SUBDIR+=	ar
-SUBDIR+=	elfcopy
 SUBDIR+=	elfdump
 SUBDIR+=	nm
 
