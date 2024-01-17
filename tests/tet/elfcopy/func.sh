@@ -4,7 +4,7 @@
 #
 init() {
     THISDIR=`/bin/pwd`
-    TOPDIR=${THISDIR}/../..
+    TOPDIR=${THISDIR}/../../..
     ELFCOPY=${TOPDIR}/elfcopy/elfcopy
     STRIP=${TOPDIR}/elfcopy/strip
     MCS=${TOPDIR}/elfcopy/mcs

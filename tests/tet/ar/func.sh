@@ -3,7 +3,7 @@
 #
 init() {
     THISDIR=`/bin/pwd`
-    TOPDIR=${THISDIR}/../..
+    TOPDIR=${THISDIR}/../../..
     AR=${TOPDIR}/ar/ar
     RANLIB=${TOPDIR}/ar/ranlib
 
