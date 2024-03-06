@@ -207,6 +207,7 @@ _dwarf_info_load(Dwarf_Debug dbg, Dwarf_Bool load_all, Dwarf_Bool is_info,
 
 		/* Verify the DWARF version is supported. */
 		if (cu->cu_version < 2 || cu->cu_version > 5) {
+			free(cu);
 			DWARF_SET_ERROR(dbg, error, DW_DLE_VERSION_STAMP_ERROR);
 			ret = DW_DLE_VERSION_STAMP_ERROR;
 			break;
