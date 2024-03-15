@@ -337,6 +337,8 @@ struct _Dwarf_CU {
 	uint64_t	cu_type_offset; /* Type unit's type offset. */
 	Dwarf_Off	cu_next_offset; /* Offset to the next CU. */
 	uint64_t	cu_1st_offset;	/* First DIE offset. */
+	int		cu_stroff_base_valid; /* DWARF5 str offset base is valid. */
+	uint64_t	cu_stroff_base; /* DWARF5 base offset into str offsets.  */
 	int		cu_pass2;	/* Two pass DIE traverse. */
 	Dwarf_LineInfo	cu_lineinfo;	/* Ptr to Dwarf_LineInfo. */
 	Dwarf_Abbrev	cu_abbrev_hash; /* Abbrev hash table. */
@@ -397,6 +399,14 @@ typedef struct {
 	Dwarf_Obj_Access_Methods eo_methods;
 } Dwarf_Elf_Object;
 
+typedef struct _Dwarf_StrOffsets {
+	Dwarf_Unsigned	so_length;
+	Dwarf_Half	so_version;
+	Dwarf_Unsigned	so_header_size;
+	Dwarf_Small 	so_dwarf_size;
+	Dwarf_Small	*so_data;
+} Dwarf_StrOffsets;
+
 struct _Dwarf_Debug {
 	Dwarf_Obj_Access_Interface *dbg_iface;
 	Dwarf_Section	*dbg_section;	/* Dwarf section list. */
@@ -432,6 +442,7 @@ struct _Dwarf_Debug {
 	Dwarf_Unsigned	dbg_strtab_cap; /* Dwarf string table capacity. */
 	Dwarf_Unsigned	dbg_strtab_size; /* Dwarf string table size. */
 	char		*dbg_line_strtab;/* Dwarf line info string table. */
+	Dwarf_StrOffsets *dbg_str_offsets; /* Dwarf string offsets. */
 	STAILQ_HEAD(, _Dwarf_MacroSet) dbg_mslist; /* List of macro set. */
 	STAILQ_HEAD(, _Dwarf_Rangelist) dbg_rllist; /* List of rangelist. */
 	uint64_t	(*read)(uint8_t *, uint64_t *, int);
@@ -646,6 +657,9 @@ void		_dwarf_strtab_cleanup(Dwarf_Debug);
 int		_dwarf_strtab_gen(Dwarf_P_Debug, Dwarf_Error *);
 char		*_dwarf_strtab_get_table(Dwarf_Debug);
 char		*_dwarf_strtab_get_line_table(Dwarf_Debug);
+void		_dwarf_str_offsets_cleanup(Dwarf_Debug);
+int		_dwarf_read_indexed_str(Dwarf_Debug, Dwarf_CU, uint64_t,
+		    char **, Dwarf_Error *);
 int		_dwarf_strtab_init(Dwarf_Debug, Dwarf_Error *);
 void		_dwarf_type_unit_cleanup(Dwarf_Debug);
 void		_dwarf_write_block(void *, uint64_t *, uint8_t *, uint64_t);

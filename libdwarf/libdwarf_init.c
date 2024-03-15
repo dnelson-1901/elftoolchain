@@ -275,6 +275,7 @@ _dwarf_consumer_deinit(Dwarf_Debug dbg)
 	_dwarf_arange_cleanup(dbg);
 	_dwarf_macinfo_cleanup(dbg);
 	_dwarf_strtab_cleanup(dbg);
+	_dwarf_str_offsets_cleanup(dbg);
 	_dwarf_nametbl_cleanup(&dbg->dbg_globals);
 	_dwarf_nametbl_cleanup(&dbg->dbg_pubtypes);
 	_dwarf_nametbl_cleanup(&dbg->dbg_weaks);

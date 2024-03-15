@@ -66,6 +66,8 @@ dwarf_attrval_string(Dwarf_Die die, Dwarf_Half attr, const char **strp, Dwarf_Er
 {
 	Dwarf_Attribute at;
 	Dwarf_Debug dbg;
+	Dwarf_CU cu;
+	char *str;
 
 	dbg = die != NULL ? die->die_dbg : NULL;
 
@@ -73,6 +75,9 @@ dwarf_attrval_string(Dwarf_Die die, Dwarf_Half attr, const char **strp, Dwarf_Er
 		DWARF_SET_ERROR(dbg, err, DW_DLE_ARGUMENT);
 		return (DW_DLV_ERROR);
 	}
+
+	cu = die->die_cu;
+	assert(cu != NULL);
 
 	*strp = NULL;
 
@@ -87,6 +92,16 @@ dwarf_attrval_string(Dwarf_Die die, Dwarf_Half attr, const char **strp, Dwarf_Er
 		break;
 	case DW_FORM_string:
 		*strp = at->u[0].s;
+		break;
+	case DW_FORM_strx:
+	case DW_FORM_strx1:
+	case DW_FORM_strx2:
+	case DW_FORM_strx3:
+	case DW_FORM_strx4:
+		if (_dwarf_read_indexed_str(dbg, cu, at->u[0].u64, &str, err) !=
+		    DW_DLE_NONE)
+			return (DW_DLV_ERROR);
+		*strp = str;
 		break;
 	default:
 		DWARF_SET_ERROR(dbg, err, DW_DLE_ATTR_FORM_BAD);

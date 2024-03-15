@@ -199,7 +199,6 @@ _dwarf_attr_init(Dwarf_Debug dbg, Dwarf_Section *ds, uint64_t *offsetp,
 		break;
 	case DW_FORM_strx:
 		atref.u[0].u64 = _dwarf_read_uleb128(ds->ds_data, offsetp);
-		/* TODO: .debug_str_offsets */
 		break;
 	case DW_FORM_addrx:
 		atref.u[0].u64 = _dwarf_read_uleb128(ds->ds_data, offsetp);
@@ -226,19 +225,15 @@ _dwarf_attr_init(Dwarf_Debug dbg, Dwarf_Section *ds, uint64_t *offsetp,
 		break;
 	case DW_FORM_strx1:
 		atref.u[0].u64 = dbg->read(ds->ds_data, offsetp, 1);
-		/* TODO: .debug_str_offsets */
 		break;
 	case DW_FORM_strx2:
 		atref.u[0].u64 = dbg->read(ds->ds_data, offsetp, 1);
-		/* TODO: .debug_str_offsets */
 		break;
 	case DW_FORM_strx3:
 		atref.u[0].u64 = dbg->read(ds->ds_data, offsetp, 3);
-		/* TODO: .debug_str_offsets */
 		break;
 	case DW_FORM_strx4:
 		atref.u[0].u64 = dbg->read(ds->ds_data, offsetp, 4);
-		/* TODO: .debug_str_offsets */
 		break;
 	case DW_FORM_addrx1:
 		atref.u[0].u64 = dbg->read(ds->ds_data, offsetp, 1);
