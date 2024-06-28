@@ -16,7 +16,7 @@ List of placeholders
 
 @ELFTC-DECLARE-DOWNSTREAM-VCSID@
 
-  A place holder to be replaced with the definition of the downstream
+  A placeholder to be replaced with the definition of the downstream
   project's version control system ID.
 
   E.g. on NetBSD this placeholder could be replaced with::
@@ -27,13 +27,13 @@ List of placeholders
 
 @ELFTC-DEFINE-ELFTC-VCSID@
 
-  This place holder is meant to be replaced by a project-specific
+  This placeholder is meant to be replaced by a project-specific
   definition of the ``ELFTC_VCSID()`` macro if the default definition
   needs to be overridden.
 
 @ELFTC-USE-DOWNSTREAM-VCSID@
 
-  A place holder to be replaced by the use of the downstream project's
+  A placeholder to be replaced by the use of the downstream project's
   version control ID.
 
   E.g. on NetBSD this placeholder could be replaced with::
@@ -49,7 +49,7 @@ List of placeholders
 
 @LIBELF-DEFINE-HOST-BYTEORDER@
 
-  A place holder to be replaced by the downstream project's method to
+  A placeholder to be replaced by the downstream project's method to
   determine the runtime byte order to use (ELF2LSB or ELF2MSB).
 
   Projects using GCC or CLANG would not ordinarily need to use this

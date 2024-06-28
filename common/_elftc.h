@@ -283,7 +283,7 @@ struct name {							\
 /*
  * VCS Ids.
  *
- * The place holder below is intended to be replaced with a project-specific
+ * The placeholder below is intended to be replaced with a project-specific
  * definition of the ELFTC_VCSID macro.
  */
 
@@ -314,10 +314,10 @@ struct name {							\
 #endif	/* ELFTC_VCSID */
 
 /*
- * The place holder below is meant to be replaced by a declaration
+ * The placeholder below is meant to be replaced by a declaration
  * of the downstream project's revision control macro.
  *
- * E.g. on NetBSD, this place holder would be replaced by:
+ * E.g. on NetBSD, this placeholder would be replaced by:
  *
  *   #if !defined(__RCSID)
  *   #define __RCSID(ID)
