@@ -258,7 +258,7 @@ run()
 
     tet_infoline "OPTION $1"
 
-    NM_PATH="$TET_SUITE_ROOT/../../nm/nm"
+    NM_PATH="$TET_SUITE_ROOT/../../../nm/nm"
     TEST_OUTPUT_FILE="test.out"
 
     $NM_PATH $1 $2 > $TEST_OUTPUT_FILE 2> /dev/null
@@ -289,7 +289,7 @@ run_without_diff()
 
     tet_infoline "OPTION $1"
 
-    NM_PATH="$TET_SUITE_ROOT/../../nm/nm"
+    NM_PATH="$TET_SUITE_ROOT/../../../nm/nm"
 
     $NM_PATH $1 > /dev/null 2> /dev/null
     NM_RETURN_CODE="$?"
