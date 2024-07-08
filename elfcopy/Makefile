@@ -37,6 +37,8 @@ LINKS=	${BINDIR}/elfcopy ${BINDIR}/mcs		\
 
 EXTRA_TARGETS=	mcs strip objcopy
 
+TEST_FRAMEWORK=	custom
+
 CLEANFILES+=	${EXTRA_TARGETS}
 
 # Create in-place symbolic links to "elfcopy" at build time.

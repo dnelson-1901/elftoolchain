@@ -22,6 +22,8 @@ CLEANFILES+= 	${EXTRA_TARGETS}
 
 MAN=	ar.1 ranlib.1 ar.5
 
+TEST_FRAMEWORK=	custom
+
 all:	${EXTRA_TARGETS}
 
 ${EXTRA_TARGETS}:	${PROG}
