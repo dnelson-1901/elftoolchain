@@ -169,6 +169,7 @@ _dwarf_abbrev_parse(Dwarf_Debug dbg, Dwarf_CU cu, Dwarf_Unsigned *offset,
 		adoff = *offset;
 		attr = _dwarf_read_uleb128(ds->ds_data, offset);
 		form = _dwarf_read_uleb128(ds->ds_data, offset);
+		ic = 0;
 		if (form == DW_FORM_implicit_const) {
 			/*
 			 * DWARF5 7.5.3: atrribute definition with the form
