@@ -43,6 +43,8 @@ _dwarf_abbrev_allocate(Dwarf_Debug dbg, Dwarf_Abbrev *abp,
 	/* Initialise the list of attribute definitions. */
 	STAILQ_INIT(&ab->ab_attrdef);
 
+	*abp = ab;
+	
 	return (DW_DLE_NONE);
 }
 
