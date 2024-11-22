@@ -27,8 +27,8 @@
 #   October 2009 draft of System V ABI.
 #   See: http://www.sco.com/developers/gabi/latest/ch4.intro.html
 # - The May 1998 (version 1.5) draft of "The ELF-64 object format".
-# - Processor-specific ELF ABI definitions for sparc, i386, amd64, mips,
-#   ia64, powerpc, and RISC-V processors.
+# - Processor-specific ELF ABI definitions for amd64, i386, ia64,
+#   mips, powerpc, riscv and sparc processors.
 # - The "Linkers and Libraries Guide", from Sun Microsystems.
 
 define(`VCSID_ELFCONSTANTS_M4',
