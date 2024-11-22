@@ -28,7 +28,7 @@
 #   See: http://www.sco.com/developers/gabi/latest/ch4.intro.html
 # - The May 1998 (version 1.5) draft of "The ELF-64 object format".
 # - Processor-specific ELF ABI definitions for amd64, i386, ia64,
-#   mips, powerpc, riscv and sparc processors.
+#   loongarch, mips, powerpc, riscv and sparc processors.
 # - The "Linkers and Libraries Guide", from Sun Microsystems.
 
 define(`VCSID_ELFCONSTANTS_M4',
@@ -1036,6 +1036,8 @@ _(EM_CSKY,             252,
 	`C-SKY processor family')
 _(EM_65816,            257,
 	`WDC 65816/65C816')
+_(EM_LOONGARCH,        258,
+	`Loongson Loongarch')
 _(EM_KF32,             259,
 	`ChipON KungFu 32')
 ')
