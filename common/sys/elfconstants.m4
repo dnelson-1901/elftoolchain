@@ -1037,7 +1037,7 @@ _(EM_CSKY,             252,
 _(EM_65816,            257,
 	`WDC 65816/65C816')
 _(EM_LOONGARCH,        258,
-	`Loongson Loongarch')
+	`Loongson LoongArch')
 _(EM_KF32,             259,
 	`ChipON KungFu 32')
 ')
