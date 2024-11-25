@@ -892,6 +892,10 @@ _(EM_TI_C2000,         141,
 	`The Texas Instruments TMS320C2000 DSP family')
 _(EM_TI_C5500,         142,
 	`The Texas Instruments TMS320C55x DSP family')
+_(EM_TI_ARP32,         143,
+	`Texas Instruments Application Specific RISC Processor, 32bit fetch')
+_(EM_TI_PRU,           144,
+	`Texas Instruments Programmable Realtime Unit')
 _(EM_MMDSP_PLUS,       160,
 	`STMicroelectronics 64bit VLIW Data Signal Processor')
 _(EM_CYPRESS_M8C,      161,
@@ -934,6 +938,10 @@ _(EM_ETPU,             178,
 	`Freescale Extended Time Processing Unit')
 _(EM_SLE9X,            179,
 	`Infineon Technologies SLE9X core')
+_(EM_L10M,             180,
+	`Intel L10M')
+_(EM_K10M,             181,
+	`Intel K10M')
 _(EM_AARCH64,          183,
 	`AArch64 (64-bit ARM)')
 _(EM_AVR32,            185,
@@ -1032,14 +1040,40 @@ _(EM_IMG1,             249,
 	`Imagination Technologies')
 _(EM_NFP,              250,
 	`Netronome Flow Processor (NFP)')
+_(EM_VE,               251,
+	`NEC Vector Engine')
 _(EM_CSKY,             252,
 	`C-SKY processor family')
+_(EM_ARC_COMPACT3_64,  253,
+	`Synopsys ARCv2.3 64-bit')
+_(EM_MCS6502,          254,
+	`MOS Technology MCS 6502 processor')
+_(EM_ARC_COMPACT3,     255,
+	`Synopsys ARCv2.3 32-bit')
+_(EM_KVX,              256,
+	`Kalray VLIW core of the MPPA processor family')
 _(EM_65816,            257,
 	`WDC 65816/65C816')
 _(EM_LOONGARCH,        258,
 	`Loongson LoongArch')
 _(EM_KF32,             259,
 	`ChipON KungFu 32')
+_(EM_U16_U8CORE,       260,
+	`LAPIS nX-U16/U8')
+_(EM_TACHYUM,          261,
+	`Reserved for Tachyum processor')
+_(EM_56800EF,          262,
+	`NXP 56800EF Digital Signal Controller (DSC)')
+_(EM_SBF,              263,
+	`Solana Bytecode Format')
+_(EM_AIENGINE,         264,
+	`AMD/Xilinx AIEngine architecture')
+_(EM_SIMA_MLA,         265,
+	`SiMa MLA')
+_(EM_BANG,             266,
+	`Cambricon BANG')
+_(EM_LOONGGPU,         267,
+	`Loongson Loongarch')
 ')
 
 define(`DEFINE_ELF_MACHINE_TYPE_SYNONYMS',`
