@@ -1073,7 +1073,7 @@ _(EM_SIMA_MLA,         265,
 _(EM_BANG,             266,
 	`Cambricon BANG')
 _(EM_LOONGGPU,         267,
-	`Loongson Loongarch')
+	`Loongson LoongArch GPU')
 ')
 
 define(`DEFINE_ELF_MACHINE_TYPE_SYNONYMS',`
