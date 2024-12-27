@@ -445,6 +445,20 @@ _(EF_ARM_VFP_FLOAT,    0x00000400UL,
 	`GNU EABI extension')
 _(EF_ARM_MAVERICK_FLOAT, 0x00000800UL,
 	`GNU EABI extension')
+_(EF_LOONGARCH_ABI_SOFT_FLOAT,     0x00000001UL,
+	`LoongArch software floating point emulation')
+_(EF_LOONGARCH_ABI_SINGLE_FLOAT,   0x00000002UL,
+	`LoongArch 32-bit floating point registers')
+_(EF_LOONGARCH_ABI_DOUBLE_FLOAT,   0x00000003UL,
+	`LoongArch 64-bit floating point registers')
+_(EF_LOONGARCH_ABI_MODIFIER_MASK,  0x00000007UL,
+	`LoongArch floating point modifier mask')
+_(EF_LOONGARCH_OBJABI_V0,          0x00000000UL,
+	`LoongArch object file ABI version 0')
+_(EF_LOONGARCH_OBJABI_V1,          0x00000040UL,
+	`LoongArch object file ABI version 1')
+_(EF_LOONGARCH_OBJABI_MASK,        0x000000C0UL,
+	`LoongArch object file ABI version mask')
 _(EF_MIPS_NOREORDER,   0x00000001UL,
 	`at least one .noreorder directive appeared in the source')
 _(EF_MIPS_PIC,         0x00000002UL,
