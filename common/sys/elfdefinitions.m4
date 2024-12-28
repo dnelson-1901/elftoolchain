@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2010,2021 Joseph Koshy
+ * Copyright (c) 2010,2021,2024 Joseph Koshy
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,9 +28,27 @@ define(`VCSID_ELFDEFINITIONS_M4',
 	`$Id$')
 include(`elfconstants.m4')dnl
 
-define(`_',`ifelse(eval(len($1) <= 7),1,
-    `#define	$1		$2',
-    `#define	$1	$2')')
+# Compute the whitespace between a symbol and its definition.
+#
+# - If the symbol is 7 characters or shorter in width, use two tabs.
+# - Otherwise, if the symbol is 15 characters or less in width, use one tab.
+# - Otherwise, use a single space.
+#
+# This makes the generated definitions easier to read.
+define(`_WHITESPACE',
+  `ifelse(eval(len($1) <= 7),1,`		',
+          eval(len($1) <= 15),1,`	',
+          ` ')')
+
+# Format symbol descriptions as C-style comment.
+define(`_DESCRIPTION',
+  `ifelse(eval(len($1) > 0),1,` /* $1 */',
+          `')')
+
+# Expand the `_' macro to a C preprocessor definition that is suitably
+# vertically aligned.  If a symbol description is present, add it as a
+# C-style comment.
+define(`_',``#'define $1`'_WHITESPACE($1)`'$2`'_DESCRIPTION($3)')
 divert(0)dnl
 
 /*
