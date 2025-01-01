@@ -926,8 +926,6 @@ _(EM_STXP7X,           166,
 	`STMicroelectronics STxP7x family of configurable and extensible RISC processors')
 _(EM_NDS32,            167,
 	`Andes Technology compact code size embedded RISC processor family')
-_(EM_ECOG1,            168,
-	`Cyan Technology eCOG1X family')
 _(EM_ECOG1X,           168,
 	`Cyan Technology eCOG1X family')
 _(EM_MAXQ30,           169,
@@ -1093,6 +1091,7 @@ _(EM_LOONGGPU,         267,
 define(`DEFINE_ELF_MACHINE_TYPE_SYNONYMS',`
 _(EM_AMD64, EM_X86_64)
 _(EM_ARC_A5, EM_ARC_COMPACT)
+_(EM_ECOG1, EM_ECOG1X)
 ')
 
 #
