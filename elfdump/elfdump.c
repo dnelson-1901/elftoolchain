@@ -2252,7 +2252,7 @@ elf_print_svr4_hash64(struct elfdump *ed, struct section *s)
 	uint64_t	*bl, *c, j, maxl, total;
 	size_t		 i;
 	int		 elferr, first;
-	char		 idx[10];
+	char		 idx[24];
 
 	if (ed->flags & SOLARIS_FMT)
 		PRT("\nHash Section:  %s\n", s->name);
