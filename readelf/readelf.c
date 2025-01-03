@@ -4832,6 +4832,7 @@ dump_dwarf_line_cu(struct readelf *re, Elf_Data *d, Elf_Data *ds, Elf_Data *dl,
 		    (uintmax_t) offset);
 		printf("  Entry\tDir\tName\n");
 		for (i = 0; i < file_cnt; i++) {
+			path = ""; dirndx = 0U;
 			for (j = 0; j < fmt_cnt; j++) {
 				switch (lnct[j].type) {
 				case DW_LNCT_path:
