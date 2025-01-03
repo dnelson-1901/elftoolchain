@@ -443,7 +443,8 @@ _dwarf_lineno_init(Dwarf_Die die, uint64_t offset, Dwarf_Error *error)
 	char *compdir;
 	uint64_t length, hdroff, endoff;
 	uint8_t *p;
-	int dwarf_size, fmt, i, j, ret;
+	int dwarf_size, fmt, j, ret;
+	unsigned int i;
 
 	cu = die->die_cu;
 	assert(cu != NULL);
