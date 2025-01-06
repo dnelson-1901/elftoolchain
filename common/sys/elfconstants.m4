@@ -1098,15 +1098,15 @@ _(EM_ECOG1, EM_ECOG1X)
 # ELF file types: (ET_*).
 #
 define(`DEFINE_ELF_TYPES',`
-_(ET_NONE,   0,
+_(ET_NONE,   0U,
 	`No file type')
-_(ET_REL,    1,
+_(ET_REL,    1U,
 	`Relocatable object')
-_(ET_EXEC,   2,
+_(ET_EXEC,   2U,
 	`Executable')
-_(ET_DYN,    3,
+_(ET_DYN,    3U,
 	`Shared object')
-_(ET_CORE,   4,
+_(ET_CORE,   4U,
 	`Core file')
 _(ET_LOOS,   0xFE00U,
 	`Begin OS-specific range')
@@ -1238,27 +1238,27 @@ _(PT_LOSUNW,	PT_SUNWBSS)
 # Section flags.
 #
 define(`DEFINE_SECTION_FLAGS',`
-_(SHF_WRITE,           0x1,
+_(SHF_WRITE,           0x1U,
 	`writable during program execution')
-_(SHF_ALLOC,           0x2,
+_(SHF_ALLOC,           0x2U,
 	`occupies memory during program execution')
-_(SHF_EXECINSTR,       0x4,
+_(SHF_EXECINSTR,       0x4U,
 	`executable instructions')
-_(SHF_MERGE,           0x10,
+_(SHF_MERGE,           0x10U,
 	`may be merged to prevent duplication')
-_(SHF_STRINGS,         0x20,
+_(SHF_STRINGS,         0x20U,
 	`NUL-terminated character strings')
-_(SHF_INFO_LINK,       0x40,
+_(SHF_INFO_LINK,       0x40U,
 	`the sh_info field holds a link')
-_(SHF_LINK_ORDER,      0x80,
+_(SHF_LINK_ORDER,      0x80U,
 	`special ordering requirements during linking')
-_(SHF_OS_NONCONFORMING, 0x100,
+_(SHF_OS_NONCONFORMING, 0x100U,
 	`requires OS-specific processing during linking')
-_(SHF_GROUP,           0x200,
+_(SHF_GROUP,           0x200U,
 	`member of a section group')
-_(SHF_TLS,             0x400,
+_(SHF_TLS,             0x400U,
 	`holds thread-local storage')
-_(SHF_COMPRESSED,      0x800,
+_(SHF_COMPRESSED,      0x800U,
 	`holds compressed data')
 _(SHF_MASKOS,          0x0FF00000U,
 	`bits reserved for OS-specific semantics')
@@ -1296,7 +1296,7 @@ _(SHF_MASKPROC,        0xF0000000U,
 # Special section indices.
 #
 define(`DEFINE_SECTION_INDICES',`
-_(SHN_UNDEF, 	0,
+_(SHN_UNDEF, 	0U,
 	 `undefined section')
 _(SHN_LORESERVE, 	0xFF00U,
 	`start of reserved area')
@@ -1344,29 +1344,29 @@ _(SHN_HIRESERVE, 	0xFFFFU,
 # Section types.
 #
 define(`DEFINE_SECTION_TYPES',`
-_(SHT_NULL,            0, `inactive header')
-_(SHT_PROGBITS,        1, `program defined information')
-_(SHT_SYMTAB,          2, `symbol table')
-_(SHT_STRTAB,          3, `string table')
-_(SHT_RELA,            4,
+_(SHT_NULL,            0U, `inactive header')
+_(SHT_PROGBITS,        1U, `program defined information')
+_(SHT_SYMTAB,          2U, `symbol table')
+_(SHT_STRTAB,          3U, `string table')
+_(SHT_RELA,            4U,
 	`relocation entries with addends')
-_(SHT_HASH,            5, `symbol hash table')
-_(SHT_DYNAMIC,         6,
+_(SHT_HASH,            5U, `symbol hash table')
+_(SHT_DYNAMIC,         6U,
 	`information for dynamic linking')
-_(SHT_NOTE,            7, `additional notes')
-_(SHT_NOBITS,          8, `section occupying no space')
-_(SHT_REL,             9,
+_(SHT_NOTE,            7U, `additional notes')
+_(SHT_NOBITS,          8U, `section occupying no space')
+_(SHT_REL,             9U,
 	`relocation entries without addends')
-_(SHT_SHLIB,           10, `reserved')
-_(SHT_DYNSYM,          11, `symbol table')
-_(SHT_INIT_ARRAY,      14,
+_(SHT_SHLIB,           10U, `reserved')
+_(SHT_DYNSYM,          11U, `symbol table')
+_(SHT_INIT_ARRAY,      14U,
 	`pointers to initialization functions')
-_(SHT_FINI_ARRAY,      15,
+_(SHT_FINI_ARRAY,      15U,
 	`pointers to termination functions')
-_(SHT_PREINIT_ARRAY,   16,
+_(SHT_PREINIT_ARRAY,   16U,
 	`pointers to functions called before initialization')
-_(SHT_GROUP,           17, `defines a section group')
-_(SHT_SYMTAB_SHNDX,    18,
+_(SHT_GROUP,           17U, `defines a section group')
+_(SHT_SYMTAB_SHNDX,    18U,
 	`used for extended section numbering')
 _(SHT_LOOS,            0x60000000U,
 	`start of OS-specific range')
