@@ -49,7 +49,7 @@ ELFTC_VCSID("$Id$");
 
 Elf_Data *
 _libelf_xlate(Elf_Data *dst, const Elf_Data *src, unsigned int encoding,
-    int elfclass, int elfmachine, int direction)
+    unsigned int elfclass, int elfmachine, int direction)
 {
 	int byteswap;
 	size_t cnt, dsz, fsz, msz;

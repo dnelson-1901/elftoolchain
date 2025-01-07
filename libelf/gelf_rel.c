@@ -40,10 +40,10 @@ ELFTC_VCSID("$Id$");
 GElf_Rel *
 gelf_getrel(Elf_Data *ed, int ndx, GElf_Rel *dst)
 {
-	int ec;
 	Elf *e;
 	size_t msz;
 	Elf_Scn *scn;
+	unsigned int ec;
 	uint32_t sh_type;
 	Elf32_Rel *rel32;
 	Elf64_Rel *rel64;
@@ -102,10 +102,10 @@ gelf_getrel(Elf_Data *ed, int ndx, GElf_Rel *dst)
 int
 gelf_update_rel(Elf_Data *ed, int ndx, GElf_Rel *dr)
 {
-	int ec;
 	Elf *e;
 	size_t msz;
 	Elf_Scn *scn;
+	unsigned int ec;
 	uint32_t sh_type;
 	Elf32_Rel *rel32;
 	Elf64_Rel *rel64;

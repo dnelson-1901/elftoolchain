@@ -40,10 +40,10 @@ ELFTC_VCSID("$Id$");
 GElf_Cap *
 gelf_getcap(Elf_Data *ed, int ndx, GElf_Cap *dst)
 {
-	int ec;
 	Elf *e;
 	size_t msz;
 	Elf_Scn *scn;
+	unsigned int ec;
 	Elf32_Cap *cap32;
 	Elf64_Cap *cap64;
 	uint32_t sh_type;
@@ -99,10 +99,10 @@ gelf_getcap(Elf_Data *ed, int ndx, GElf_Cap *dst)
 int
 gelf_update_cap(Elf_Data *ed, int ndx, GElf_Cap *gc)
 {
-	int ec;
 	Elf *e;
 	size_t msz;
 	Elf_Scn *scn;
+	unsigned int ec;
 	Elf32_Cap *cap32;
 	Elf64_Cap *cap64;
 	uint32_t sh_type;

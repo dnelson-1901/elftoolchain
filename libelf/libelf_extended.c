@@ -50,7 +50,7 @@ _libelf_getscn0(Elf *e)
 }
 
 int
-_libelf_setshnum(Elf *e, void *eh, int ec, size_t shnum)
+_libelf_setshnum(Elf *e, void *eh, unsigned int ec, size_t shnum)
 {
 	Elf_Scn *scn;
 
@@ -80,7 +80,7 @@ _libelf_setshnum(Elf *e, void *eh, int ec, size_t shnum)
 }
 
 int
-_libelf_setshstrndx(Elf *e, void *eh, int ec, size_t shstrndx)
+_libelf_setshstrndx(Elf *e, void *eh, unsigned int ec, size_t shstrndx)
 {
 	Elf_Scn *scn;
 
@@ -109,7 +109,7 @@ _libelf_setshstrndx(Elf *e, void *eh, int ec, size_t shstrndx)
 }
 
 int
-_libelf_setphnum(Elf *e, void *eh, int ec, size_t phnum)
+_libelf_setphnum(Elf *e, void *eh, unsigned int ec, size_t phnum)
 {
 	Elf_Scn *scn;
 

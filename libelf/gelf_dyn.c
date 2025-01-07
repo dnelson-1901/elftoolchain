@@ -40,10 +40,10 @@ ELFTC_VCSID("$Id$");
 GElf_Dyn *
 gelf_getdyn(Elf_Data *ed, int ndx, GElf_Dyn *dst)
 {
-	int ec;
 	Elf *e;
 	size_t msz;
 	Elf_Scn *scn;
+	unsigned int ec;
 	Elf32_Dyn *dyn32;
 	Elf64_Dyn *dyn64;
 	uint32_t sh_type;
@@ -100,10 +100,10 @@ gelf_getdyn(Elf_Data *ed, int ndx, GElf_Dyn *dst)
 int
 gelf_update_dyn(Elf_Data *ed, int ndx, GElf_Dyn *ds)
 {
-	int ec;
 	Elf *e;
 	size_t msz;
 	Elf_Scn *scn;
+	unsigned int ec;
 	Elf32_Dyn *dyn32;
 	Elf64_Dyn *dyn64;
 	uint32_t sh_type;

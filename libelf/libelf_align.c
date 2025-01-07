@@ -92,7 +92,7 @@ static struct align malign[ELF_T_NUM] = {
 };
 
 unsigned int
-_libelf_malign(Elf_Type t, int elfclass)
+_libelf_malign(Elf_Type t, unsigned int elfclass)
 {
 	if (t >= ELF_T_NUM || (int) t < 0)
 		return (0);
@@ -131,7 +131,7 @@ static struct align falign[ELF_T_NUM] = {
 };
 
 unsigned int
-_libelf_falign(Elf_Type t, int elfclass)
+_libelf_falign(Elf_Type t, unsigned int elfclass)
 {
 	if (t >= ELF_T_NUM || (int) t < 0)
 		return (0);

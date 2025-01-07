@@ -46,7 +46,7 @@ Elf *
 _libelf_memory(unsigned char *image, size_t sz, int reporterror)
 {
 	Elf *e;
-	int e_class;
+	unsigned int e_class;
 	enum Elf_Error error;
 	unsigned int e_byteorder, e_version;
 

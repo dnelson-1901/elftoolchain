@@ -38,7 +38,7 @@ ELFTC_VCSID("$Id$");
 /*@ELFTC-USE-DOWNSTREAM-VCSID@*/
 
 void *
-_libelf_getphdr(Elf *e, int ec)
+_libelf_getphdr(Elf *e, unsigned int ec)
 {
 	size_t phnum;
 	size_t fsz, msz;
@@ -114,7 +114,7 @@ _libelf_getphdr(Elf *e, int ec)
 }
 
 void *
-_libelf_newphdr(Elf *e, int ec, size_t count)
+_libelf_newphdr(Elf *e, unsigned int ec, size_t count)
 {
 	void *ehdr, *newphdr, *oldphdr;
 	size_t msz;

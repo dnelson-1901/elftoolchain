@@ -42,7 +42,7 @@ ELFTC_VCSID("$Id$");
  * from section header #0 of the ELF object.
  */
 static int
-_libelf_load_extended(Elf *e, int ec, uint64_t shoff, uint16_t phnum,
+_libelf_load_extended(Elf *e, unsigned int ec, uint64_t shoff, uint16_t phnum,
     uint16_t strndx)
 {
 	size_t fsz;
@@ -107,7 +107,7 @@ _libelf_load_extended(Elf *e, int ec, uint64_t shoff, uint16_t phnum,
 	} while (/* CONSTCOND */ 0)
 
 void *
-_libelf_ehdr(Elf *e, int ec, int allocate)
+_libelf_ehdr(Elf *e, unsigned int ec, int allocate)
 {
 	void *ehdr;
 	size_t fsz, msz;

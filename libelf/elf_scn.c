@@ -48,10 +48,11 @@ int
 _libelf_load_section_headers(Elf *e, void *ehdr)
 {
 	Elf_Scn *scn;
+	int swapbytes;
 	uint64_t shoff;
+	unsigned int ec;
 	Elf32_Ehdr *eh32;
 	Elf64_Ehdr *eh64;
-	int ec, swapbytes;
 	unsigned char *src;
 	size_t fsz, i, shnum;
 	_libelf_translator_function *xlator;
@@ -134,9 +135,9 @@ _libelf_load_section_headers(Elf *e, void *ehdr)
 Elf_Scn *
 elf_getscn(Elf *e, size_t index)
 {
-	int ec;
 	void *ehdr;
 	Elf_Scn *s;
+	unsigned int ec;
 
 	if (e == NULL || e->e_kind != ELF_K_ELF ||
 	    ((ec = e->e_class) != ELFCLASS32 && ec != ELFCLASS64)) {
@@ -173,9 +174,9 @@ elf_ndxscn(Elf_Scn *s)
 Elf_Scn *
 elf_newscn(Elf *e)
 {
-	int ec;
 	void *ehdr;
 	Elf_Scn *scn;
+	unsigned int ec;
 
 	if (e == NULL || e->e_kind != ELF_K_ELF) {
 		LIBELF_SET_ERROR(ARGUMENT, 0);

@@ -42,8 +42,8 @@ Elf_Data *
 elf_getdata(Elf_Scn *s, Elf_Data *ed)
 {
 	Elf *e;
-	unsigned int sh_type;
-	int elfclass, elftype;
+	unsigned int elfclass, sh_type;
+	int elftype;
 	size_t count, fsz, msz;
 	struct _Libelf_Data *d;
 	uint64_t sh_align, sh_offset, sh_size, raw_size;
@@ -219,8 +219,8 @@ Elf_Data *
 elf_rawdata(Elf_Scn *s, Elf_Data *ed)
 {
 	Elf *e;
-	int elf_class;
 	uint32_t sh_type;
+	unsigned int elf_class;
 	struct _Libelf_Data *d;
 	uint64_t sh_align, sh_offset, sh_size, raw_size;
 

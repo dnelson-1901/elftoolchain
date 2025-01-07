@@ -144,7 +144,7 @@ FSIZES(ELF_TYPE_LIST)
 };
 
 size_t
-_libelf_fsize(Elf_Type t, int ec, unsigned int v, size_t c)
+_libelf_fsize(Elf_Type t, unsigned int ec, unsigned int v, size_t c)
 {
 	size_t sz;
 

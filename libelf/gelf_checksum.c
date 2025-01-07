@@ -50,7 +50,8 @@ elf64_checksum(Elf *e)
 long
 gelf_checksum(Elf *e)
 {
-	int ec;
+	unsigned int ec;
+
 	if (e == NULL ||
 	    ((ec = e->e_class) != ELFCLASS32 && ec != ELFCLASS64)) {
 		LIBELF_SET_ERROR(ARGUMENT, 0);

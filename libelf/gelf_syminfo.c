@@ -38,10 +38,10 @@ ELFTC_VCSID("$Id$");
 GElf_Syminfo *
 gelf_getsyminfo(Elf_Data *ed, int ndx, GElf_Syminfo *dst)
 {
-	int ec;
 	Elf *e;
 	size_t msz;
 	Elf_Scn *scn;
+	unsigned int ec;
 	uint32_t sh_type;
 	struct _Libelf_Data *d;
 	Elf32_Syminfo *syminfo32;
@@ -99,10 +99,10 @@ gelf_getsyminfo(Elf_Data *ed, int ndx, GElf_Syminfo *dst)
 int
 gelf_update_syminfo(Elf_Data *ed, int ndx, GElf_Syminfo *gs)
 {
-	int ec;
 	Elf *e;
 	size_t msz;
 	Elf_Scn *scn;
+	unsigned int ec;
 	uint32_t sh_type;
 	struct _Libelf_Data *d;
 	Elf32_Syminfo *syminfo32;

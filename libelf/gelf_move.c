@@ -40,10 +40,10 @@ ELFTC_VCSID("$Id$");
 GElf_Move *
 gelf_getmove(Elf_Data *ed, int ndx, GElf_Move *dst)
 {
-	int ec;
 	Elf *e;
 	size_t msz;
 	Elf_Scn *scn;
+	unsigned int ec;
 	uint32_t sh_type;
 	Elf32_Move *move32;
 	Elf64_Move *move64;
@@ -103,10 +103,10 @@ gelf_getmove(Elf_Data *ed, int ndx, GElf_Move *dst)
 int
 gelf_update_move(Elf_Data *ed, int ndx, GElf_Move *gm)
 {
-	int ec;
 	Elf *e;
 	size_t msz;
 	Elf_Scn *scn;
+	unsigned int ec;
 	uint32_t sh_type;
 	Elf32_Move *move32;
 	Elf64_Move *move64;

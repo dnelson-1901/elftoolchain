@@ -100,7 +100,7 @@ MSIZES(ELF_TYPE_LIST)
  * library error code set.
  */
 size_t
-_libelf_msize(Elf_Type t, int elfclass, unsigned int version)
+_libelf_msize(Elf_Type t, unsigned int elfclass, unsigned int version)
 {
 	size_t sz;
 

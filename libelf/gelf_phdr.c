@@ -52,7 +52,7 @@ elf64_getphdr(Elf *e)
 GElf_Phdr *
 gelf_getphdr(Elf *e, int index, GElf_Phdr *d)
 {
-	int ec;
+	unsigned int ec;
 	Elf32_Ehdr *eh32;
 	Elf64_Ehdr *eh64;
 	Elf32_Phdr *ep32;
@@ -126,9 +126,9 @@ gelf_newphdr(Elf *e, size_t count)
 int
 gelf_update_phdr(Elf *e, int ndx, GElf_Phdr *s)
 {
-	int ec;
-	size_t phnum;
 	void *ehdr;
+	size_t phnum;
+	unsigned int ec;
 	Elf32_Phdr *ph32;
 	Elf64_Phdr *ph64;
 

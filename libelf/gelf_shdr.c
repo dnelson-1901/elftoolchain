@@ -53,8 +53,8 @@ elf64_getshdr(Elf_Scn *s)
 GElf_Shdr *
 gelf_getshdr(Elf_Scn *s, GElf_Shdr *d)
 {
-	int ec;
 	void *sh;
+	unsigned int ec;
 	Elf32_Shdr *sh32;
 	Elf64_Shdr *sh64;
 
@@ -93,8 +93,8 @@ gelf_getshdr(Elf_Scn *s, GElf_Shdr *d)
 int
 gelf_update_shdr(Elf_Scn *scn, GElf_Shdr *s)
 {
-	int ec;
 	Elf *e;
+	unsigned int ec;
 	Elf32_Shdr *sh32;
 
 

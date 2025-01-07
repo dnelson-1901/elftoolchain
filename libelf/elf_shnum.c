@@ -39,7 +39,7 @@ static int
 _libelf_getshdrnum(Elf *e, size_t *shnum)
 {
 	void *eh;
-	int ec;
+	unsigned int ec;
 
 	if (e == NULL || e->e_kind != ELF_K_ELF ||
 	    ((ec = e->e_class) != ELFCLASS32 && ec != ELFCLASS64)) {

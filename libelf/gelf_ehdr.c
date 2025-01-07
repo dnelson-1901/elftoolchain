@@ -54,7 +54,7 @@ elf64_getehdr(Elf *e)
 GElf_Ehdr *
 gelf_getehdr(Elf *e, GElf_Ehdr *d)
 {
-	int ec;
+	unsigned int ec;
 	Elf32_Ehdr *eh32;
 	Elf64_Ehdr *eh64;
 
@@ -113,7 +113,7 @@ gelf_newehdr(Elf *e, int ec)
 {
 	if (e != NULL &&
 	    (ec == ELFCLASS32 || ec == ELFCLASS64))
-		return (_libelf_ehdr(e, ec, 1));
+		return (_libelf_ehdr(e, (unsigned) ec, 1));
 
 	LIBELF_SET_ERROR(ARGUMENT, 0);
 	return (NULL);
@@ -122,8 +122,8 @@ gelf_newehdr(Elf *e, int ec)
 int
 gelf_update_ehdr(Elf *e, GElf_Ehdr *s)
 {
-	int ec;
 	void *ehdr;
+	unsigned int ec;
 	Elf32_Ehdr *eh32;
 	Elf64_Ehdr *eh64;
 

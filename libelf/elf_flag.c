@@ -84,8 +84,8 @@ elf_flagdata(Elf_Data *d, Elf_Cmd c, unsigned int flags)
 unsigned int
 elf_flagehdr(Elf *e, Elf_Cmd c, unsigned int flags)
 {
-	int ec;
 	void *ehdr;
+	unsigned int ec;
 
 	if (e == NULL)
 		return (0);
@@ -146,8 +146,8 @@ elf_flagelf(Elf *e, Elf_Cmd c, unsigned int flags)
 unsigned int
 elf_flagphdr(Elf *e, Elf_Cmd c, unsigned int flags)
 {
-	int ec;
 	void *phdr;
+	unsigned int ec;
 
 	if (e == NULL)
 		return (0);

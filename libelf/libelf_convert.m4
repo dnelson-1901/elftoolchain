@@ -1081,7 +1081,8 @@ CONVERTER_NAMES(ELF_TYPE_LIST)
  * direction, ELF class and ELF machine.
  */
 _libelf_translator_function *
-_libelf_get_translator(Elf_Type t, int direction, int elfclass, int elfmachine)
+_libelf_get_translator(Elf_Type t, int direction, unsigned int elfclass,
+    int elfmachine)
 {
 	assert(elfclass == ELFCLASS32 || elfclass == ELFCLASS64);
 	assert(direction == ELF_TOFILE || direction == ELF_TOMEMORY);

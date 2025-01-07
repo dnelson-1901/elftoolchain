@@ -37,5 +37,5 @@ ELFTC_VCSID("$Id$");
 int
 gelf_getclass(Elf *e)
 {
-	return (e != NULL ? e->e_class : ELFCLASSNONE);
+	return (int) (e != NULL ? e->e_class : ELFCLASSNONE);
 }
