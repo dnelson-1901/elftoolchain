@@ -50,7 +50,7 @@ divert(0)dnl
 #include "libelftc.h"
 
 const char *
-elftc_get_machine_name(int e_machine)
+elftc_get_machine_name(unsigned int e_machine)
 {
 
 	switch (e_machine)
