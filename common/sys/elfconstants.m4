@@ -575,11 +575,11 @@ _(EI_NIDENT,  16,
 # The ELF class of an object.
 #
 define(`DEFINE_ELF_CLASSES',`
-_(ELFCLASSNONE, 0,
+_(ELFCLASSNONE, 0U,
 	`Unknown ELF class')
-_(ELFCLASS32,   1,
+_(ELFCLASS32,   1U,
 	`32 bit objects')
-_(ELFCLASS64,   2,
+_(ELFCLASS64,   2U,
 	`64 bit objects')
 ')
 
@@ -587,11 +587,11 @@ _(ELFCLASS64,   2,
 # Endianness of data in an ELF object.
 #
 define(`DEFINE_ELF_DATA_ENDIANNESSES',`
-_(ELFDATANONE, 0,
+_(ELFDATANONE, 0U,
 	`Unknown data endianness')
-_(ELFDATA2LSB, 1,
+_(ELFDATA2LSB, 1U,
 	`little endian')
-_(ELFDATA2MSB, 2,
+_(ELFDATA2MSB, 2U,
 	`big endian')
 ')
 
@@ -617,51 +617,51 @@ _(SELFMAG, 4)
 # ELF OS ABI field.
 #
 define(`DEFINE_ELF_OSABIS',`
-_(ELFOSABI_NONE,       0,
+_(ELFOSABI_NONE,       0U,
 	`No extensions or unspecified')
-_(ELFOSABI_SYSV,       0,
+_(ELFOSABI_SYSV,       0U,
 	`SYSV')
-_(ELFOSABI_HPUX,       1,
+_(ELFOSABI_HPUX,       1U,
 	`Hewlett-Packard HP-UX')
-_(ELFOSABI_NETBSD,     2,
+_(ELFOSABI_NETBSD,     2U,
 	`NetBSD')
-_(ELFOSABI_GNU,        3,
+_(ELFOSABI_GNU,        3U,
 	`GNU')
-_(ELFOSABI_HURD,       4,
+_(ELFOSABI_HURD,       4U,
 	`GNU/HURD')
-_(ELFOSABI_86OPEN,     5,
+_(ELFOSABI_86OPEN,     5U,
 	`86Open Common ABI')
-_(ELFOSABI_SOLARIS,    6,
+_(ELFOSABI_SOLARIS,    6U,
 	`Sun Solaris')
-_(ELFOSABI_AIX,        7,
+_(ELFOSABI_AIX,        7U,
 	`AIX')
-_(ELFOSABI_IRIX,       8,
+_(ELFOSABI_IRIX,       8U,
 	`IRIX')
-_(ELFOSABI_FREEBSD,    9,
+_(ELFOSABI_FREEBSD,    9U,
 	`FreeBSD')
-_(ELFOSABI_TRU64,      10,
+_(ELFOSABI_TRU64,      10U,
 	`Compaq TRU64 UNIX')
-_(ELFOSABI_MODESTO,    11,
+_(ELFOSABI_MODESTO,    11U,
 	`Novell Modesto')
-_(ELFOSABI_OPENBSD,    12,
+_(ELFOSABI_OPENBSD,    12U,
 	`Open BSD')
-_(ELFOSABI_OPENVMS,    13,
+_(ELFOSABI_OPENVMS,    13U,
 	`Open VMS')
-_(ELFOSABI_NSK,        14,
+_(ELFOSABI_NSK,        14U,
 	`Hewlett-Packard Non-Stop Kernel')
-_(ELFOSABI_AROS,       15,
+_(ELFOSABI_AROS,       15U,
 	`Amiga Research OS')
-_(ELFOSABI_FENIXOS,    16,
+_(ELFOSABI_FENIXOS,    16U,
 	`The FenixOS highly scalable multi-core OS')
-_(ELFOSABI_CLOUDABI,   17,
+_(ELFOSABI_CLOUDABI,   17U,
 	`Nuxi CloudABI')
-_(ELFOSABI_OPENVOS,    18,
+_(ELFOSABI_OPENVOS,    18U,
 	`Stratus Technologies OpenVOS')
-_(ELFOSABI_ARM_AEABI,  64,
+_(ELFOSABI_ARM_AEABI,  64U,
 	`ARM specific symbol versioning extensions')
-_(ELFOSABI_ARM,        97,
+_(ELFOSABI_ARM,        97U,
 	`ARM ABI')
-_(ELFOSABI_STANDALONE, 255,
+_(ELFOSABI_STANDALONE, 255U,
 	`Standalone (embedded) application')
 ')
 
@@ -1120,8 +1120,8 @@ _(ET_HIPROC, 0xFFFFU,
 
 # ELF file format version numbers.
 define(`DEFINE_ELF_FILE_VERSIONS',`
-_(EV_NONE, 0)
-_(EV_CURRENT, 1)
+_(EV_NONE, 0U)
+_(EV_CURRENT, 1U)
 ')
 
 #
