@@ -659,7 +659,7 @@ phdr_type(unsigned int mach, unsigned int ptype)
 			}
 			break;
 		}
-		snprintf(s_ptype, sizeof(s_ptype), "LOPROC+%#lx",
+		snprintf(s_ptype, sizeof(s_ptype), "LOPROC+%#x",
 		    ptype - PT_LOPROC);
 		return (s_ptype);
 	}
@@ -681,7 +681,7 @@ phdr_type(unsigned int mach, unsigned int ptype)
 	case PT_OPENBSD_BOOTDATA: return "OPENBSD_BOOTDATA";
 	default:
 		if (ptype >= PT_LOOS && ptype <= PT_HIOS)
-			snprintf(s_ptype, sizeof(s_ptype), "LOOS+%#lx",
+			snprintf(s_ptype, sizeof(s_ptype), "LOOS+%#x",
 			    ptype - PT_LOOS);
 		else
 			snprintf(s_ptype, sizeof(s_ptype), "<unknown: %#x>",
@@ -753,7 +753,7 @@ section_type(unsigned int mach, unsigned int stype)
 			break;
 		}
 
-		snprintf(s_stype, sizeof(s_stype), "LOPROC+%#lx",
+		snprintf(s_stype, sizeof(s_stype), "LOPROC+%#x",
 		    stype - SHT_LOPROC);
 		return (s_stype);
 	}
@@ -790,10 +790,10 @@ section_type(unsigned int mach, unsigned int stype)
 	case SHT_SUNW_versym: return "SUNW_versym";
 	default:
 		if (stype >= SHT_LOOS && stype <= SHT_HIOS)
-			snprintf(s_stype, sizeof(s_stype), "LOOS+%#lx",
+			snprintf(s_stype, sizeof(s_stype), "LOOS+%#x",
 			    stype - SHT_LOOS);
 		else if (stype >= SHT_LOUSER)
-			snprintf(s_stype, sizeof(s_stype), "LOUSER+%#lx",
+			snprintf(s_stype, sizeof(s_stype), "LOUSER+%#x",
 			    stype - SHT_LOUSER);
 		else
 			snprintf(s_stype, sizeof(s_stype), "<unknown: %#x>",
@@ -4529,9 +4529,9 @@ dump_mips_options(struct readelf *re, struct section *s)
 			dump_mips_odk_reginfo(re, p, size);
 			break;
 		case ODK_EXCEPTIONS:
-			printf(" EXCEPTIONS FPU_MIN: %#lx\n",
+			printf(" EXCEPTIONS FPU_MIN: %#x\n",
 			    info & OEX_FPU_MIN);
-			printf("%11.11s FPU_MAX: %#lx\n", "",
+			printf("%11.11s FPU_MAX: %#x\n", "",
 			    info & OEX_FPU_MAX);
 			dump_mips_option_flags("", mips_exceptions_option,
 			    info);
