@@ -226,36 +226,6 @@ d_tags(uint64_t tag)
 }
 
 static const char *
-e_machines(unsigned int mach)
-{
-	static char machdesc[64];
-
-	switch (mach) {
-	case EM_NONE:	return "EM_NONE";
-	case EM_M32:	return "EM_M32";
-	case EM_SPARC:	return "EM_SPARC";
-	case EM_386:	return "EM_386";
-	case EM_68K:	return "EM_68K";
-	case EM_88K:	return "EM_88K";
-	case EM_IAMCU:	return "EM_IAMCU";
-	case EM_860:	return "EM_860";
-	case EM_MIPS:	return "EM_MIPS";
-	case EM_PPC:	return "EM_PPC";
-	case EM_PPC64:	return "EM_PPC64";
-	case EM_ARM:	return "EM_ARM";
-	case EM_ALPHA:	return "EM_ALPHA (legacy)";
-	case EM_SPARCV9:return "EM_SPARCV9";
-	case EM_IA_64:	return "EM_IA_64";
-	case EM_X86_64:	return "EM_X86_64";
-	case EM_AARCH64:return "EM_AARCH64";
-	case EM_RISCV:	return "EM_RISCV";
-	}
-	snprintf(machdesc, sizeof(machdesc),
-	    "(unknown machine) -- type 0x%x", mach);
-	return (machdesc);
-}
-
-static const char *
 elf_type_str(unsigned int type)
 {
 	static char s_type[32];
@@ -1287,10 +1257,18 @@ get_string(struct elfdump *ed, int strtab, size_t off)
 static void
 elf_print_ehdr(struct elfdump *ed)
 {
+	const char *em_name;
+	char em_name_buffer[64];
 
 	if (!STAILQ_EMPTY(&ed->snl))
 		return;
 
+	if ((em_name = elftc_get_machine_name(ed->ehdr.e_machine)) == NULL) {
+		(void) snprintf(em_name_buffer, sizeof(em_name_buffer),
+		    "(unknown machine) -- type 0x%x", ed->ehdr.e_machine);
+		em_name = em_name_buffer;
+	}
+	
 	if (ed->flags & SOLARIS_FMT) {
 		PRT("\nELF Header\n");
 		PRT("  ei_magic:   { %#x, %c, %c, %c }\n",
@@ -1300,7 +1278,7 @@ elf_print_ehdr(struct elfdump *ed)
 		    elf_class_str(ed->ehdr.e_ident[EI_CLASS]));
 		PRT("  ei_data:      %s\n",
 		    elf_data_str(ed->ehdr.e_ident[EI_DATA]));
-		PRT("  e_machine:  %-18s", e_machines(ed->ehdr.e_machine));
+		PRT("  e_machine:  %-18s", em_name);
 		PRT("  e_version:    %s\n",
 		    elf_version_str(ed->ehdr.e_version));
 		PRT("  e_type:     %s\n", elf_type_str(ed->ehdr.e_type));
@@ -1322,7 +1300,7 @@ elf_print_ehdr(struct elfdump *ed)
 		    elf_data_str(ed->ehdr.e_ident[EI_DATA]),
 		    ei_abis[ed->ehdr.e_ident[EI_OSABI]]);
 		PRT("\te_type: %s\n", elf_type_str(ed->ehdr.e_type));
-		PRT("\te_machine: %s\n", e_machines(ed->ehdr.e_machine));
+		PRT("\te_machine: %s\n", em_name);
 		PRT("\te_version: %s\n", elf_version_str(ed->ehdr.e_version));
 		PRT("\te_entry: %#jx\n", (uintmax_t)ed->ehdr.e_entry);
 		PRT("\te_phoff: %ju\n", (uintmax_t)ed->ehdr.e_phoff);
