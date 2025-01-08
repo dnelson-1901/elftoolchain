@@ -674,417 +674,417 @@ _(ELFOSABI_LINUX,	ELFOSABI_GNU)
 # ELF Machine types: (EM_*).
 #
 define(`DEFINE_ELF_MACHINE_TYPES',`
-_(EM_NONE,             0,
+_(EM_NONE,             0U,
 	`No machine')
-_(EM_M32,              1,
+_(EM_M32,              1U,
 	`AT&T WE 32100')
-_(EM_SPARC,            2,
+_(EM_SPARC,            2U,
 	`SPARC')
-_(EM_386,              3,
+_(EM_386,              3U,
 	`Intel 80386')
-_(EM_68K,              4,
+_(EM_68K,              4U,
 	`Motorola 68000')
-_(EM_88K,              5,
+_(EM_88K,              5U,
 	`Motorola 88000')
-_(EM_IAMCU,            6,
+_(EM_IAMCU,            6U,
 	`Intel MCU')
-_(EM_860,              7,
+_(EM_860,              7U,
 	`Intel 80860')
-_(EM_MIPS,             8,
+_(EM_MIPS,             8U,
 	`MIPS I Architecture')
-_(EM_S370,             9,
+_(EM_S370,             9U,
 	`IBM System/370 Processor')
-_(EM_MIPS_RS3_LE,      10,
+_(EM_MIPS_RS3_LE,      10U,
 	`MIPS RS3000 Little-endian')
-_(EM_PARISC,           15,
+_(EM_PARISC,           15U,
 	`Hewlett-Packard PA-RISC')
-_(EM_VPP500,           17,
+_(EM_VPP500,           17U,
 	`Fujitsu VPP500')
-_(EM_SPARC32PLUS,      18,
+_(EM_SPARC32PLUS,      18U,
 	`Enhanced instruction set SPARC')
-_(EM_960,              19,
+_(EM_960,              19U,
 	`Intel 80960')
-_(EM_PPC,              20,
+_(EM_PPC,              20U,
 	`PowerPC')
-_(EM_PPC64,            21,
+_(EM_PPC64,            21U,
 	`64-bit PowerPC')
-_(EM_S390,             22,
+_(EM_S390,             22U,
 	`IBM System/390 Processor')
-_(EM_SPU,              23,
+_(EM_SPU,              23U,
 	`IBM SPU/SPC')
-_(EM_V800,             36,
+_(EM_V800,             36U,
 	`NEC V800')
-_(EM_FR20,             37,
+_(EM_FR20,             37U,
 	`Fujitsu FR20')
-_(EM_RH32,             38,
+_(EM_RH32,             38U,
 	`TRW RH-32')
-_(EM_RCE,              39,
+_(EM_RCE,              39U,
 	`Motorola RCE')
-_(EM_ARM,              40,
+_(EM_ARM,              40U,
 	`Advanced RISC Machines ARM')
-_(EM_ALPHA,            41,
+_(EM_ALPHA,            41U,
 	`Digital Alpha')
-_(EM_SH,               42,
+_(EM_SH,               42U,
 	`Hitachi SH')
-_(EM_SPARCV9,          43,
+_(EM_SPARCV9,          43U,
 	`SPARC Version 9')
-_(EM_TRICORE,          44,
+_(EM_TRICORE,          44U,
 	`Siemens TriCore embedded processor')
-_(EM_ARC,              45,
+_(EM_ARC,              45U,
 	`Argonaut RISC Core, Argonaut Technologies Inc.')
-_(EM_H8_300,           46,
+_(EM_H8_300,           46U,
 	`Hitachi H8/300')
-_(EM_H8_300H,          47,
+_(EM_H8_300H,          47U,
 	`Hitachi H8/300H')
-_(EM_H8S,              48,
+_(EM_H8S,              48U,
 	`Hitachi H8S')
-_(EM_H8_500,           49,
+_(EM_H8_500,           49U,
 	`Hitachi H8/500')
-_(EM_IA_64,            50,
+_(EM_IA_64,            50U,
 	`Intel IA-64 processor architecture')
-_(EM_MIPS_X,           51,
+_(EM_MIPS_X,           51U,
 	`Stanford MIPS-X')
-_(EM_COLDFIRE,         52,
+_(EM_COLDFIRE,         52U,
 	`Motorola ColdFire')
-_(EM_68HC12,           53,
+_(EM_68HC12,           53U,
 	`Motorola M68HC12')
-_(EM_MMA,              54,
+_(EM_MMA,              54U,
 	`Fujitsu MMA Multimedia Accelerator')
-_(EM_PCP,              55,
+_(EM_PCP,              55U,
 	`Siemens PCP')
-_(EM_NCPU,             56,
+_(EM_NCPU,             56U,
 	`Sony nCPU embedded RISC processor')
-_(EM_NDR1,             57,
+_(EM_NDR1,             57U,
 	`Denso NDR1 microprocessor')
-_(EM_STARCORE,         58,
+_(EM_STARCORE,         58U,
 	`Motorola Star*Core processor')
-_(EM_ME16,             59,
+_(EM_ME16,             59U,
 	`Toyota ME16 processor')
-_(EM_ST100,            60,
+_(EM_ST100,            60U,
 	`STMicroelectronics ST100 processor')
-_(EM_TINYJ,            61,
+_(EM_TINYJ,            61U,
 	`Advanced Logic Corp. TinyJ embedded processor family')
-_(EM_X86_64,           62,
+_(EM_X86_64,           62U,
 	`AMD x86-64 architecture')
-_(EM_PDSP,             63,
+_(EM_PDSP,             63U,
 	`Sony DSP Processor')
-_(EM_PDP10,            64,
+_(EM_PDP10,            64U,
 	`Digital Equipment Corp. PDP-10')
-_(EM_PDP11,            65,
+_(EM_PDP11,            65U,
 	`Digital Equipment Corp. PDP-11')
-_(EM_FX66,             66,
+_(EM_FX66,             66U,
 	`Siemens FX66 microcontroller')
-_(EM_ST9PLUS,          67,
+_(EM_ST9PLUS,          67U,
 	`STMicroelectronics ST9+ 8/16 bit microcontroller')
-_(EM_ST7,              68,
+_(EM_ST7,              68U,
 	`STMicroelectronics ST7 8-bit microcontroller')
-_(EM_68HC16,           69,
+_(EM_68HC16,           69U,
 	`Motorola MC68HC16 Microcontroller')
-_(EM_68HC11,           70,
+_(EM_68HC11,           70U,
 	`Motorola MC68HC11 Microcontroller')
-_(EM_68HC08,           71,
+_(EM_68HC08,           71U,
 	`Motorola MC68HC08 Microcontroller')
-_(EM_68HC05,           72,
+_(EM_68HC05,           72U,
 	`Motorola MC68HC05 Microcontroller')
-_(EM_SVX,              73,
+_(EM_SVX,              73U,
 	`Silicon Graphics SVx')
-_(EM_ST19,             74,
+_(EM_ST19,             74U,
 	`STMicroelectronics ST19 8-bit microcontroller')
-_(EM_VAX,              75,
+_(EM_VAX,              75U,
 	`Digital VAX')
-_(EM_CRIS,             76,
+_(EM_CRIS,             76U,
 	`Axis Communications 32-bit embedded processor')
-_(EM_JAVELIN,          77,
+_(EM_JAVELIN,          77U,
 	`Infineon Technologies 32-bit embedded processor')
-_(EM_FIREPATH,         78,
+_(EM_FIREPATH,         78U,
 	`Element 14 64-bit DSP Processor')
-_(EM_ZSP,              79,
+_(EM_ZSP,              79U,
 	`LSI Logic 16-bit DSP Processor')
-_(EM_MMIX,             80,
+_(EM_MMIX,             80U,
 	`Educational 64-bit processor by Donald Knuth')
-_(EM_HUANY,            81,
+_(EM_HUANY,            81U,
 	`Harvard University machine-independent object files')
-_(EM_PRISM,            82,
+_(EM_PRISM,            82U,
 	`SiTera Prism')
-_(EM_AVR,              83,
+_(EM_AVR,              83U,
 	`Atmel AVR 8-bit microcontroller')
-_(EM_FR30,             84,
+_(EM_FR30,             84U,
 	`Fujitsu FR30')
-_(EM_D10V,             85,
+_(EM_D10V,             85U,
 	`Mitsubishi D10V')
-_(EM_D30V,             86,
+_(EM_D30V,             86U,
 	`Mitsubishi D30V')
-_(EM_V850,             87,
+_(EM_V850,             87U,
 	`NEC v850')
-_(EM_M32R,             88,
+_(EM_M32R,             88U,
 	`Mitsubishi M32R')
-_(EM_MN10300,          89,
+_(EM_MN10300,          89U,
 	`Matsushita MN10300')
-_(EM_MN10200,          90,
+_(EM_MN10200,          90U,
 	`Matsushita MN10200')
-_(EM_PJ,               91,
+_(EM_PJ,               91U,
 	`picoJava')
-_(EM_OPENRISC,         92,
+_(EM_OPENRISC,         92U,
 	`OpenRISC 32-bit embedded processor')
-_(EM_ARC_COMPACT,      93,
+_(EM_ARC_COMPACT,      93U,
 	`ARC International ARCompact processor')
-_(EM_XTENSA,           94,
+_(EM_XTENSA,           94U,
 	`Tensilica Xtensa Architecture')
-_(EM_VIDEOCORE,        95,
+_(EM_VIDEOCORE,        95U,
 	`Alphamosaic VideoCore processor')
-_(EM_TMM_GPP,          96,
+_(EM_TMM_GPP,          96U,
 	`Thompson Multimedia General Purpose Processor')
-_(EM_NS32K,            97,
+_(EM_NS32K,            97U,
 	`National Semiconductor 32000 series')
-_(EM_TPC,              98,
+_(EM_TPC,              98U,
 	`Tenor Network TPC processor')
-_(EM_SNP1K,            99,
+_(EM_SNP1K,            99U,
 	`Trebia SNP 1000 processor')
-_(EM_ST200,            100,
+_(EM_ST200,            100U,
 	`STMicroelectronics (www.st.com) ST200 microcontroller')
-_(EM_IP2K,             101,
+_(EM_IP2K,             101U,
 	`Ubicom IP2xxx microcontroller family')
-_(EM_MAX,              102,
+_(EM_MAX,              102U,
 	`MAX Processor')
-_(EM_CR,               103,
+_(EM_CR,               103U,
 	`National Semiconductor CompactRISC microprocessor')
-_(EM_F2MC16,           104,
+_(EM_F2MC16,           104U,
 	`Fujitsu F2MC16')
-_(EM_MSP430,           105,
+_(EM_MSP430,           105U,
 	`Texas Instruments embedded microcontroller msp430')
-_(EM_BLACKFIN,         106,
+_(EM_BLACKFIN,         106U,
 	`Analog Devices Blackfin (DSP) processor')
-_(EM_SE_C33,           107,
+_(EM_SE_C33,           107U,
 	`S1C33 Family of Seiko Epson processors')
-_(EM_SEP,              108,
+_(EM_SEP,              108U,
 	`Sharp embedded microprocessor')
-_(EM_ARCA,             109,
+_(EM_ARCA,             109U,
 	`Arca RISC Microprocessor')
-_(EM_UNICORE,          110,
+_(EM_UNICORE,          110U,
 	`Microprocessor series from PKU-Unity Ltd. and MPRC of Peking University')
-_(EM_EXCESS,           111,
+_(EM_EXCESS,           111U,
 	`eXcess: 16/32/64-bit configurable embedded CPU')
-_(EM_DXP,              112,
+_(EM_DXP,              112U,
 	`Icera Semiconductor Inc. Deep Execution Processor')
-_(EM_ALTERA_NIOS2,     113,
+_(EM_ALTERA_NIOS2,     113U,
 	`Altera Nios II soft-core processor')
-_(EM_CRX,              114,
+_(EM_CRX,              114U,
 	`National Semiconductor CompactRISC CRX microprocessor')
-_(EM_XGATE,            115,
+_(EM_XGATE,            115U,
 	`Motorola XGATE embedded processor')
-_(EM_C166,             116,
+_(EM_C166,             116U,
 	`Infineon C16x/XC16x processor')
-_(EM_M16C,             117,
+_(EM_M16C,             117U,
 	`Renesas M16C series microprocessors')
-_(EM_DSPIC30F,         118,
+_(EM_DSPIC30F,         118U,
 	`Microchip Technology dsPIC30F Digital Signal Controller')
-_(EM_CE,               119,
+_(EM_CE,               119U,
 	`Freescale Communication Engine RISC core')
-_(EM_M32C,             120,
+_(EM_M32C,             120U,
 	`Renesas M32C series microprocessors')
-_(EM_TSK3000,          131,
+_(EM_TSK3000,          131U,
 	`Altium TSK3000 core')
-_(EM_RS08,             132,
+_(EM_RS08,             132U,
 	`Freescale RS08 embedded processor')
-_(EM_SHARC,            133,
+_(EM_SHARC,            133U,
 	`Analog Devices SHARC family of 32-bit DSP processors')
-_(EM_ECOG2,            134,
+_(EM_ECOG2,            134U,
 	`Cyan Technology eCOG2 microprocessor')
-_(EM_SCORE7,           135,
+_(EM_SCORE7,           135U,
 	`Sunplus S+core7 RISC processor')
-_(EM_DSP24,            136,
+_(EM_DSP24,            136U,
 	`New Japan Radio (NJR) 24-bit DSP Processor')
-_(EM_VIDEOCORE3,       137,
+_(EM_VIDEOCORE3,       137U,
 	`Broadcom VideoCore III processor')
-_(EM_LATTICEMICO32,    138,
+_(EM_LATTICEMICO32,    138U,
 	`RISC processor for Lattice FPGA architecture')
-_(EM_SE_C17,           139,
+_(EM_SE_C17,           139U,
 	`Seiko Epson C17 family')
-_(EM_TI_C6000,         140,
+_(EM_TI_C6000,         140U,
 	`The Texas Instruments TMS320C6000 DSP family')
-_(EM_TI_C2000,         141,
+_(EM_TI_C2000,         141U,
 	`The Texas Instruments TMS320C2000 DSP family')
-_(EM_TI_C5500,         142,
+_(EM_TI_C5500,         142U,
 	`The Texas Instruments TMS320C55x DSP family')
-_(EM_TI_ARP32,         143,
+_(EM_TI_ARP32,         143U,
 	`Texas Instruments Application Specific RISC Processor, 32bit fetch')
-_(EM_TI_PRU,           144,
+_(EM_TI_PRU,           144U,
 	`Texas Instruments Programmable Realtime Unit')
-_(EM_MMDSP_PLUS,       160,
+_(EM_MMDSP_PLUS,       160U,
 	`STMicroelectronics 64bit VLIW Data Signal Processor')
-_(EM_CYPRESS_M8C,      161,
+_(EM_CYPRESS_M8C,      161U,
 	`Cypress M8C microprocessor')
-_(EM_R32C,             162,
+_(EM_R32C,             162U,
 	`Renesas R32C series microprocessors')
-_(EM_TRIMEDIA,         163,
+_(EM_TRIMEDIA,         163U,
 	`NXP Semiconductors TriMedia architecture family')
-_(EM_QDSP6,            164,
+_(EM_QDSP6,            164U,
 	`QUALCOMM DSP6 Processor')
-_(EM_8051,             165,
+_(EM_8051,             165U,
 	`Intel 8051 and variants')
-_(EM_STXP7X,           166,
+_(EM_STXP7X,           166U,
 	`STMicroelectronics STxP7x family of configurable and extensible RISC processors')
-_(EM_NDS32,            167,
+_(EM_NDS32,            167U,
 	`Andes Technology compact code size embedded RISC processor family')
-_(EM_ECOG1X,           168,
+_(EM_ECOG1X,           168U,
 	`Cyan Technology eCOG1X family')
-_(EM_MAXQ30,           169,
+_(EM_MAXQ30,           169U,
 	`Dallas Semiconductor MAXQ30 Core Micro-controllers')
-_(EM_XIMO16,           170,
+_(EM_XIMO16,           170U,
 	`New Japan Radio (NJR) 16-bit DSP Processor')
-_(EM_MANIK,            171,
+_(EM_MANIK,            171U,
 	`M2000 Reconfigurable RISC Microprocessor')
-_(EM_CRAYNV2,          172,
+_(EM_CRAYNV2,          172U,
 	`Cray Inc. NV2 vector architecture')
-_(EM_RX,               173,
+_(EM_RX,               173U,
 	`Renesas RX family')
-_(EM_METAG,            174,
+_(EM_METAG,            174U,
 	`Imagination Technologies META processor architecture')
-_(EM_MCST_ELBRUS,      175,
+_(EM_MCST_ELBRUS,      175U,
 	`MCST Elbrus general purpose hardware architecture')
-_(EM_ECOG16,           176,
+_(EM_ECOG16,           176U,
 	`Cyan Technology eCOG16 family')
-_(EM_CR16,             177,
+_(EM_CR16,             177U,
 	`National Semiconductor CompactRISC CR16 16-bit microprocessor')
-_(EM_ETPU,             178,
+_(EM_ETPU,             178U,
 	`Freescale Extended Time Processing Unit')
-_(EM_SLE9X,            179,
+_(EM_SLE9X,            179U,
 	`Infineon Technologies SLE9X core')
-_(EM_L10M,             180,
+_(EM_L10M,             180U,
 	`Intel L10M')
-_(EM_K10M,             181,
+_(EM_K10M,             181U,
 	`Intel K10M')
-_(EM_AARCH64,          183,
+_(EM_AARCH64,          183U,
 	`AArch64 (64-bit ARM)')
-_(EM_AVR32,            185,
+_(EM_AVR32,            185U,
 	`Atmel Corporation 32-bit microprocessor family')
-_(EM_STM8,             186,
+_(EM_STM8,             186U,
 	`STMicroeletronics STM8 8-bit microcontroller')
-_(EM_TILE64,           187,
+_(EM_TILE64,           187U,
 	`Tilera TILE64 multicore architecture family')
-_(EM_TILEPRO,          188,
+_(EM_TILEPRO,          188U,
 	`Tilera TILEPro multicore architecture family')
-_(EM_MICROBLAZE,       189,
+_(EM_MICROBLAZE,       189U,
 	`Xilinx MicroBlaze 32-bit RISC soft processor core')
-_(EM_CUDA,             190,
+_(EM_CUDA,             190U,
 	`NVIDIA CUDA architecture')
-_(EM_TILEGX,           191,
+_(EM_TILEGX,           191U,
 	`Tilera TILE-Gx multicore architecture family')
-_(EM_CLOUDSHIELD,      192,
+_(EM_CLOUDSHIELD,      192U,
 	`CloudShield architecture family')
-_(EM_COREA_1ST,        193,
+_(EM_COREA_1ST,        193U,
 	`KIPO-KAIST Core-A 1st generation processor family')
-_(EM_COREA_2ND,        194,
+_(EM_COREA_2ND,        194U,
 	`KIPO-KAIST Core-A 2nd generation processor family')
-_(EM_ARC_COMPACT2,     195,
+_(EM_ARC_COMPACT2,     195U,
 	`Synopsys ARCompact V2')
-_(EM_OPEN8,            196,
+_(EM_OPEN8,            196U,
 	`Open8 8-bit RISC soft processor core')
-_(EM_RL78,             197,
+_(EM_RL78,             197U,
 	`Renesas RL78 family')
-_(EM_VIDEOCORE5,       198,
+_(EM_VIDEOCORE5,       198U,
 	`Broadcom VideoCore V processor')
-_(EM_78KOR,            199,
+_(EM_78KOR,            199U,
 	`Renesas 78KOR family')
-_(EM_56800EX,          200,
+_(EM_56800EX,          200U,
 	`Freescale 56800EX Digital Signal Controller')
-_(EM_BA1,              201,
+_(EM_BA1,              201U,
 	`Beyond BA1 CPU architecture')
-_(EM_BA2,              202,
+_(EM_BA2,              202U,
 	`Beyond BA2 CPU architecture')
-_(EM_XCORE,            203,
+_(EM_XCORE,            203U,
 	`XMOS xCORE processor family')
-_(EM_MCHP_PIC,         204,
+_(EM_MCHP_PIC,         204U,
 	`Microchip 8-bit PIC(r) family')
-_(EM_INTELGT,          205,
+_(EM_INTELGT,          205U,
 	`Intel Graphics Technology')
-_(EM_INTEL206,         206,
+_(EM_INTEL206,         206U,
 	`Reserved by Intel')
-_(EM_INTEL207,         207,
+_(EM_INTEL207,         207U,
 	`Reserved by Intel')
-_(EM_INTEL208,         208,
+_(EM_INTEL208,         208U,
 	`Reserved by Intel')
-_(EM_INTEL209,         209,
+_(EM_INTEL209,         209U,
 	`Reserved by Intel')
-_(EM_KM32,             210,
+_(EM_KM32,             210U,
 	`KM211 KM32 32-bit processor')
-_(EM_KMX32,            211,
+_(EM_KMX32,            211U,
 	`KM211 KMX32 32-bit processor')
-_(EM_KMX16,            212,
+_(EM_KMX16,            212U,
 	`KM211 KMX16 16-bit processor')
-_(EM_KMX8,             213,
+_(EM_KMX8,             213U,
 	`KM211 KMX8 8-bit processor')
-_(EM_KVARC,            214,
+_(EM_KVARC,            214U,
 	`KM211 KMX32 KVARC processor')
-_(EM_CDP,              215,
+_(EM_CDP,              215U,
 	`Paneve CDP architecture family')
-_(EM_COGE,             216,
+_(EM_COGE,             216U,
 	`Cognitive Smart Memory Processor')
-_(EM_COOL,             217,
+_(EM_COOL,             217U,
 	`Bluechip Systems CoolEngine')
-_(EM_NORC,             218,
+_(EM_NORC,             218U,
 	`Nanoradio Optimized RISC')
-_(EM_CSR_KALIMBA,      219,
+_(EM_CSR_KALIMBA,      219U,
 	`CSR Kalimba architecture family')
-_(EM_Z80,              220,
+_(EM_Z80,              220U,
 	`Zilog Z80')
-_(EM_VISIUM,           221,
+_(EM_VISIUM,           221U,
 	`Controls and Data Services VISIUMcore processor')
-_(EM_FT32,             222,
+_(EM_FT32,             222U,
 	`FTDI Chip FT32 high performance 32-bit RISC architecture')
-_(EM_MOXIE,            223,
+_(EM_MOXIE,            223U,
 	`Moxie processor family')
-_(EM_AMDGPU,           224,
+_(EM_AMDGPU,           224U,
 	`AMD GPU architecture')
-_(EM_RISCV,            243,
+_(EM_RISCV,            243U,
 	`RISC-V')
-_(EM_LANAI,            244,
+_(EM_LANAI,            244U,
 	`Lanai processor')
-_(EM_CEVA,             245,
+_(EM_CEVA,             245U,
 	`CEVA Processor Architecture Family')
-_(EM_CEVA_X2,          246,
+_(EM_CEVA_X2,          246U,
 	`CEVA X2 Processor Family')
-_(EM_BPF,              247,
+_(EM_BPF,              247U,
 	`Linux BPF – in-kernel virtual machine')
-_(EM_GRAPHCORE_IPU,    248,
+_(EM_GRAPHCORE_IPU,    248U,
 	`Graphcore Intelligent Processing Unit')
-_(EM_IMG1,             249,
+_(EM_IMG1,             249U,
 	`Imagination Technologies')
-_(EM_NFP,              250,
+_(EM_NFP,              250U,
 	`Netronome Flow Processor (NFP)')
-_(EM_VE,               251,
+_(EM_VE,               251U,
 	`NEC Vector Engine')
-_(EM_CSKY,             252,
+_(EM_CSKY,             252U,
 	`C-SKY processor family')
-_(EM_ARC_COMPACT3_64,  253,
+_(EM_ARC_COMPACT3_64,  253U,
 	`Synopsys ARCv2.3 64-bit')
-_(EM_MCS6502,          254,
+_(EM_MCS6502,          254U,
 	`MOS Technology MCS 6502 processor')
-_(EM_ARC_COMPACT3,     255,
+_(EM_ARC_COMPACT3,     255U,
 	`Synopsys ARCv2.3 32-bit')
-_(EM_KVX,              256,
+_(EM_KVX,              256U,
 	`Kalray VLIW core of the MPPA processor family')
-_(EM_65816,            257,
+_(EM_65816,            257U,
 	`WDC 65816/65C816')
-_(EM_LOONGARCH,        258,
+_(EM_LOONGARCH,        258U,
 	`Loongson LoongArch')
-_(EM_KF32,             259,
+_(EM_KF32,             259U,
 	`ChipON KungFu 32')
-_(EM_U16_U8CORE,       260,
+_(EM_U16_U8CORE,       260U,
 	`LAPIS nX-U16/U8')
-_(EM_TACHYUM,          261,
+_(EM_TACHYUM,          261U,
 	`Reserved for Tachyum processor')
-_(EM_56800EF,          262,
+_(EM_56800EF,          262U,
 	`NXP 56800EF Digital Signal Controller (DSC)')
-_(EM_SBF,              263,
+_(EM_SBF,              263U,
 	`Solana Bytecode Format')
-_(EM_AIENGINE,         264,
+_(EM_AIENGINE,         264U,
 	`AMD/Xilinx AIEngine architecture')
-_(EM_SIMA_MLA,         265,
+_(EM_SIMA_MLA,         265U,
 	`SiMa MLA')
-_(EM_BANG,             266,
+_(EM_BANG,             266U,
 	`Cambricon BANG')
-_(EM_LOONGGPU,         267,
+_(EM_LOONGGPU,         267U,
 	`Loongson LoongArch GPU')
 ')
 
