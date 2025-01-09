@@ -26,22 +26,6 @@
  * $Id$
  */
 
-#if defined(__NetBSD__)
-
-#include <machine/elf_machdep.h>
-
-#if	!defined(ARCH_ELFSIZE)
-#error	ARCH_ELFSIZE is not defined.
-#endif
-
-#if	ARCH_ELFSIZE == 32
-#define	Elf_Note		Elf32_Nhdr
-#else
-#define	Elf_Note		Elf64_Nhdr
-#endif
-
-#endif
-
 /*
  * Downstream projects can replace the following placeholder with a custom
  * definition of LIBELF_BYTEORDER, if the host's native byte order cannot
