@@ -236,6 +236,11 @@ DEFINE_VERSIONING_NUMBERS()
 DEFINE_RELOCATIONS()
 
 /*
+ * Alternate spellings for relocation type symbols.
+ */
+DEFINE_RELOCATION_TYPE_SYNONYMS()
+
+/*
  * MIPS ABI related.
  */
 DEFINE_MIPS_ABIS()
