@@ -236,6 +236,11 @@ DEFINE_VERSIONING_NUMBERS()
 DEFINE_RELOCATIONS()
 
 /*
+ * Obsolete relocation types.
+ */
+DEFINE_OBSOLETE_RELOCATION_TYPES()
+
+/*
  * Alternate spellings for relocation type symbols.
  */
 DEFINE_RELOCATION_TYPE_SYNONYMS()
