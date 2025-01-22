@@ -21,7 +21,8 @@ SRCS=	elftc_bfdtarget.c			\
 
 M4FLAGS=	-DTOP=${TOP}
 M4SRCS=	elftc_get_machine_description.m4	\
-	elftc_get_machine_name.m4
+	elftc_get_machine_name.m4		\
+	elftc_get_relocation_type_name.m4
 
 SRCS+=	${M4SRCS:S/.m4/.c/}
 CLEANFILES+=	${M4SRCS:S/.m4/.c/}

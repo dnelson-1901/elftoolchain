@@ -78,6 +78,8 @@ int		elftc_demangle(const char *_mangledname, char *_buffer,
     size_t _bufsize, unsigned int _flags);
 const char	*elftc_get_machine_description(unsigned int _e_machine);
 const char	*elftc_get_machine_name(unsigned int _e_machine);
+const char	*elftc_get_relocation_type_name(unsigned int _e_machine,
+    unsigned int _r_value);
 const char	*elftc_reloc_type_str(unsigned int mach, unsigned int type);
 int		elftc_set_timestamps(const char *_filename, struct stat *_sb);
 Elftc_String_Table	*elftc_string_table_create(size_t _sizehint);
