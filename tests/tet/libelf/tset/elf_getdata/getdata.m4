@@ -81,11 +81,14 @@ findscn(Elf *e, const char *name)
 static int
 match_content(Elf_Data *ed, size_t nbytes, const char *content)
 {
-	int n;
+	size_t n;
 	const char *buf;
 
 	if (ed->d_size != nbytes)
 		return (-1);
+
+	if (nbytes == 0)  /* Nothing to compare. */
+		return (0);
 
 	buf = (const char *) ed->d_buf;
 	for (n = 0; n < nbytes; n++) {
