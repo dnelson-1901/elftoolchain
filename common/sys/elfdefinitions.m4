@@ -233,7 +233,7 @@ DEFINE_VERSIONING_NUMBERS()
 /**
  ** Relocation types.
  **/
-DEFINE_RELOCATIONS()
+DEFINE_RELOCATION_TYPES()
 
 /*
  * Obsolete relocation types.

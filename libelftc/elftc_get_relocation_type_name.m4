@@ -38,12 +38,12 @@ define(`_',`		case $2: return "$1";')
 #
 # Usage:
 #
-#   EXPAND_RELOCATIONS(MACHINE)
+#   EXPAND_RELOCATION_TYPES(MACHINE)
 #
 # where "MACHINE" names a group of relocation types in "elfconstants.m4".
-define(`EXPAND_RELOCATIONS',`dnl
+define(`EXPAND_RELOCATION_TYPES',`dnl
 switch (r_value) {dnl
-DEFINE_$1_RELOCATIONS()dnl
+DEFINE_$1_RELOCATION_TYPES()dnl
 		default: /*FALLTHROUGH*/
 		}')
 divert(0)dnl
@@ -70,51 +70,51 @@ elftc_get_relocation_type_name(unsigned int e_machine, unsigned int r_value)
 	{
 	case EM_386:
 	case EM_IAMCU:
-		EXPAND_RELOCATIONS(386)
+		EXPAND_RELOCATION_TYPES(386)
 		break;
 
 	case EM_AARCH64:
-		EXPAND_RELOCATIONS(AARCH64)
+		EXPAND_RELOCATION_TYPES(AARCH64)
 		break;
 
 	case EM_ARM:
-		EXPAND_RELOCATIONS(ARM)
+		EXPAND_RELOCATION_TYPES(ARM)
 		break;
 
 	case EM_IA_64:
-		EXPAND_RELOCATIONS(IA_64)
+		EXPAND_RELOCATION_TYPES(IA_64)
 		break;
 
 	case EM_LOONGARCH:
-		EXPAND_RELOCATIONS(LOONGARCH)
+		EXPAND_RELOCATION_TYPES(LOONGARCH)
 		break;
 
 	case EM_MIPS:
-		EXPAND_RELOCATIONS(MIPS)
+		EXPAND_RELOCATION_TYPES(MIPS)
 		break;
 
 	case EM_PPC:
-		EXPAND_RELOCATIONS(PPC)
+		EXPAND_RELOCATION_TYPES(PPC)
 		break;
 
 	case EM_PPC64:
-		EXPAND_RELOCATIONS(PPC64)
+		EXPAND_RELOCATION_TYPES(PPC64)
 		break;
 
 	case EM_RISCV:
-		EXPAND_RELOCATIONS(RISCV)
+		EXPAND_RELOCATION_TYPES(RISCV)
 		break;
 
 	case EM_SPARC:
-		EXPAND_RELOCATIONS(SPARC)
+		EXPAND_RELOCATION_TYPES(SPARC)
 		break;
 
 	case EM_VAX:
-		EXPAND_RELOCATIONS(VAX)
+		EXPAND_RELOCATION_TYPES(VAX)
 		break;
 
 	case EM_X86_64:
-		EXPAND_RELOCATIONS(X86_64)
+		EXPAND_RELOCATION_TYPES(X86_64)
 		break;
 
 	default:
