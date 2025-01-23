@@ -23,7 +23,7 @@
 .\"
 .\" $Id$
 .\"
-.Dd January 2, 2025
+.Dd January 23, 2025
 .Dt ELFTC_GET_MACHINE_DESCRIPTION 3
 .Os
 .Sh NAME
@@ -38,6 +38,8 @@
 .Fn elftc_get_machine_description "unsigned int e_machine"
 .Ft const char *
 .Fn elftc_get_machine_name "unsigned int e_machine"
+.Ft const char *
+.Fn elftc_get_relocation_type_name "unsigned int e_machine" "unsigned int r_type"
 .Sh DESCRIPTION
 Function
 .Fn elftc_get_machine_description
@@ -51,7 +53,18 @@ returns a pointer to a string containing the symbolic name of the
 ELF machine architecture specified by argument
 .Ar e_machine .
 .Pp
-For both of these functions, the value in argument
+Function
+.Fn elftc_get_relocation_type_name
+returns a pointer to string containing the symbolic name of relocation
+type specified by argument
+.Ar r_type .
+The value of argument
+.Ar r_type
+should be a relocation type defined for the ELF machine architecture
+specified by argument
+.Ar e_machine .
+.Pp
+For these functions, the value in argument
 .Ar e_machine
 should be one of
 .Dv EM_*
@@ -75,6 +88,21 @@ if (name)
 else
 	(void) printf("Unknown EM_* value %d\en", e_machine);
 .Ed
+.Pp
+To retrieve and print the symbolic name for a relocation type number
+42 for the
+.Li EM_X86_64
+architecture, use:
+.Bd -literal -offset indent
+#include <libelftc.h>
+
+const char *name = elftc_get_relocation_type_name(EM_X86_64, 42U);
+if (name)
+	(void) printf("Relocation type: %s\en", name);
+else
+	(void) printf("Unknown relocation type %u for machine %u\en",
+	    42U, EM_X86_64);
+.Ed
 .Sh ERRORS
 These functions may fail with the following errors:
 .Bl -tag -width ".Bq Er EINVAL"
@@ -82,6 +110,11 @@ These functions may fail with the following errors:
 The value in argument
 .Ar e_machine
 was not recognized.
+.It Bq Er EINVAL
+The value in argument
+.Ar r_type
+was not valid for the machine argument specified by argument
+.Ar e_machine .
 .El
 .Sh SEE ALSO
 .Xr elf 5

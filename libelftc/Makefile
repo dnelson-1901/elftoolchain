@@ -55,6 +55,7 @@ MLINKS=	elftc_bfd_find_target.3 elftc_bfd_target_byteorder.3 \
 	elftc_bfd_find_target.3 elftc_bfd_target_class.3 \
 	elftc_bfd_find_target.3 elftc_bfd_target_flavor.3 \
 	elftc_get_machine_description.3 elftc_get_machine_name.3 \
+	elftc_get_machine_description.3 elftc_get_relocation_type_name.3 \
 	elftc_string_table_create.3 elftc_string_table_from_section.3 \
 	elftc_string_table_create.3 elftc_string_table_destroy.3 \
 	elftc_string_table_create.3 elftc_string_table_image.3 \
