@@ -29,5 +29,3 @@ NOWEB?=		/usr/bin/noweb
 PDFJAM?=	/usr/bin/pdfjam
 PDFLATEX?=	/usr/bin/pdflatex
 PYTHON?=	/usr/bin/python3
-
-CFLAGS+=	-Werror -Wformat -Wextra # -Wsign-compare # -Wextra
