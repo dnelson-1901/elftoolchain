@@ -290,6 +290,11 @@ tcArMember$1(void)
 			goto done;
 		}
 
+		if (sb.st_size < 0) {
+			TP_UNRESOLVED("\"%s\": negative size", *fn);
+			goto done;
+		}
+
 		if (strcmp(arh->ar_name, *fn) != 0) {
 			TP_FAIL("name: \"%s\" != \"%s\".", *fn,
 			    arh->ar_name);
@@ -302,7 +307,7 @@ tcArMember$1(void)
 			goto done;
 		}
 
-		if (arh->ar_size != sb.st_size) {
+		if (arh->ar_size != (size_t) sb.st_size) {
 			TP_FAIL("\"%s\" size: %d != %d.", *fn,
 			    arh->ar_size, sb.st_size);
 			goto done;
