@@ -65,11 +65,16 @@ tcSequenceUninitialized$1(void)
 	    "using the elf_begin($1) API.");
 
 	result = TET_PASS;
-	if ((e = elf_begin(-1, ELF_C_$1, NULL)) != NULL ||
-	    (error = elf_errno()) != ELF_E_SEQUENCE)
+	if ((e = elf_begin(-1, ELF_C_$1, NULL)) != NULL) {
+		TP_FAIL("ELF_C_$1: e=%p elf_begin() succeeded unexpectedly.",
+		    (void *) e);
+		goto done;
+	}
+
+	if ((error = elf_errno()) != ELF_E_SEQUENCE)
 		TP_FAIL("ELF_C_$1: e=%p error=%d \"%s\".", (void *) e, error,
 		    elf_errmsg(error));
-
+ done:
 	tet_result(result);
 }')
 
@@ -394,13 +399,13 @@ tcElfOpen$1$2(void)
 	int fd, result;
 	char *p;
 
-	TP_ANNOUNCE("open(ELFCLASS$1,ELFDATA2`'TOUPPER($2)) succeeds.");
-
-	TP_SET_VERSION();
-
 	fd = -1;
 	e = NULL;
 	result = TET_UNRESOLVED;
+
+	TP_ANNOUNCE("open(ELFCLASS$1,ELFDATA2`'TOUPPER($2)) succeeds.");
+
+	TP_SET_VERSION();
 
 	if ((fd = open ("check_elf.$2$1", O_RDONLY)) < 0) {
 		TP_UNRESOLVED("open() failed: %s.", strerror(errno));
@@ -446,12 +451,12 @@ tcFdMismatch(void)
 	Elf *e, *e2;
 	int error, fd, result;
 
+	e = e2 = NULL;
+	fd = -1;
+
 	TP_ANNOUNCE("an fd mismatch is detected.");
 
 	TP_SET_VERSION();
-
-	e = e2 = NULL;
-	fd = -1;
 
 	if ((fd = open("check_elf.msb32", O_RDONLY)) < 0 ||
 	    (e = elf_begin(fd, ELF_C_READ, NULL)) == NULL) {
@@ -461,10 +466,15 @@ tcFdMismatch(void)
 
 	result = TET_PASS;
 
-	if ((e2 = elf_begin(fd+1, ELF_C_READ, e)) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
+	if ((e2 = elf_begin(fd+1, ELF_C_READ, e)) != NULL) {
+		TP_FAIL("e2=%p elf_begin(%d+1) succeeded unexpectedly.",
+		    (void *) e2, fd);
+		goto done;
+	}
+	if ((error = elf_errno()) != ELF_E_ARGUMENT)
 		TP_FAIL("elf_begin(%d+1) -> %p, error=%d \"%s\".", fd,
 		    (void *) e2, error, elf_errmsg(error));
+
  done:
 	if (e)
 		(void) elf_end(e);
@@ -486,23 +496,28 @@ tcArCmdMismatchRDWR_$1(void)
 	Elf *e, *e2;
 	int error, fd, result;
 
-	TP_ANNOUNCE("($1): a cmd mismatch is detected.");
-
-	TP_SET_VERSION();
-
 	result = TET_UNRESOLVED;
 	e = e2 = NULL;
 	fd = -1;
+
+	TP_ANNOUNCE("($1): a cmd mismatch is detected.");
+
+	TP_SET_VERSION();
 
 	/* Open the archive with ELF_C_READ. */
 	_TS_OPEN_FILE(e, TS_ARFILE_$1, ELF_C_READ, fd, goto done;);
 
 	/* Attempt to iterate through it with ELF_C_RDWR. */
 	result = TET_PASS;
-	if ((e2 = elf_begin(fd, ELF_C_RDWR, e)) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
+	if ((e2 = elf_begin(fd, ELF_C_RDWR, e)) != NULL) {
+		TP_FAIL("e2=%p elf_begin() succeeded unexpectedly.",
+		    (void *) e2);
+		goto done;
+	}
+	if ((error = elf_errno()) != ELF_E_ARGUMENT)
 		TP_FAIL("e2=%p error=%d \"%s\".", (void *) e2,
 		    error, elf_errmsg(error));
+
  done:
 	if (e)
 		(void) elf_end(e);
@@ -523,12 +538,13 @@ tcArRetrieval_$1(void)
 	int fd, result;
 	Elf_Kind k;
 
+	e = e1 = NULL;
+	fd = -1;
+	result = TET_UNRESOLVED;
+
 	TP_ANNOUNCE("($1): an archive member is correctly retrieved.");
 
 	TP_SET_VERSION();
-
-	e = e1 = NULL;
-	fd = -1;
 
 	_TS_OPEN_FILE(e, TS_ARFILE_$1, ELF_C_READ, fd, goto done;);
 
@@ -564,15 +580,15 @@ tcArMemoryFdIgnored_$1(void)
 	struct stat sb;
 	char *b;
 
-	TP_ANNOUNCE("($1): The fd value is ignored for archives opened "
-	    "with elf_memory().");
-
-	TP_SET_VERSION();
-
 	e = e1 = NULL;
 	b = NULL;
 	fd = -1;
 	result = TET_UNRESOLVED;
+
+	TP_ANNOUNCE("($1): The fd value is ignored for archives opened "
+	    "with elf_memory().");
+
+	TP_SET_VERSION();
 
 	/*
 	 * First, populate a memory area with the contents of
