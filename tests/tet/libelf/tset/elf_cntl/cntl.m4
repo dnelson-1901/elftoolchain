@@ -28,6 +28,7 @@
 
 #include <sys/types.h>
 
+#include <errno.h>
 #include <libelf.h>
 #include <limits.h>
 #include <stdlib.h>
@@ -62,11 +63,12 @@ tcInvalidNull(void)
 
 	TP_CHECK_INITIALIZATION();
 
-	ret = error = 0;
 	result = TET_PASS;
-	if ((ret = elf_cntl(NULL, ELF_C_FDREAD)) != -1 ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
-		TP_FAIL("ret=%d, error=%d \"%s\".", ret, error);
+	if ((ret = elf_cntl(NULL, ELF_C_FDREAD)) != -1) {
+		TP_FAIL("elf_cntl() succeeded unexpectedly, ret=%d.", ret);
+	} else if ((error = elf_errno()) != ELF_E_ARGUMENT)
+		TP_FAIL("elf_cntl() failed with an unexpected error \"%s\".",
+		    elf_errmsg(error));
 
 	tet_result(result);
 }
@@ -91,10 +93,13 @@ tcInvalidInvalid(void)
 	for (c = ELF_C_FIRST-1; c <= ELF_C_LAST; c++) {
 		if (c == ELF_C_FDDONE || c == ELF_C_FDREAD)
 			continue;
-		if ((ret = elf_cntl(e, c)) != -1 ||
-		    (error = elf_errno()) != ELF_E_ARGUMENT) {
-			TP_FAIL("returned (%d) / error (%d) for "
-			    "c = %d.", ret, error, c);
+		if ((ret = elf_cntl(e, c)) != -1) {
+			TP_FAIL("elf_cntl(%d) succeeded unexpectedly.", c);
+			break;
+		}
+		if ((error = elf_errno()) != ELF_E_ARGUMENT) {
+			TP_FAIL("elf_cntl(%d) returned an unexpected error "
+			    "(%d, \"%s\").", c, error, elf_errmsg(error));
 			break;
 		}
 	}
@@ -120,7 +125,8 @@ tcReadFDREAD(void)
 
 	result = TET_PASS;
 	if (elf_cntl(e, ELF_C_FDREAD) != 0)
-		TP_FAIL("elf_errmsg=\"%s\".", elf_errmsg(-1));
+		TP_FAIL("elf_cntl() failed unexpectedly: \"%s\".",
+		    elf_errmsg(-1));
 
 	(void) elf_end(e);
 	tet_result(result);
@@ -138,6 +144,10 @@ tcWriteFDREAD(void)
 	Elf *e;
 	int err, fd, result, ret;
 
+	e = NULL;
+	fd = -1;
+	err = ELF_E_NONE;
+	
 	TP_ANNOUNCE("elf_cntl(e,FDREAD) for a descriptor opened for write "
 	    "fails with ELF_E_MODE.");
 
@@ -146,19 +156,34 @@ tcWriteFDREAD(void)
 	(void) strncpy(pathname, "/tmp/TCXXXXXX", sizeof(pathname));
 	pathname[sizeof(pathname) - 1] = '\0';
 
-	if ((fd = mkstemp(pathname)) == -1 ||
-	    (e = elf_begin(fd, ELF_C_WRITE, NULL)) == NULL) {
+	if ((fd = mkstemp(pathname)) == -1) {
+		TP_UNRESOLVED("mkstemp(%s) failed: %s,", pathname,
+		    strerror(errno));
+		goto done;
+	}
+
+	if ((e = elf_begin(fd, ELF_C_WRITE, NULL)) == NULL) {
 		TP_UNRESOLVED("elf_begin(%d,WRITE,NULL) failed.");
 		goto done;
 	}
 
+	if ((ret = elf_cntl(e, ELF_C_FDREAD)) != -1) {
+		TP_FAIL("elf_cntl() succeeded unexpectedly.");
+		goto done;
+	}
+	if ((err = elf_errno()) != ELF_E_MODE) {
+		TP_FAIL("elf_cntl() failed with an unexpected error \"%s\".",
+		    elf_errmsg(err));
+		goto done;
+	}
+
 	result = TET_PASS;
-	if ((ret = elf_cntl(e, ELF_C_FDREAD)) != -1 ||
-	    (err = elf_errno()) != ELF_E_MODE)
-		TP_FAIL("ret (%d) error (%d).", ret, err);
 
  done:
-	(void) elf_end(e);
+	if (e)
+		(void) elf_end(e);
+	if (fd != -1)
+		(void) close(fd);
 	(void) unlink(pathname);
 	tet_result(result);
 }
@@ -175,6 +200,10 @@ tcWriteFDDONE(void)
 	int err, fd, result;
 	off_t ret;
 
+	e = NULL;
+	fd = -1;
+	err = ELF_E_NONE;
+	
 	TP_ANNOUNCE("elf_cntl(e,FDDONE) makes a subsequent "
 	    "elf_update(ELF_C_WRITE) fail with ELF_E_SEQUENCE.");
 
@@ -183,8 +212,11 @@ tcWriteFDDONE(void)
 	(void) strncpy(pathname, "/tmp/TCXXXXXX", sizeof(pathname));
 	pathname[sizeof(pathname) - 1] = '\0';
 
-	if ((fd = mkstemp(pathname)) == -1 ||
-	    (e = elf_begin(fd, ELF_C_WRITE, NULL)) == NULL) {
+	if ((fd = mkstemp(pathname)) == -1) {
+		TP_UNRESOLVED("mkstemp(%s) failed.", pathname);
+		goto done;
+	}
+	if ((e = elf_begin(fd, ELF_C_WRITE, NULL)) == NULL) {
 		TP_UNRESOLVED("elf_begin(%d,WRITE,NULL) failed.");
 		goto done;
 	}
@@ -204,14 +236,24 @@ tcWriteFDDONE(void)
 		goto done;
 	}
 
+	if ((ret = elf_update(e, ELF_C_WRITE)) != (off_t) -1) {
+		TP_FAIL("elf_update(ELF_C_WRITE) succeeded unexpectedly.");
+		goto done;
+	}
+	if ((err = elf_errno()) != ELF_E_SEQUENCE) {
+		TP_FAIL("elf_update() failed with an unexpected error "
+		    "(%d, \"%s\").", ret, err, elf_errmsg(err));
+		goto done;
+	}
+
 	result = TET_PASS;
-	if ((ret = elf_update(e, ELF_C_WRITE)) != (off_t) -1 ||
-	    (err = elf_errno()) != ELF_E_SEQUENCE)
-		TP_FAIL("ret (%jd) err (%d).", (uint64_t) ret, err);
 
  done:
 	tet_result(result);
 
-	(void) elf_end(e);
+	if (e)
+		(void) elf_end(e);
+	if (fd != -1)
+		(void) close(fd);
 	(void) unlink(pathname);
 }
