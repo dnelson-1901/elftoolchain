@@ -80,9 +80,13 @@ tcNestedCount(void)
 		return;
 	}
 
-	if ((r1 = elf_end(e1)) != 1 ||
-	    (r2 = elf_end(e)) != 0) {
-		tet_printf("fail: r1=%d r2=%d.", r1, r2);
+	if ((r1 = elf_end(e1)) != 1) {
+	   	tet_printf("fail: r1=%d.", r1);
+		tet_result(TET_FAIL);
+		return;
+	}
+	if ((r2 = elf_end(e)) != 0) {
+		tet_printf("fail: r2=%d.", r2);
 		tet_result(TET_FAIL);
 		return;
 	}
