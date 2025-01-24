@@ -50,10 +50,10 @@ define(`TP_FLAG_NULL',`_TP_FLAG_FN(`tcArgsNull',`
 
 	TP_ANNOUNCE("A NULL first parameter returns zero.");',`
 	result = TET_PASS;
-	if ((ret = $1(NULL, ELF_C_SET, ELF_F_DIRTY)) != 0 ||
-	    (error = elf_errno()) != ELF_E_NONE)
-		TP_FAIL("ret=%d, error=%d \"%s\".", ret, error,
-		    elf_errmsg(error));',`')')
+	if ((ret = $1(NULL, ELF_C_SET, ELF_F_DIRTY)) != 0) {
+		TP_FAIL("$1() failed: ret=%d, error \"%s\".", ret,
+		    elf_errmsg(-1));
+	}',`')')
 
 /*
  * TP_FLAG_ILLEGAL_CMD(FN,ARG)
@@ -74,10 +74,13 @@ define(`TP_FLAG_ILLEGAL_CMD',`_TP_FLAG_FN(`tcArgsIllegalCmd',`
 	for (cmd = ELF_C_NULL-1; cmd <= ELF_C_NUM; cmd++) {
 		if (cmd == ELF_C_CLR || cmd == ELF_C_SET)
 			continue;
-		if ((ret = $1($2, ELF_C_NUM, ELF_F_DIRTY)) != 0 ||
-		    (error = elf_errno()) != ELF_E_ARGUMENT) {
-			TP_FAIL("cmd=%d ret=%d, error=%d \"%s\".", cmd, ret,
-			    error, elf_errmsg(error));
+		if ((ret = $1($2, ELF_C_NUM, ELF_F_DIRTY)) != 0) {
+			TP_FAIL("$1 cmd=%d ret=%d.", cmd, ret);
+			goto done;
+		}
+		if ((error = elf_errno()) != ELF_E_ARGUMENT) {
+			TP_FAIL("$1 cmd=%d error=%d \"%s\".", cmd, error,
+			    elf_errmsg(error));
 			goto done;
 		}
 	}',`_TP_EPILOGUE')')
@@ -150,9 +153,12 @@ define(`TP_FLAG_ILLEGAL_FLAG',`_TP_FLAG_FN(`tcArgsIllegalFlags',`
 	for (flags = 0x1; flags; flags <<= 1) {
 		if (flags & ($3))
 			continue;
-		if ((ret = $1($2, ELF_C_SET, flags)) != 0 ||
-		    (error = elf_errno()) != ELF_E_ARGUMENT) {
-			TP_FAIL("ret=%d, error=%d \"%s\".", ret, error,
+		if ((ret = $1($2, ELF_C_SET, flags)) != 0) {
+			TP_FAIL("$1 ELF_C_SET ret=%d.", ret);
+			goto done;
+		}
+		if ((error = elf_errno()) != ELF_E_ARGUMENT) {
+			TP_FAIL("$1 ret=%d, error=%d \"%s\".", ret, error,
 			    elf_errmsg(error));
 			goto done;
 		}
@@ -175,9 +181,10 @@ _TP_FLAG_FN(`tcArgsNonElf',`
 
 	TS_OPEN_MEMORY(e, rawdata);',`
 	result = TET_PASS;
-	if ((ret = $1(e, ELF_C_SET, ELF_F_DIRTY)) != 0 ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT) {
-		TP_FAIL("ret=%d, error=%d \"%s\".", ret, error,
+	if ((ret = $1(e, ELF_C_SET, ELF_F_DIRTY)) != 0) {
+		TP_FAIL("$1 ret=%d.", ret);
+	} else if ((error = elf_errno()) != ELF_E_ARGUMENT) {
+		TP_FAIL("$1 ret=%d, error=%d \"%s\".", ret, error,
 		    elf_errmsg(error));
 	}',`')')
 
