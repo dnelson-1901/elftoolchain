@@ -95,7 +95,12 @@
 			    strerror(errno));				\
 			ACTION						\
 		}							\
-		if ((DSZ) < _sb.st_size)				\
+		if (_sb.st_size < 0) {					\
+			tet_printf("unresolved: \"%s\" had a negative "	\
+				   "size.", FN);			\
+			ACTION						\
+		}							\
+		if ((DSZ) < (size_t) _sb.st_size)			\
 			_sz = (DSZ);					\
 		else							\
 			_sz = _sb.st_size;				\
