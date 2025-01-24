@@ -255,9 +255,14 @@ tcMemElfNull$1$2(void)
 	}
 
 	result = TET_PASS;
-	if ((offset = elf_update(e, ELF_C_NULL)) != fsz)
-		TP_FAIL("offset=%jd != %d, error=%d \"%s\".",
-		    (intmax_t) offset, fsz, elf_errmsg(-1));
+	offset = elf_update(e, ELF_C_NULL);
+	if (offset < 0) {
+		TP_FAIL("offset=%jd, error=\"%s\".", (intmax_t) offset,
+		    elf_errmsg(-1));
+		 goto done;
+        }
+	if ((size_t) offset != fsz)
+		TP_FAIL("offset=%jd != %zu.", (intmax_t) offset, fsz);
 
  done:
 	(void) elf_end(e);
@@ -546,7 +551,12 @@ tcSequenceFdDoneNull$1(void)
 		goto done;
 	}
 
-	if ((offset = elf_update(e, ELF_C_NULL)) != fsz) {
+	offset = elf_update(e, ELF_C_NULL);
+	if (offset < 0) {
+		TP_FAIL("elf_update() returned a negative value %jd.",
+		    (intmax_t) offset);
+		goto done;
+	} else if ((size_t) offset != fsz) {
 		TP_FAIL("elf_update()->%jd, (expected %d).",
 		    (intmax_t) offset, fsz);
 		goto done;
@@ -681,9 +691,14 @@ tcUpdate$1$2(void)
 
 	fsz += ssz;
 
-	if ((offset = elf_update(e, ELF_C_WRITE)) != fsz) {
-		TP_FAIL("ret=%jd != %d [elferror=\"%s\"]",
-		    (intmax_t) offset, fsz, elf_errmsg(-1));
+	offset = elf_update(e, ELF_C_WRITE);
+	if (offset < 0) {
+		TP_FAIL("ret=%jd [elferror=\"%s\"]", (intmax_t) offset,
+		    elf_errmsg(-1));
+		goto done;
+	}
+	if ((size_t) offset != fsz) {
+		TP_FAIL("ret=%jd != %zu", (intmax_t) offset, fsz);
 		goto done;
 	}
 

@@ -106,8 +106,9 @@ define(`TP_SHDR',`
 void
 tcShdr_tpValid$1`'TOUPPER($2)(void)
 {
-	int i, fd;
+	int fd;
 	Elf *e;
+	size_t i;
 	Elf$1_Shdr *sh, *rs;
 	Elf_Scn *scn;
 	int error, result;

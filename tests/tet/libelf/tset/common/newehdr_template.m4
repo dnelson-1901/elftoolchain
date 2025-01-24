@@ -146,6 +146,7 @@ tcUpdate$1`'TS_EHDRSZ`'(void)
 	int fd, reffd, result;
 	off_t offset;
 	size_t fsz;
+	ssize_t rsz;
 	void *t, *tref;
 	char *ref = "TS_REFELF.TOLOWER($1)`'TS_EHDRSZ";
 
@@ -176,7 +177,7 @@ tcUpdate$1`'TS_EHDRSZ`'(void)
 	/* check that the correct number of bytes were written out. */
 	fsz = elf`'TS_EHDRSZ`'_fsize(ELF_T_EHDR, 1, EV_CURRENT);
 
-	if (offset != fsz) {
+	if ((size_t) offset != fsz) {
 		TP_FAIL("elf_update() -> %d, expected %d.", offset, fsz);
 		goto done;
 	}
@@ -195,7 +196,7 @@ tcUpdate$1`'TS_EHDRSZ`'(void)
 		goto done;
 	}
 
-	if (read(fd, t, fsz) != fsz) {
+	if ((rsz = read(fd, t, fsz)) < 0 || (size_t) rsz != fsz) {
 		TP_UNRESOLVED("read %d bytes failed: %s.", fsz,
 		    strerror(errno));
 		goto done;
@@ -213,7 +214,7 @@ tcUpdate$1`'TS_EHDRSZ`'(void)
 		goto done;
 	}
 
-	if (read(reffd, tref, fsz) != fsz) {
+	if ((rsz = read(reffd, tref, fsz)) < 0 || (size_t) rsz != fsz) {
 		TP_UNRESOLVED("unresolved: read \"%s\" failed: %s.", ref,
 		    strerror(errno));
 		goto done;

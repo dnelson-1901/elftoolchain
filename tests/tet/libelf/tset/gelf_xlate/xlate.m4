@@ -118,8 +118,9 @@ tcDriver(int (*tf)(const char *fn, Elf *e))
 static int
 _tcByte(const char *fn, Elf *e)
 {
+	size_t sz;
 	Elf_Data dst, src;
-	int i, offset, sz, result;
+	int i, offset, result;
 	char *filebuf, *membuf, *t, *ref;
 
 	ref = td_L32_QUAD;

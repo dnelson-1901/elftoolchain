@@ -379,6 +379,7 @@ tcUpdateElf$1$2(void)
 	int fd, reffd, result;
 	off_t offset;
 	size_t fsz;
+	ssize_t rsz;
 	void *t, *tref;
 
 	TP_CHECK_INITIALIZATION();
@@ -408,7 +409,7 @@ tcUpdateElf$1$2(void)
 
 	fsz = gelf_fsize(e, ELF_T_EHDR, 1, EV_CURRENT);
 
-	if (offset != fsz) {
+	if ((size_t) offset != fsz) {
 		TP_FAIL("elf_update() -> %d, expected %d.", offset, fsz);
 		goto done;
 	}
@@ -427,7 +428,7 @@ tcUpdateElf$1$2(void)
 		goto done;
 	}
 
-	if (read(fd, t, fsz) != fsz) {
+	if ((rsz = read(fd, t, fsz)) < 0 || (size_t) rsz != fsz) {
 		TP_UNRESOLVED("read(%d) failed: %s", fsz, strerror(errno));
 		goto done;
 	}
@@ -438,7 +439,7 @@ tcUpdateElf$1$2(void)
 		goto done;
 	}
 
-	if (read(reffd, tref, fsz) != fsz) {
+	if ((rsz = read(reffd, tref, fsz)) < 0 || (size_t) rsz != fsz) {
 		TP_UNRESOLVED("read(%d) failed: %s.", fsz, strerror(errno));
 		goto done;
 	}
