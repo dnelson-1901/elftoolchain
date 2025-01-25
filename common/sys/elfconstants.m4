@@ -996,7 +996,7 @@ _(EM_XCORE,            203U,
 	`XMOS xCORE processor family')
 _(EM_MCHP_PIC,         204U,
 	`Microchip 8-bit PIC(r) family')
-_(EM_INTELGT,          205U,
+_(EM_INTEL205,         205U,
 	`Intel Graphics Technology')
 _(EM_INTEL206,         206U,
 	`Reserved by Intel')
@@ -1092,6 +1092,7 @@ define(`DEFINE_ELF_MACHINE_TYPE_SYNONYMS',`
 _(EM_AMD64, EM_X86_64)
 _(EM_ARC_A5, EM_ARC_COMPACT)
 _(EM_ECOG1, EM_ECOG1X)
+_(EM_INTELGT, EM_INTEL205)
 ')
 
 #
