@@ -45,6 +45,7 @@ define(`EXPAND_RELOCATION_TYPES',`dnl
 switch (r_value) {dnl
 DEFINE_$1_RELOCATION_TYPES()dnl
 		default: /*FALLTHROUGH*/
+			;
 		}')
 divert(0)dnl
 
@@ -65,7 +66,6 @@ divert(0)dnl
 const char *
 elftc_get_relocation_type_name(unsigned int e_machine, unsigned int r_value)
 {
-	(void) e_machine; (void) r_value;
 	switch (e_machine)
 	{
 	case EM_386:
