@@ -105,6 +105,10 @@ elftc_get_relocation_type_name(unsigned int e_machine, unsigned int r_value)
 		EXPAND_RELOCATION_TYPES(RISCV)
 		break;
 
+	case EM_S390:
+		EXPAND_RELOCATION_TYPES(S390);
+		break;
+
 	case EM_SPARC:
 		EXPAND_RELOCATION_TYPES(SPARC)
 		break;
