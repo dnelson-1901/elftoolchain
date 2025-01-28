@@ -75,4 +75,3 @@ ${f:S/.m4/.c/}: ${f} ${ELF_CONSTANTS_M4}
 .endfor
 
 .include "${TOP}/mk/elftoolchain.lib.mk"
-.include "${TOP}/mk/elftoolchain.m4.mk"
