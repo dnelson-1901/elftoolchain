@@ -58,6 +58,12 @@ define(`VCSID_ELFCONSTANTS_M4',
 #       }
 #   }   
 
+
+# The `__' macro is used to record comments.
+#
+# Provide a default definition for the macro that ignores its arguments.
+define(`__',`')
+
 #
 # Types of capabilities.
 # 

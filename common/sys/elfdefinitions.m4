@@ -49,6 +49,20 @@ define(`_DESCRIPTION',
 # vertically aligned.  If a symbol description is present, add it as a
 # C-style comment.
 define(`_',``#'define $1`'_WHITESPACE($1)`'$2`'_DESCRIPTION($3)')
+
+# Expand the `__' macro to a C-style comment.
+#
+# - An empty invocation __()) is ignored.
+# - An invocation with a single argument __(COMMENT) is expanded as an inline
+#   C-style comment.
+# - An invocation with two or more arguments __(PREFIX, COMMENT) expands to
+#   `PREFIX/* COMMENT */'.  This form would be used to visually indent the
+#   comment in the generated output.
+undefine(`__')
+define(`__',
+  `ifelse($#, 0, `',
+          $#, 1, `/* $1 */',
+          `$1/* shift($*) */')')
 divert(0)dnl
 
 /*
