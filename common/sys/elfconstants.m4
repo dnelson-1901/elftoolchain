@@ -22,14 +22,26 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
-# These definitions are based on:
+# These definitions are believed to be compatible with:
+#
 # - The public specification of the ELF format as defined in the
 #   October 2009 draft of System V ABI.
-#   See: http://www.sco.com/developers/gabi/latest/ch4.intro.html
+#   http://www.sco.com/developers/gabi/latest/ch4.intro.html
+#
 # - The May 1998 (version 1.5) draft of "The ELF-64 object format".
-# - Processor-specific ELF ABI definitions for amd64, i386, ia64,
-#   loongarch, mips, powerpc, riscv and sparc processors.
+#
 # - The "Linkers and Libraries Guide", from Sun Microsystems.
+#
+# - Processor-specific ELF ABI definitions for the aarch64, arm, i386,
+#   ia_64, loongarch, mips, powerpc, riscv, sparc and x86_64 architectures:
+#
+#   aarch64 ::
+#     ELF for the Arm® 64-bit Architecture (AArch64)
+#     https://github.com/ARM-software/abi-aa/blob/main/aaelf64/aaelf64.rst
+#
+#   loongarch ::
+#     ELF for the LoongArch™ Architecture
+#     https://github.com/loongson/la-abi-specs/blob/release/laelf.adoc.
 
 define(`VCSID_ELFCONSTANTS_M4',
 	`$Id$')
@@ -2139,9 +2151,6 @@ _(R_IA64_DTPREL64LSB,		R_IA_64_DTPREL64LSB)
 _(R_IA64_LTOFF_DTPREL22,	R_IA_64_LTOFF_DTPREL22)
 ')
 
-# LoongArch relocations.
-#
-# Source: https://github.com/loongson/la-abi-specs/blob/release/laelf.adoc.
 define(`DEFINE_LOONGARCH_RELOCATION_TYPES',`
 __(`EM_LOONGARCH')
 _(R_LARCH_NONE,				0)
