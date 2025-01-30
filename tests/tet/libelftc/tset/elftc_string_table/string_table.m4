@@ -693,7 +693,7 @@ static int
 validate_string_table(int nstrings, const char *image, size_t imagesz,
     const char **strings)
 {
-	int n, result, *seen;
+	int n, *seen;
 	const char *s, *end;
 
 	if (*image != '\0')
