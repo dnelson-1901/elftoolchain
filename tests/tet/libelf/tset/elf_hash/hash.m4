@@ -65,7 +65,7 @@ to_printable_string(char *dst, const char *src)
 	char *s;
 	
 	s = dst;
-	while (c = *src++) {
+	while ((c = *src++) != 0) {
 		if (isprint(c))
 			*s++ = c;
 		else
