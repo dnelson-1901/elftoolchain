@@ -52,10 +52,10 @@ tcArgsNull(void)
 	TP_ANNOUNCE("elf_getscn(NULL,*) fails.");
 
 	result = TET_PASS;
-	if ((scn = elf_getscn(NULL, (size_t) 0)) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
-		TP_FAIL("scn=%p error=%d \"%s\".", (void *) scn,
-		    error, elf_errmsg(error));
+	if ((scn = elf_getscn(NULL, (size_t) 0)) != NULL)
+		TP_FAIL("scn=%p.", (void *) scn);
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
+		TP_FAIL("error=%d \"%s\".", error, elf_errmsg(error));
 
 	tet_result(result);
 }
@@ -81,10 +81,10 @@ tcArgsNonElf(void)
 
 	result = TET_PASS;
 
-	if ((scn = elf_getscn(e, (size_t) 0)) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
-		TP_FAIL("scn=%p error=%d \"%s\".", (void *) scn,
-		    error, elf_errmsg(error));
+	if ((scn = elf_getscn(e, (size_t) 0)) != NULL)
+		TP_FAIL("scn=%p.", scn);
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
+		TP_FAIL("error=%d \"%s\".", error, elf_errmsg(error));
 
 	(void) elf_end(e);
 
@@ -102,7 +102,7 @@ tcElfAll$1$2(void)
 {
 	Elf *e;
 	Elf_Scn *scn;
-	int error, fd, result;
+	int fd, result;
 	size_t nsections, n, r;
 
 	TP_CHECK_INITIALIZATION();
@@ -124,17 +124,12 @@ tcElfAll$1$2(void)
 
 	for (n = 0; n < nsections; n++) {
 		/* Retrieve the section ... */
-		if ((scn = elf_getscn(e, n)) == NULL) {
-			TP_FAIL("scn=%p error=%d \"%s\".", (void *) scn,
-			    error, elf_errmsg(error));
-			break;
-		}
+		if ((scn = elf_getscn(e, n)) == NULL)
+			TP_FAIL("elf_getscn() failed \"%s\".", elf_errmsg(-1));
 
 		/* ... and verify that the section has the correct index. */
-		if ((r = elf_ndxscn(scn)) != n) {
+		if ((r = elf_ndxscn(scn)) != n)
 			TP_FAIL("scn=%p ndx %d != %d.", (void *) scn, r, n);
-			break;
-		}
 	}
 
  done:
@@ -180,10 +175,10 @@ tcElfRange$1$2(void)
 	}
 
 	result = TET_PASS;
-	if ((scn = elf_getscn(e, n)) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
-		TP_FAIL("scn=%p error=\"%s\".", (void *) scn,
-		    elf_errmsg(error));
+	if ((scn = elf_getscn(e, n)) != NULL)
+		TP_FAIL("elf_getscn() failed.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
+		TP_FAIL("error=\"%s\".", elf_errmsg(error));
 
  done:
 	if (e)
@@ -222,10 +217,10 @@ tcExSecNumError$1$2(void)
 	_TS_OPEN_FILE(e, "xscn-1.$2$1", ELF_C_READ, fd, goto done;);
 
 	result = TET_PASS;
-	if ((scn = elf_getscn(e, 0)) != NULL ||
-	    (error = elf_errno()) != ELF_E_SECTION)
-		TP_FAIL("scn=%p, error=%d \"%s\".", (void *) scn,
-		    error, elf_errmsg(error));
+	if ((scn = elf_getscn(e, 0)) != NULL)
+		TP_FAIL("elf_getscn() failed.");
+	else if ((error = elf_errno()) != ELF_E_SECTION)
+		TP_FAIL("error=%d \"%s\".", error, elf_errmsg(error));
 
  done:
 	if (e)
@@ -252,7 +247,7 @@ tcExSecNumLast$1$2(void)
 	Elf *e;
 	Elf_Scn *scn;
 	Elf$1_Shdr *sh;
-	int error, fd, result;
+	int fd, result;
 	size_t n, r;
 
 	TP_CHECK_INITIALIZATION();
@@ -277,8 +272,7 @@ tcExSecNumLast$1$2(void)
 
 	/* Retrieve the section ... */
 	if ((scn = elf_getscn(e, n)) == NULL) {
-		TP_FAIL("scn=%p error=%d \"%s\".", (void *) scn,
-		    error, elf_errmsg(error));
+		TP_FAIL("elf_getscn() failed error=\"%s\".", elf_errmsg(-1));
 		goto done;
 	}
 
