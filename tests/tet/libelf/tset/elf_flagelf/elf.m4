@@ -102,12 +102,10 @@ $1(void)
 	TS_OPEN_FILE(e, $3, $4, fd);
 
 	result = TET_PASS;
-	if ((ret = elf_flagelf(e, ELF_C_SET, $5)) != 0 ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT) {
-		TP_FAIL("ret=%d,error=%d \"%s\".", ret, error,
-		    elf_errmsg(error));
-		    goto done;
-	}
+	if ((ret = elf_flagelf(e, ELF_C_SET, $5)) != 0)
+		TP_FAIL("elf_flagelf() ret=%d.", ret);
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
+		TP_FAIL("error=%d \"%s\".", error, elf_errmsg(error));
 
 	_TP_EPILOGUE()
 

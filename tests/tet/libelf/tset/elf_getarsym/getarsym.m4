@@ -67,9 +67,12 @@ tcArgsNull(void)
 
 	result = TET_PASS;
 	n = ~(size_t) 0;
-	if (elf_getarsym(NULL, &n) != NULL ||
-	    (n != (size_t) 0) || (error = elf_errno()) != ELF_E_ARGUMENT)
-		TP_FAIL("n=%d error=%d \"%s\".", n, error, elf_errmsg(error));
+	if (elf_getarsym(NULL, &n) != NULL)
+		TP_FAIL("elf_getarsym() succeeded unexpectedly.");
+	else if (n != 0)
+		TP_FAIL("non-zero value n=%zu.", n);
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
+		TP_FAIL("error=%d \"%s\".", error, elf_errmsg(error));
 
 	tet_result(result);
 }
@@ -95,8 +98,11 @@ tcArgsNonAr(void)
 	result = TET_PASS;
 
 	n = ~ (size_t) 0;
-	if (elf_getarsym(e, &n) != NULL || (n != (size_t) 0) ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
+	if (elf_getarsym(e, &n) != NULL)
+		TP_FAIL("elf_getarsym() succeeded unexpectedly.");
+	else if (n != 0)
+		TP_FAIL("non-zero value n=%zu.", n);
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
 		TP_FAIL("error=%d \"%s\".", error, elf_errmsg(error));
 
 	(void) elf_end(e);
@@ -124,8 +130,11 @@ tcArgsElf(void)
 	result = TET_PASS;
 
 	n = ~ (size_t) 0;
-	if (elf_getarsym(e, &n) != NULL || (n != (size_t) 0) ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
+	if (elf_getarsym(e, &n) != NULL)
+		TP_FAIL("elf_getarsym() succeeded unexpectedly.");
+	else if (n != 0)
+		TP_FAIL("non-zero value n=%zu.", n);
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
 		TP_FAIL("error=%d \"%s\".", error, elf_errmsg(error));
 
 	(void) elf_end(e);

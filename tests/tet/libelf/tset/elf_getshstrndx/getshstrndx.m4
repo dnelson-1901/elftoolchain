@@ -52,8 +52,9 @@ tcArgsNull(void)
 	TP_ANNOUNCE("elf_getshstrndx(NULL,*) fails.");
 
 	result = TET_PASS;
-	if (elf_getshstrndx(NULL, &n) != 0 ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
+	if (elf_getshstrndx(NULL, &n) != 0)
+		TP_FAIL("elf_getshstrndx() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
 		TP_FAIL("n=%d error=%d \"%s\".", n, error,
 		    elf_errmsg(error));
 
@@ -79,8 +80,9 @@ tcArgsNonElf(void)
 	TS_OPEN_MEMORY(e, nonelf);
 
 	result = TET_PASS;
-	if (elf_getshstrndx(e, &n) != 0 ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
+	if (elf_getshstrndx(e, &n) != 0)
+		TP_FAIL("elf_getshstrndx() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
 		TP_FAIL("n=%d error=%d \"%s\".", n, error,
 		    elf_errmsg(error));
 
@@ -161,8 +163,9 @@ tcMalformed_Xscn$1$2(void)
 
 	n = ~(size_t) 0;
 	result = TET_PASS;
-	if ((elf_getshstrndx(e, &n) != 0 ||
-	    (error = elf_errno()) != ELF_E_SECTION))
+	if (elf_getshstrndx(e, &n) != 0)
+		TP_FAIL("elf_getshstrndx() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_SECTION)
 		TP_FAIL("n=%d error=%d \"%s\".", n, error, elf_errmsg(error));
 
  done:

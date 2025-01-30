@@ -61,11 +61,10 @@ tcArgsNull(void)
 	TP_ANNOUNCE("elf_getarhdr(NULL) fails.");
 
 	result = TET_PASS;
-	if (elf_getarhdr(NULL) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT) {
+	if (elf_getarhdr(NULL) != NULL)
+		TP_FAIL("elf_getarhdr() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
 		TP_FAIL("error=%d \"%s\".", error, elf_errmsg(error));
-		result = TET_FAIL;
-	}
 
 	tet_result(result);
 }
@@ -89,11 +88,10 @@ tcArgsNonAr(void)
 
 	result = TET_PASS;
 
-	if (elf_getarhdr(e) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT) {
+	if (elf_getarhdr(e) != NULL)
+		TP_FAIL("elf_getarhdr() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
 		TP_FAIL("error=%d \"%s\".", error, elf_errmsg(error));
-		result = TET_FAIL;
-	}
 
 	(void) elf_end(e);
 
@@ -118,11 +116,10 @@ tcArgsElf(void)
 
 	result = TET_PASS;
 
-	if (elf_getarhdr(e) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT) {
+	if (elf_getarhdr(e) != NULL)
+		TP_FAIL("elf_getarhdr() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
 		TP_FAIL("error=%d \"%s\".", error, elf_errmsg(error));
-		result = TET_FAIL;
-	}
 
 	(void) elf_end(e);
 
@@ -244,10 +241,10 @@ tcArArchive$1(void)
 
 	result = TET_PASS;
 
-	if (elf_getarhdr(e) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT) {
+	if (elf_getarhdr(e) != NULL)
+		TP_FAIL("elf_getarhdr() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
 		TP_FAIL("error=%d \"%s\".", error, elf_errmsg(error));
-	}
 
 	(void) elf_end(e);
 

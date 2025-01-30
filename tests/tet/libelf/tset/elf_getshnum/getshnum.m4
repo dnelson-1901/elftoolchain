@@ -52,8 +52,9 @@ tcArgsNull(void)
 	TP_ANNOUNCE("elf_getshnum(NULL,*) fails.");
 
 	result = TET_PASS;
-	if (elf_getshnum(NULL, &n) != 0 ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
+	if (elf_getshnum(NULL, &n) != 0)
+		TP_FAIL("elf_getshnum() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
 		TP_FAIL("n=%d error=%d \"%s\".", n, error,
 		    elf_errmsg(error));
 
@@ -79,8 +80,9 @@ tcArgsNonElf(void)
 	TS_OPEN_MEMORY(e, nonelf);
 
 	result = TET_PASS;
-	if (elf_getshnum(e, &n) != 0 ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
+	if (elf_getshnum(e, &n) != 0)
+		TP_FAIL("elf_getshnum() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
 		TP_FAIL("n=%d error=%d \"%s\".", n, error,
 		    elf_errmsg(error));
 
@@ -158,8 +160,9 @@ tcMalformedXscn$1$2(void)
 	_TS_OPEN_FILE(e, "xscn-1.$2$1", ELF_C_READ, fd, goto done;);
 
 	result = TET_PASS;
-	if ((elf_getshnum(e, &n) != 0 ||
-	    (error = elf_errno()) != ELF_E_SECTION))
+	if (elf_getshnum(e, &n) != 0)
+		TP_FAIL("elf_getshnum() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_SECTION)
 		TP_FAIL("n=%d error=%d \"%s\".", n, error, elf_errmsg(error));
 
  done:
