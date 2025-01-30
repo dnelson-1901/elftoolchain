@@ -44,7 +44,7 @@ $4
 }')
 
 define(`TP_FLAG_NULL',`_TP_FLAG_FN(`tcArgsNull',`
-	int error, ret;
+	int ret;
 
 	TP_CHECK_INITIALIZATION();
 

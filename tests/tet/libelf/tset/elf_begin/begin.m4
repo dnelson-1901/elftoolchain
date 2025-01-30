@@ -355,7 +355,7 @@ void
 tcCmdWriteParamIgnored(void)
 {
 	Elf *e, *t;
-	int error, fd, fd1, result;
+	int fd, fd1, result;
 
 	TP_ANNOUNCE("cmd == ELF_C_WRITE ignores the last parameter.");
 
@@ -375,7 +375,6 @@ tcCmdWriteParamIgnored(void)
 	}
 
 	result = TET_PASS;
-	error = -1;
 	if ((e = elf_begin(fd, ELF_C_WRITE, t)) == NULL) {
 		TP_FAIL("elf_begin() failed: \"%s\".", elf_errmsg(-1));
 	}
