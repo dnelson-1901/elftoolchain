@@ -243,6 +243,7 @@ tcMemElfNull$1$2(void)
 
 	TP_ANNOUNCE("TOUPPER($2)$1: ELF_C_NULL updates in-memory objects.");
 
+	e = NULL;
 	result = TET_UNRESOLVED;
 
 	_TS_READ_FILE("newehdr.$2$1", elf, sizeof(elf), goto done;);
@@ -265,7 +266,8 @@ tcMemElfNull$1$2(void)
 		TP_FAIL("offset=%jd != %zu.", (intmax_t) offset, fsz);
 
  done:
-	(void) elf_end(e);
+	if (e)
+		(void) elf_end(e);
 	tet_result(result);
 }')
 
@@ -822,7 +824,7 @@ define(`FN',`
 void
 tcSectionTypeOSUserProcDefined_$2$1(void)
 {
-	int error, fd, result;
+	int fd, result;
 	off_t offset;
 	Elf *e;
 	Elf_Data *d;
@@ -996,7 +998,7 @@ tcRdWrShdrIdempotent$2$1(void)
 	fd = tfd = -1;
 
 	/* Make a copy of the reference object. */
-	if ((tfn = elfts_copy_file(srcfile, &error)) < 0) {
+	if ((tfn = elfts_copy_file(srcfile, &error)) == NULL) {
 		TP_UNRESOLVED("elfts_copyfile(%s) failed: \"%s\".", srcfile,
 		    strerror(error));
 		goto done;
@@ -1111,7 +1113,7 @@ tcRdWrShdrIdempotentAppLayout$2$1(void)
 	fd = tfd = -1;
 
 	/* Make a copy of the reference object. */
-	if ((tfn = elfts_copy_file(srcfile, &error)) < 0) {
+	if ((tfn = elfts_copy_file(srcfile, &error)) == NULL) {
 		TP_UNRESOLVED("elfts_copyfile(%s) failed: \"%s\".", srcfile,
 		    strerror(error));
 		goto done;
@@ -1247,11 +1249,11 @@ tcMixedBuffer_$2$1(void)
 {
 	Elf *e;
 	Elf_Scn *scn, *strscn;
-	int error, fd, result;
+	int fd, result;
 	Elf$1_Ehdr *ehdr;
 	Elf$1_Shdr *shdr, *strshdr;
 	Elf_Data *data1, *data2, *data3, *data4;
-	char *reffile = "mixedscn.$2$1", *tfn;
+	char *reffile = "mixedscn.$2$1";
 
 	TP_CHECK_INITIALIZATION();
 
@@ -1260,7 +1262,6 @@ tcMixedBuffer_$2$1(void)
 
 	result = TET_UNRESOLVED;
 	e = NULL;
-	tfn = NULL;
 	fd = -1;
 
 	_TS_OPEN_FILE(e, TS_NEWFILE, ELF_C_WRITE, fd, goto done;);
@@ -1375,7 +1376,8 @@ tcMixedBuffer_$2$1(void)
 	}
 
 	/* Compare files here. */
-	TP_UNRESOLVED("Verification is yet to be implemented.");
+	TP_UNRESOLVED("Verification is yet to be implemented: "
+	    "ref=\"%s\".", reffile);
 
  done:
 	if (e)
@@ -1421,7 +1423,7 @@ tcRdWrModeNoOp_$1$2(void)
 	tfn = NULL;
 
 	/* Make a copy of the reference object. */
-	if ((tfn = elfts_copy_file(srcfile, &error)) < 0) {
+	if ((tfn = elfts_copy_file(srcfile, &error)) == NULL) {
 		TP_UNRESOLVED("elfts_copyfile(%s) failed: \"%s\".",
 		    srcfile, strerror(error));
 		goto done;
@@ -1523,7 +1525,7 @@ tcRdWrModeNoDataChange_$1$2(void)
 	tfn = NULL;
 
 	/* Make a copy of the reference object. */
-	if ((tfn = elfts_copy_file(srcfile, &error)) < 0) {
+	if ((tfn = elfts_copy_file(srcfile, &error)) == NULL) {
 		TP_UNRESOLVED("elfts_copyfile(%s) failed: \"%s\".",
 		    srcfile, strerror(error));
 		goto done;
@@ -1633,7 +1635,7 @@ tcRdWrModeEhdrChange_$1$2(void)
 	tfn = NULL;
 
 	/* Make a copy of the reference object. */
-	if ((tfn = elfts_copy_file(srcfile, &error)) < 0) {
+	if ((tfn = elfts_copy_file(srcfile, &error)) == NULL) {
 		TP_UNRESOLVED("elfts_copyfile(%s) failed: \"%s\".",
 		    srcfile, strerror(error));
 		goto done;
@@ -1730,7 +1732,6 @@ void
 tcRdWrExtendSection_$1$2(void)
 {
 	int error, fd, result;
-	unsigned int flag;
 	struct stat sb;
 	Elf *e;
 	Elf_Scn *scn;
@@ -1751,7 +1752,7 @@ tcRdWrExtendSection_$1$2(void)
 	tfn = NULL;
 
 	/* Make a copy of the reference object. */
-	if ((tfn = elfts_copy_file(srcfile, &error)) < 0) {
+	if ((tfn = elfts_copy_file(srcfile, &error)) == NULL) {
 		TP_UNRESOLVED("elfts_copyfile(%s) failed: \"%s\".",
 		    srcfile, strerror(error));
 		goto done;
@@ -1851,7 +1852,6 @@ void
 tcRdWrShrinkSection_$1$2(void)
 {
 	int error, fd, result;
-	unsigned int flag;
 	struct stat sb;
 	Elf *e;
 	Elf_Scn *scn;
@@ -1872,7 +1872,7 @@ tcRdWrShrinkSection_$1$2(void)
 	tfn = NULL;
 
 	/* Make a copy of the reference object. */
-	if ((tfn = elfts_copy_file(srcfile, &error)) < 0) {
+	if ((tfn = elfts_copy_file(srcfile, &error)) == NULL) {
 		TP_UNRESOLVED("elfts_copyfile(%s) failed: \"%s\".",
 		    srcfile, strerror(error));
 		goto done;
@@ -1979,11 +1979,9 @@ tcEhdrPhdrCollision$1$2(void)
 {
 	int error, fd, result, flags;
 	off_t offset;
-	size_t fsz, psz, roundup, ssz;
 	Elf$1_Ehdr *eh;
 	Elf$1_Phdr *ph;
-	Elf_Data *d;
-	Elf_Scn *scn;
+	size_t fsz;
 	Elf *e;
 
 	TP_CHECK_INITIALIZATION();
@@ -2068,11 +2066,10 @@ tcShdrPhdrCollision$1$2(void)
 {
 	int error, fd, result, flags;
 	off_t offset;
-	size_t fsz, psz, roundup, ssz;
 	Elf$1_Ehdr *eh;
 	Elf$1_Phdr *ph;
-	Elf_Data *d;
 	Elf_Scn *scn;
+	size_t fsz;
 	Elf *e;
 
 	TP_CHECK_INITIALIZATION();
@@ -2166,11 +2163,10 @@ tcShdrSectionCollision$1$2(void)
 {
 	int error, fd, result, flags;
 	off_t offset;
-	size_t fsz, psz, roundup, ssz;
 	Elf$1_Ehdr *eh;
 	Elf$1_Shdr *sh;
-	Elf_Data *d;
 	Elf_Scn *scn;
+	size_t fsz;
 	Elf *e;
 
 	TP_CHECK_INITIALIZATION();
@@ -2268,12 +2264,12 @@ void
 tcSectionOverlap$1$2(void)
 {
 	int error, fd, result, flags;
-	off_t offset;
-	size_t fsz, psz, roundup, ssz;
 	Elf$1_Ehdr *eh;
 	Elf$1_Shdr *sh;
-	Elf_Data *d;
 	Elf_Scn *scn;
+	Elf_Data *d;
+	off_t offset;
+	size_t fsz;
 	Elf *e;
 
 	TP_CHECK_INITIALIZATION();

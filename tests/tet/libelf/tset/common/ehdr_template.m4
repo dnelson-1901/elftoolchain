@@ -189,8 +189,9 @@ tcBadElfVersion(void)
 
 	result = TET_PASS;
 
-	if ((eh = TS_ICFUNC`'(e)) != NULL ||
-	    (err = elf_errno()) != ELF_E_VERSION)
+	if ((eh = TS_ICFUNC`'(e)) != NULL)
+		TP_FAIL("TS_ICFUNC`'() succeeded unexpectedly.");
+	else if ((err = elf_errno()) != ELF_E_VERSION)
 		TP_FAIL("error=%d eh=%p.", err, (void *) eh);
 
 	(void) elf_end(e);
@@ -218,8 +219,9 @@ tcBadElf(void)
 	TS_OPEN_MEMORY(e, badelf);
 
 	result = TET_PASS;
-	if ((eh = TS_ICFUNC`'(e)) != NULL ||
-	    (err = elf_errno()) != ELF_E_HEADER)
+	if ((eh = TS_ICFUNC`'(e)) != NULL)
+		TP_FAIL("TS_ICFUNC`'() succeeded unexpectedly.");
+	else if ((err = elf_errno()) != ELF_E_HEADER)
 		TP_FAIL("error=%d eh=%p.", err, (void *) eh);
 
 	(void) elf_end(e);
@@ -354,8 +356,9 @@ tcElfWrongSize$1(void)
 
 	fn = "ehdr.TOLOWER($1)`'TS_OTHERSIZE";
 	TS_OPEN_FILE(e,fn,ELF_C_READ,fd);
-	if ((eh = TS_ICFUNC`'(e)) != NULL ||
-	    (error = elf_errno()) != ELF_E_CLASS)
+	if ((eh = TS_ICFUNC`'(e)) != NULL)
+		TP_FAIL("TS_ICFUNC`'() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_CLASS)
 		TP_FAIL("\"%s\" opened (error %d).", fn, error);
 
 	(void) elf_end(e);

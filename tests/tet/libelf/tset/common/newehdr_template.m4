@@ -112,12 +112,14 @@ tcAllocateFlagDirty(void)
 
 	flags = elf_flagehdr(e, ELF_C_CLR, 0); /* Our extension */
 
-	tet_result((flags & ELF_F_DIRTY) == 0 ? TET_FAIL : TET_PASS);
+	result = (flags & ELF_F_DIRTY) == 0 ? TET_FAIL : TET_PASS;
 
  done:
 	(void) unlink(TS_NEWELF);
 	(void) elf_end(e);
 	(void) close(fd);
+
+	tet_result(result);
 }
 
 /* Declare fixed sizes associated with an ELF header. */

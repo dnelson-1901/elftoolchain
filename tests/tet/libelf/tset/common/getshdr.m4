@@ -44,8 +44,9 @@ tcNull_tpNull$1(void)
 	TP_ANNOUNCE("elf$1_getshdr(NULL) fails with ELF_E_ARGUMENT.");
 
 	result = TET_PASS;
-	if ((sh = elf$1_getshdr(NULL)) != NULL ||
-	   (error = elf_errno()) != ELF_E_ARGUMENT)
+	if ((sh = elf$1_getshdr(NULL)) != NULL)
+		TP_FAIL("elf$1_getshdr() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
 		TP_FAIL("sh=%p error=%d \"%s\".", (void *) sh,
 		    error, elf_errmsg(error));
 

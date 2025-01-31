@@ -200,8 +200,11 @@ tcBadElfVersion_tpElf(void)
 
 	TS_OPEN_MEMORY(e, badelf);
 
-	if ((ph = TS_ICFUNC(e)) != NULL ||
-	    (err = elf_errno()) != ELF_E_VERSION) {
+	if ((ph = TS_ICFUNC(e)) != NULL) {
+		tet_printf("fail: " __XSTRING(TS_ICFUNC) " succeeded "
+		    "unexpectedly.");
+		tet_result(TET_FAIL);
+	} else if ((err = elf_errno()) != ELF_E_VERSION) {
 		tet_printf("fail: error=%d ph=%p.", err, (void *) ph);
 		tet_result(TET_FAIL);
 	} else
@@ -229,8 +232,11 @@ tcBadElf_tpElf(void)
 
 	TS_OPEN_MEMORY(e, badelf);
 
-	if ((ph = TS_ICFUNC(e)) != NULL ||
-	    (err = elf_errno()) != ELF_E_HEADER) {
+	if ((ph = TS_ICFUNC(e)) != NULL) {
+		tet_printf("fail: " __XSTRING(TS_ICFUNC) " succeeded "
+		     "unexpectedly.");
+		tet_result(TET_FAIL);
+	} else if ((err = elf_errno()) != ELF_E_HEADER) {
 		tet_printf("fail: error=%d ph=%p.", err, (void *) ph);
 		tet_result(TET_FAIL);
 	} else
@@ -387,8 +393,11 @@ tcElf_tpElfWrongSize(void)
 	fn = "phdr.msb" __XSTRING(TS_OTHERSIZE);
 	TS_OPEN_FILE(e,fn,ELF_C_READ,fd);
 
-	if ((ph = TS_ICFUNC(e)) != NULL ||
-	    (error = elf_errno()) != ELF_E_CLASS) {
+	if ((ph = TS_ICFUNC(e)) != NULL) {
+	  	tet_printf("fail: " __XSTRING(TS_ICFUNC) " succeeded "
+		    "unexpectedly.");
+		result = TET_FAIL;
+        } else if ((error = elf_errno()) != ELF_E_CLASS) {
 		tet_printf("fail: \"%s\" opened (error %d).", fn, error);
 		result = TET_FAIL;
 	}
