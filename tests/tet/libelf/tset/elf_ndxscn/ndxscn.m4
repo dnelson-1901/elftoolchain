@@ -52,10 +52,11 @@ tcArgsNull(void)
 	TP_ANNOUNCE("elf_ndxscn(NULL) fails.");
 
 	result = TET_PASS;
-	if ((shn = elf_ndxscn(NULL)) != SHN_UNDEF ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
-		TP_FAIL("shn=%d error=%d \"%s\".", shn,
-		    error, elf_errmsg(error));
+	if ((shn = elf_ndxscn(NULL)) != SHN_UNDEF)
+		TP_FAIL("elf_ndxscn() succeeded unexpectedly: shn=%zu.", shn);
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
+		TP_FAIL("Unexpected error=%d \"%s\".", error,
+		    elf_errmsg(error));
 
 	tet_result(result);
 }

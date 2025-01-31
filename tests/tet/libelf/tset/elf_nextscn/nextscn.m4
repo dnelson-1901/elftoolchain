@@ -52,10 +52,11 @@ tcArgsNull(void)
 	TP_ANNOUNCE("elf_nextscn(NULL,*) fails.");
 
 	result = TET_PASS;
-	if ((scn = elf_nextscn(NULL, NULL)) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
-		TP_FAIL("scn=%p error=%d \"%s\".", (void *) scn,
-		    error, elf_errmsg(error));
+	if ((scn = elf_nextscn(NULL, NULL)) != NULL)
+		TP_FAIL("elf_nextscn() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
+		TP_FAIL("Unexpected error=%d \"%s\".", error,
+		    elf_errmsg(error));
 
 	tet_result(result);
 }
@@ -81,10 +82,11 @@ tcArgsNonElf(void)
 
 	result = TET_PASS;
 
-	if ((scn = elf_nextscn(e, NULL)) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
-		TP_FAIL("scn=%p error=%d \"%s\".", (void *) scn,
-		    error, elf_errmsg(error));
+	if ((scn = elf_nextscn(e, NULL)) != NULL)
+		TP_FAIL("elf_nextscn() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
+		TP_FAIL("Unexpected error=%d \"%s\".", error,
+		    elf_errmsg(error));
 
 	(void) elf_end(e);
 
@@ -177,10 +179,11 @@ tcElfLastNewFile$1(void)
 	(void) elf_errno();
 
 	result = TET_PASS;
-	if ((nextscn = elf_nextscn(e, scn)) != NULL ||
-	    (error = elf_errno()) != ELF_E_NONE)
-		TP_FAIL("scn=%p error=%d \"%s\".", (void *) scn,
-		    error, elf_errmsg(error));
+	if ((nextscn = elf_nextscn(e, scn)) != NULL)
+		TP_FAIL("elf_nextscn() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_NONE)
+		TP_FAIL("Unexpected error=%d \"%s\".", error,
+		    elf_errmsg(error));
 
  done:
 	if (e)
@@ -233,10 +236,11 @@ tcElfLastOldFile$2$1(void)
 	(void) elf_errno();
 
 	result = TET_PASS;
-	if ((nextscn = elf_nextscn(e, scn)) != NULL ||
-	    (error = elf_errno()) != ELF_E_NONE)
-		TP_FAIL("scn=%p error=%d \"%s\".", (void *) scn,
-		    error, elf_errmsg(error));
+	if ((nextscn = elf_nextscn(e, scn)) != NULL)
+		TP_FAIL("elf_nextscn() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_NONE)
+		TP_FAIL("Unexpected error=%d \"%s\".", error,
+		    elf_errmsg(error));
 
  done:
 	if (e)
@@ -263,7 +267,7 @@ tcElfAscending$2$1(void)
 {
 	Elf *e;
 	Elf_Scn *scn, *oldscn;
-	int error, fd, result;
+	int fd, result;
 	size_t nsections, n, r;
 
 	TP_CHECK_INITIALIZATION();
@@ -290,8 +294,8 @@ tcElfAscending$2$1(void)
 
 	for (n = 0; n < nsections-1; n++) {
 		if ((scn = elf_nextscn(e, oldscn)) == NULL) {
-			TP_FAIL("scn=%p error=%d \"%s\".", (void *) scn,
-			    error, elf_errmsg(error));
+			TP_FAIL("Section %zu: unexpected error \"%s\".",
+			    n, elf_errmsg(-1));
 			goto done;
 		}
 
@@ -303,9 +307,10 @@ tcElfAscending$2$1(void)
 	}
 
 	/* check the last one */
-	if ((scn = elf_nextscn(e, oldscn)) != NULL ||
-	    (r = elf_ndxscn(oldscn)) != (nsections-1))
-		TP_FAIL("scn=%p r=%d", (void *) scn, r);
+	if ((scn = elf_nextscn(e, oldscn)) != NULL)
+		TP_FAIL("elf_nextscn() succeeded unexpectedly.");
+	else if ((r = elf_ndxscn(oldscn)) != (nsections-1))
+		TP_FAIL("r=%d", r);
 
  done:
 	if (e)
@@ -334,7 +339,6 @@ tcElfMismatch$2$1(void)
 	Elf *e1, *e2;
 	Elf_Scn *scn, *nextscn;
 	int error, fd1, fd2, result;
-	size_t n;
 
 	TP_CHECK_INITIALIZATION();
 
@@ -348,14 +352,15 @@ tcElfMismatch$2$1(void)
 	_TS_OPEN_FILE(e2, TS_NEWFILE, ELF_C_WRITE, fd2, goto done;);
 
 	if ((scn = elf_getscn(e1, 0)) == NULL) {
-		TP_UNRESOLVED("elf_getscn(%d) failed.", (n-1));
+		TP_UNRESOLVED("elf_getscn(e1, 0) failed.");
 		goto done;
 	}
 
 	result = TET_PASS;
-	if ((nextscn = elf_nextscn(e2, scn)) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
-		TP_FAIL("scn=%p error=%d \"%s\".", (void *) scn,
+	if ((nextscn = elf_nextscn(e2, scn)) != NULL)
+		TP_FAIL("elf_nextscn() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
+		TP_FAIL("Unexpected error=%d \"%s\".",
 		    error, elf_errmsg(error));
 
  done:

@@ -54,8 +54,9 @@ tcArgsNull(void)
 	TP_ANNOUNCE("elf_strptr(NULL,*,*) fails.");
 
 	result = TET_PASS;
-	if ((r = elf_strptr(NULL, (size_t) 0, (size_t) 0)) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
+	if ((r = elf_strptr(NULL, (size_t) 0, (size_t) 0)) != NULL)
+		TP_FAIL("elf_strptr() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
 		TP_FAIL("r=%p error=%d \"%s\".", r, error, elf_errmsg(error));
 
 	tet_result(result);
@@ -77,11 +78,14 @@ tcArgsIllegalSection$1`'TOUPPER($2)(void)
 
 	TP_ANNOUNCE("TOUPPER($2)$1: a non-STRTAB section is rejected.");
 
+	result = TET_UNRESOLVED;
+
 	_TS_OPEN_FILE(e, "$3.$2$1", ELF_C_READ, fd, goto done;);
 
 	result = TET_PASS;
-	if ((r = elf_strptr(e, SHN_UNDEF, (size_t) 0)) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
+	if ((r = elf_strptr(e, SHN_UNDEF, (size_t) 0)) != NULL)
+		TP_FAIL("elf_strptr() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
 		TP_FAIL("r=%p error=%d \"%s\".", r, error,
 		    elf_errmsg(error));
 
@@ -115,6 +119,8 @@ tcArgsIllegalOffset$1`'TOUPPER($2)(void)
 
 	TP_ANNOUNCE("TOUPPER($2)$1: invalid offsets are rejected.");
 
+	result = TET_UNRESOLVED;
+
 	_TS_OPEN_FILE(e, "$3.$2$1", ELF_C_READ, fd, goto done;);
 
 	if ((eh = elf$1_getehdr(e)) == NULL) {
@@ -136,14 +142,16 @@ tcArgsIllegalOffset$1`'TOUPPER($2)(void)
 	}
 
 	result = TET_PASS;
-	if ((r = elf_strptr(e, eh->e_shstrndx, sh->sh_size)) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
+	if ((r = elf_strptr(e, eh->e_shstrndx, sh->sh_size)) != NULL)
+		TP_FAIL("elf_strptr() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
 		TP_FAIL("r=%p error=%d \"%s\".", (void *) r, error,
 		    elf_errmsg(error));
 
 	/* Try a very large value */
-	if ((r = elf_strptr(e, eh->e_shstrndx, ~ (size_t) 0)) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
+	if ((r = elf_strptr(e, eh->e_shstrndx, ~ (size_t) 0)) != NULL)
+		TP_FAIL("elf_strptr() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
 		TP_FAIL("r=%p error=%d \"%s\".", (void *) r, error,
 		    elf_errmsg(error));
 
@@ -182,6 +190,8 @@ tcArgsOffsetInHole$1`'TOUPPER($2)(void)
 	TP_CHECK_INITIALIZATION();
 
 	TP_ANNOUNCE("TOUPPER($2)$1: invalid offsets are rejected.");
+
+	result = TET_UNRESOLVED;
 
 	_TS_OPEN_FILE(e, "$3.$2$1", ELF_C_READ, fd, goto done;);
 
@@ -229,18 +239,22 @@ tcArgsOffsetInHole$1`'TOUPPER($2)(void)
 	/* first byte offset in the "hole". */
 	if ((r = elf_strptr(e, eh->e_shstrndx, sz)) != NULL ||
 	    (error = elf_errno()) != ELF_E_ARGUMENT)
-		TP_FAIL("r=%p offset=%d error=%d \"%s\".", (void *) r, sz,
-		    error, elf_errmsg(error));
+		TP_FAIL("r=%p offset=%d error=\"%s\".", (void *) r, sz,
+		    elf_errmsg(-1));
 
 	/* last offset in the "hole". */
-	if ((r = elf_strptr(e, eh->e_shstrndx, (size_t) d->d_align - 1)) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
-		TP_FAIL("r=%p offset=%d error=%d \"%s\".", (void *) r, (d->d_align-1),
-		    error, elf_errmsg(error));
+	if ((r = elf_strptr(e, eh->e_shstrndx, (size_t) d->d_align - 1))
+	    != NULL)
+		TP_FAIL("elf_strptr() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
+		TP_FAIL("r=%p offset=%d error=%d \"%s\".", (void *) r,
+		    (d->d_align-1), error, elf_errmsg(error));
 
 	/* offset after the new end of the section. */
-	if ((r = elf_strptr(e, eh->e_shstrndx, (size_t) d->d_align + d->d_size)) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
+	if ((r = elf_strptr(e, eh->e_shstrndx,
+	    (size_t) d->d_align + d->d_size)) != NULL)
+		TP_FAIL("elf_strptr() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
 		TP_FAIL("r=%p offset=%d error=%d \"%s\".", (void *) r,
 		    (d->d_align+d->d_size), error, elf_errmsg(error));
 
@@ -276,7 +290,7 @@ define(`FN',`
 void
 tcArgsValidOffset$1`'TOUPPER($2)(void)
 {
-	int error, fd, result;
+	int fd, result;
 	Elf *e;
 	Elf_Scn *scn;
 	Elf_Data *d;
@@ -289,6 +303,8 @@ tcArgsValidOffset$1`'TOUPPER($2)(void)
 
 	TP_ANNOUNCE("TOUPPER($2)$1: invalid offsets are rejected.");
 
+	result = TET_UNRESOLVED;
+	
 	_TS_OPEN_FILE(e, "$3.$2$1", ELF_C_READ, fd, goto done;);
 
 	if ((eh = elf$1_getehdr(e)) == NULL) {
@@ -341,7 +357,7 @@ tcArgsValidOffset$1`'TOUPPER($2)(void)
 	if ((r = elf_strptr(e, eh->e_shstrndx, rs->offset)) == NULL ||
 	    strcmp(r, rs->string) != 0)
 		TP_FAIL("r=\"%s\" rs=\"%s\" offset=%d error=\"%s\".", r,
-		    rs->string, rs->offset, elf_errmsg(error));
+		    rs->string, rs->offset, elf_errmsg(-1));
 
  done:
 	(void) elf_end(e);

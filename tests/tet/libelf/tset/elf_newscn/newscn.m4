@@ -52,10 +52,11 @@ tcArgsNull(void)
 	TP_ANNOUNCE("elf_newscn(NULL) fails.");
 
 	result = TET_PASS;
-	if ((scn = elf_newscn(NULL)) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
-		TP_FAIL("scn=%p error=%d \"%s\".", (void *) scn,
-		    error, elf_errmsg(error));
+	if ((scn = elf_newscn(NULL)) != NULL)
+		TP_FAIL("elf_newscn() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
+		TP_FAIL("Unexpected error=%d \"%s\".", error,
+		    elf_errmsg(error));
 
 	tet_result(result);
 }
@@ -80,10 +81,11 @@ tcArgsNonElf(void)
 
 	result = TET_PASS;
 
-	if ((scn = elf_newscn(e)) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
-		TP_FAIL("scn=%p error=%d \"%s\".", (void *) scn,
-		    error, elf_errmsg(error));
+	if ((scn = elf_newscn(e)) != NULL)
+		TP_FAIL("elf_newscn() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
+		TP_FAIL("Unexpected error=%d \"%s\".", error,
+		    elf_errmsg(error));
 
 	(void) elf_end(e);
 
@@ -219,10 +221,11 @@ tcAllocateNoEhdr(void)
 	_TS_OPEN_FILE(e, TS_NEWFILE, ELF_C_WRITE, fd, goto done;);
 
 	result = TET_PASS;
-	if ((scn = elf_newscn(e)) != NULL ||
-	    (error = elf_errno()) != ELF_E_CLASS)
-		TP_FAIL("scn=%p error=%d \"%s\".", (void *) scn,
-		    error, elf_errmsg(error));
+	if ((scn = elf_newscn(e)) != NULL)
+		TP_FAIL("elf_newscn() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_CLASS)
+		TP_FAIL("Unexpected error=%d \"%s\".", error,
+		    elf_errmsg(error));
 
  done:
 	if (e)
