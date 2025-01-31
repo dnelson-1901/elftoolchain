@@ -211,7 +211,7 @@ tcOffsetOverflow(void)
 	Elf *ar;
 	off_t offset;
 	uint64_t max_offset;
-	int error, fd, result;
+	int fd, result;
 
 	fd = -1;
 	ar = NULL;
