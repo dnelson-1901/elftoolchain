@@ -1207,7 +1207,7 @@ tcBuffer_tpMisaligned_$1_`'__SZ__`'(void)
 	(void) memset(&ed, 0, sizeof(ed));
 	(void) memset(&es, 0, sizeof(es));
 
-	es.d_type = es.d_type = td->tsd_type;
+	es.d_type = ed.d_type = td->tsd_type;
 	es.d_version = ed.d_version = EV_CURRENT;
 
 	count = sizeof(sb) / msz; /* Note: msz >= fsz always. */
