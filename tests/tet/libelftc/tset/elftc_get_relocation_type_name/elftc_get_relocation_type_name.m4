@@ -337,6 +337,203 @@ static const struct relocation_type_and_name relocation_types_AARCH64[] = {
 };
 
 /*
+ * EM_IA_64.
+ */
+static const struct relocation_type_range relocation_type_ranges_IA_64[] = {
+	{
+		0, /* R_IA_64_NONE */
+		0
+	},
+	{
+		0x21, /* R_IA_64_IMM14 */
+		0x27  /* R_IA_64_DIR64LSB */
+	},
+	{
+		0x2A, /* R_IA_64_GPREL22 */
+		0x2F  /* R_IA_64_GPREL2F */
+	},
+	{
+		0x32, /* R_IA_64_LTOFF22 */
+		0x33  /* R_IA_64_LTOFF64I */
+	},
+	{
+		0x3A, /* R_IA_64_PLTOFF22 */
+		0x3B  /* R_IA_64_PLTOFF64I */
+	},
+	{
+		0x3E, /* R_IA_64_PLTOFF64MSB */
+		0x3F  /* R_IA_64_PLTOFF64LSB */
+	},
+	{
+		0x43, /* R_IA_64_FPTR64I */
+		0x4F  /* R_IA_64_PCREL64LSB */
+	},
+	{
+		0x52, /* R_IA_64_LTOFF_FPTR22 */
+		0x57  /* R_IA_64_LTOFF_FPTR64LSB */
+	},
+	{
+		0x5C, /* R_IA_64_SEGREL32MSB */
+		0x5F  /* R_IA_64_SEGREL64LSB */
+	},
+	{
+		0x64, /* R_IA_64_SECREL32MSB */
+		0x67  /* R_IA_64_SECREL64LSB */
+	},
+	{
+		0x6C, /* R_IA_64_REL32MSB */
+		0x6F  /* R_IA_64_REL64LSB */
+	},
+	{
+		0x74, /* R_IA_64_LTV32MSB */
+		0x77  /* R_IA_64_LTV64LSB */
+	},
+	{
+		0x79, /* R_IA_64_PCREL21BI */
+		0x7B  /* R_IA_64_PCREL64I */
+	},
+	{
+		0x80, /* R_IA_64_IPLTMSB */
+		0x81  /* R_IA_64_IPLTLSB */
+	},
+	{
+		0x85, /* R_IA_64_SUB */
+		0x87  /* R_IA_64_LDXMOV */
+	},
+	{
+		0x91, /* R_IA_64_TPREL14 */
+		0x93  /* R_IA_64_TPREL64I */
+	},
+	{
+		0x96, /* R_IA_64_TPREL64MSB */
+		0x97  /* R_IA_64_TPREL64LSB */
+	},
+	{
+		0x9A, /* R_IA_64_LTOFF_TPREL22 */
+		0x9A
+	},
+	{
+		0xA6, /* R_IA_64_DTPMOD64MSB */
+		0xA7  /* R_IA_64_DTPMOD64LSB */
+	},
+	{
+		0xAA, /* R_IA_64_LTOFFDTPMOD22 */
+		0xAA
+	},
+	{
+		0xB1, /* R_IA_64_DTPREL14 */
+		0xB7  /* R_IA_64_DTPREL64LSB */
+	},
+	{
+		0xBA, /* R_IA_64_LTOFF_DTPREL22 */
+		0xBA
+	}
+};
+static const struct relocation_type_and_name relocation_types_IA_64[] = {
+	{ 0, "R_IA_64_NONE" },
+	/**/
+	{ 0x21, "R_IA_64_IMM14" },
+	{ 0x22, "R_IA_64_IMM22" },
+	{ 0x23, "R_IA_64_IMM64" },
+	{ 0x24, "R_IA_64_DIR32MSB" },
+	{ 0x25, "R_IA_64_DIR32LSB" },
+	{ 0x26, "R_IA_64_DIR64MSB" },
+	{ 0x27, "R_IA_64_DIR64LSB" },
+	/**/
+	{ 0x2A, "R_IA_64_GPREL22" },
+	{ 0x2B, "R_IA_64_GPREL64I" },
+	{ 0x2C, "R_IA_64_GPREL32MSB" },
+	{ 0x2D, "R_IA_64_GPREL32LSB" },
+	{ 0x2E, "R_IA_64_GPREL64MSB" },
+	{ 0x2F, "R_IA_64_GPREL64LSB" },
+	/**/
+	{ 0x32, "R_IA_64_LTOFF22" },
+	{ 0x33, "R_IA_64_LTOFF64I" },
+	/**/
+	{ 0x3A, "R_IA_64_PLTOFF22" },
+	{ 0x3B, "R_IA_64_PLTOFF64I" },
+	/**/
+	{ 0x3E, "R_IA_64_PLTOFF64MSB" },
+	{ 0x3F, "R_IA_64_PLTOFF64LSB" },
+	/**/
+	{ 0x43, "R_IA_64_FPTR64I" },
+	{ 0x44, "R_IA_64_FPTR32MSB" },
+	{ 0x45, "R_IA_64_FPTR32LSB" },
+	{ 0x46, "R_IA_64_FPTR64MSB" },
+	{ 0x47, "R_IA_64_FPTR64LSB" },
+	{ 0x48, "R_IA_64_PCREL60B" },
+	{ 0x49, "R_IA_64_PCREL21B" },
+	{ 0x4A, "R_IA_64_PCREL21M" },
+	{ 0x4B, "R_IA_64_PCREL21F" },
+	{ 0x4C, "R_IA_64_PCREL32MSB" },
+	{ 0x4D, "R_IA_64_PCREL32LSB" },
+	{ 0x4E, "R_IA_64_PCREL64MSB" },
+	{ 0x4F, "R_IA_64_PCREL64LSB" },
+	/**/
+	{ 0x52, "R_IA_64_LTOFF_FPTR22" },
+	{ 0x53, "R_IA_64_LTOFF_FPTR64I" },
+	{ 0x54, "R_IA_64_LTOFF_FPTR32MSB" },
+	{ 0x55, "R_IA_64_LTOFF_FPTR32LSB" },
+	{ 0x56, "R_IA_64_LTOFF_FPTR64MSB" },
+	{ 0x57, "R_IA_64_LTOFF_FPTR64LSB" },
+	/**/
+	{ 0x5C, "R_IA_64_SEGREL32MSB" },
+	{ 0x5D, "R_IA_64_SEGREL32LSB" },
+	{ 0x5E, "R_IA_64_SEGREL64MSB" },
+	{ 0x5F, "R_IA_64_SEGREL64LSB" },
+	/**/
+	{ 0x64, "R_IA_64_SECREL32MSB" },
+	{ 0x65, "R_IA_64_SECREL32LSB" },
+	{ 0x66, "R_IA_64_SECREL64MSB" },
+	{ 0x67, "R_IA_64_SECREL64LSB" },
+	/**/
+	{ 0x6C, "R_IA_64_REL32MSB" },
+	{ 0x6D, "R_IA_64_REL32LSB" },
+	{ 0x6E, "R_IA_64_REL64MSB" },
+	{ 0x6F, "R_IA_64_REL64LSB" },
+	/**/
+	{ 0x74, "R_IA_64_LTV32MSB" },
+	{ 0x75, "R_IA_64_LTV32LSB" },
+	{ 0x76, "R_IA_64_LTV64MSB" },
+	{ 0x77, "R_IA_64_LTV64LSB" },
+	/**/
+	{ 0x79, "R_IA_64_PCREL21BI" },
+	{ 0x7A, "R_IA_64_PCREL22" },
+	{ 0x7B, "R_IA_64_PCREL64I" },
+	/**/
+	{ 0x80, "R_IA_64_IPLTMSB" },
+	{ 0x81, "R_IA_64_IPLTLSB" },
+	/**/
+	{ 0x85, "R_IA_64_SUB" },
+	{ 0x86, "R_IA_64_LTOFF22X" },
+	{ 0x87, "R_IA_64_LDXMOV" },
+	/**/
+	{ 0x91, "R_IA_64_TPREL14" },
+	{ 0x92, "R_IA_64_TPREL22" },
+	{ 0x93, "R_IA_64_TPREL64I" },
+	/**/
+	{ 0x96, "R_IA_64_TPREL64MSB" },
+	{ 0x97, "R_IA_64_TPREL64LSB" },
+	/**/
+	{ 0x9A, "R_IA_64_LTOFF_TPREL22" },
+	/**/
+	{ 0xA6, "R_IA_64_DTPMOD64MSB" },
+	{ 0xA7, "R_IA_64_DTPMOD64LSB" },
+	/**/
+	{ 0xAA, "R_IA_64_LTOFF_DTPMOD22" },
+	/**/
+	{ 0xB1, "R_IA_64_DTPREL14" },
+	{ 0xB2, "R_IA_64_DTPREL22" },
+	{ 0xB3, "R_IA_64_DTPREL64I" },
+	{ 0xB4, "R_IA_64_DTPREL32MSB" },
+	{ 0xB5, "R_IA_64_DTPREL32LSB" },
+	{ 0xB6, "R_IA_64_DTPREL64MSB" },
+	{ 0xB7, "R_IA_64_DTPREL64LSB" },
+	/**/
+	{ 0xBA, "R_IA_64_LTOFF_DTPREL22" }
+};
+
+/*
  * EM_LOONGARCH.
  */
 static const struct relocation_type_range relocation_type_ranges_LOONGARCH[] = {
@@ -760,4 +957,5 @@ done:
 
 FN(`386')
 FN(`AARCH64')
+FN(`IA_64')
 FN(`LOONGARCH')
