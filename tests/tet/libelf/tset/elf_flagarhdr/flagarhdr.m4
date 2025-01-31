@@ -82,7 +82,6 @@ define(`_TP_PROLOGUE',`
 	}
 ')
 define(`_TP_EPILOGUE',`
- done:
 	if (member)
 		(void) elf_end(member);
 	if (ar)

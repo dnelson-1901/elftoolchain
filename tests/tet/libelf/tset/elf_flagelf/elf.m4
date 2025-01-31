@@ -64,7 +64,6 @@ define(`_TP_PROLOGUE',`
 
 	TS_OPEN_FILE(e, TS_NEWFILE, ELF_C_WRITE, fd);')
 define(`_TP_EPILOGUE',`
- done:
 	if (e)
 		(void) elf_end(e);
 	if (fd != -1)

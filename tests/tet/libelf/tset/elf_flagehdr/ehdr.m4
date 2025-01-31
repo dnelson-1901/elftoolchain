@@ -73,7 +73,6 @@ define(`_TP_PROLOGUE',`
 		goto done;
 	}')
 define(`_TP_EPILOGUE',`
- done:
 	if (e)
 		(void) elf_end(e);
 	if (fd != -1)
@@ -115,4 +114,6 @@ _TP_FLAG_FN(`tcArgsSequence',`
 		TP_FAIL("flag=0x%x, error=%d \"%s\".", f, error,
 		    elf_errmsg(error));
 		goto done;
-	}',`_TP_EPILOGUE')
+	}',`
+done:
+_TP_EPILOGUE')

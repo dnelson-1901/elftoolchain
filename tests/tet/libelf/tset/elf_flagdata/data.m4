@@ -85,7 +85,6 @@ define(`_TP_PROLOGUE',`
 		goto done;
 	}')
 define(`_TP_EPILOGUE',`
- done:
 	if (e)
 		(void) elf_end(e);
 	if (fd != -1)

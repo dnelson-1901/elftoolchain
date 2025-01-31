@@ -83,7 +83,9 @@ define(`TP_FLAG_ILLEGAL_CMD',`_TP_FLAG_FN(`tcArgsIllegalCmd',`
 			    elf_errmsg(error));
 			goto done;
 		}
-	}',`_TP_EPILOGUE')')
+	}',`
+done:
+ _TP_EPILOGUE')')
 
 /*
  * TP_FLAG_SET(FN,ARG)
@@ -106,7 +108,10 @@ define(`TP_FLAG_SET',`_TP_FLAG_FN(`tcArgsSet',`
 		TP_FAIL("flag=0x%x, expected 0x%x, error=%d \"%s\".", flag,
 		    ELF_F_DIRTY, error, elf_errmsg(error));
 		goto done;
-	}',`_TP_EPILOGUE')')
+	}
+',`
+done:
+_TP_EPILOGUE')')
 
 /*
  * TP_FLAG_CLR(FN,ARG)
@@ -130,7 +135,10 @@ define(`TP_FLAG_CLR',`_TP_FLAG_FN(`tcArgsClr',`
 		TP_FAIL("flag=0x%x, error=%d \"%s\".", flag, error,
 		    elf_errmsg(error));
 		goto done;
-	}',`_TP_EPILOGUE')')
+	}
+',`
+ done:
+_TP_EPILOGUE')')
 
 /*
  * TP_FLAG_ILLEGAL_CMD(FN, ARG, LEGALFLAGS)
@@ -162,7 +170,10 @@ define(`TP_FLAG_ILLEGAL_FLAG',`_TP_FLAG_FN(`tcArgsIllegalFlags',`
 			    elf_errmsg(error));
 			goto done;
 		}
-	}',`_TP_EPILOGUE')')
+	}
+',`
+done:
+_TP_EPILOGUE')')
 
 /*
  * TP_FLAG_NON_ELF(FN,ARG)
