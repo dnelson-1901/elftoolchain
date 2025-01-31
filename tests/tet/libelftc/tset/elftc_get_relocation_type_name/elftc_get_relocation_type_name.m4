@@ -560,15 +560,16 @@ check_relocations_list(
 		struct relocation_type *rt = NULL;
 		HASH_FIND_INT(hash_table, &rtn->r_value, rt);
 		if (rt == NULL) {
-			TP_UNRESOLVED("Relocation type value %u \"%s\" is not "
-			    "in any valid range of relocation types.",
-			    rtn->r_value, rtn->r_name);
+			TP_UNRESOLVED("Relocation type value %u (0x%x) \"%s\" "
+			    "is not in any valid range of relocation types.",
+			    rtn->r_value, rtn->r_value, rtn->r_name);
 			continue;
 		}
 		rt->r_count++;
 		if (rt->r_count > 1)
-			TP_UNRESOLVED("Relocation type value %u \"%s\" seen "
-			    "multiple times.", rtn->r_value, rtn->r_name);
+			TP_UNRESOLVED("Relocation type value %u (0x%x) \"%s\" "
+			    "seen multiple times.", rtn->r_value, rtn->r_value,
+			    rtn->r_name);
 	}
 
 	/*
@@ -578,8 +579,8 @@ check_relocations_list(
 	struct relocation_type *s = NULL, *tmp = NULL;
 	HASH_ITER(hh, hash_table, s, tmp) {
 		if (s->r_count == 0)
-			TP_UNRESOLVED("Relocation type value %u is not being "
-			    "tested.", s->r_value);
+			TP_UNRESOLVED("Relocation type value %u (0x%x) is not "
+			    "being tested.", s->r_value, s->r_value);
 	}
 	
 	return (result);
@@ -614,7 +615,7 @@ tcCheckRelocationTypeRangeValid_$1(void)
 		 */
 		for (unsigned int r = rtr->rtr_start; r <= rtr->rtr_end; r++)
 			if (elftc_get_relocation_type_name(EM_$1, r) == NULL)
-				TP_FAIL("relocation %u failed.", r);
+				TP_FAIL("relocation %u (0x%x) failed.", r, r);
 	}
 
 	tet_result(result);
@@ -640,18 +641,27 @@ tcCheckRelocationTypeRangeBoundary_$1(void)
 		const struct relocation_type_range *rtr =
 		    &relocation_type_ranges_$1[n];
 		const char *r_name = NULL;
-		
-		if (rtr->rtr_start > 0 &&
-		   (r_name = elftc_get_relocation_type_name(EM_$1,
-		       rtr->rtr_start - 1)) != NULL)
-		   	TP_FAIL(`"relocation %u succeeded unexpectedly with "
-			    "result \"%s\"."', rtr->rtr_start - 1, r_name);
 
-		if (rtr->rtr_end < UINT_MAX &&
-		    (r_name = elftc_get_relocation_type_name(EM_$1,
-		        rtr->rtr_end + 1)) != NULL)
-			TP_FAIL(`"relocation %u succeeded unexpectedly with "
-			    "result \"%s\"."', rtr->rtr_end + 1, r_name);
+		/*
+		 * Check beyond boundaries of the current range.
+		 */
+		if (rtr->rtr_start > 0) {
+			const unsigned int r_prev = rtr->rtr_start - 1;
+			if ((r_name = elftc_get_relocation_type_name(EM_$1,
+			    r_prev)) != NULL)
+			   	TP_FAIL(`"relocation %u (0x%x) succeeded "
+				    "unexpectedly with result \"%s\"."',
+				    r_prev, r_prev, r_name);
+		}
+
+		if (rtr->rtr_end < UINT_MAX) {
+			const unsigned int r_next = rtr->rtr_end + 1;
+			if ((r_name = elftc_get_relocation_type_name(EM_$1,
+			    r_next)) != NULL)
+				TP_FAIL(`"relocation %u (0x%x) succeeded "
+				    "unexpectedly with result \"%s\"."',
+				    r_next, r_next, r_name);
+		}
 	}
 
 	tet_result(result);
@@ -706,10 +716,12 @@ tcKnownRelocations_$1(void)
 		const char *r_name = elftc_get_relocation_type_name(EM_$1,
 		    rtn->r_value);
 		if (r_name == NULL)
-			TP_FAIL("relocation %u failed.");
+			TP_FAIL("relocation %u (0x%x) failed.", rtn->r_value,
+			    rtn->r_value);
 		else if (strcmp(r_name, rtn->r_name))
-	   		TP_FAIL(`"relocation %u: expected \"%s\", got \"%s\"."',
-			    rtn->r_value, rtn->r_name, r_name);
+	   		TP_FAIL(`"relocation %u (0x%x): expected \"%s\", "
+			    "got \"%s\"."', rtn->r_value, rtn->r_value,
+			    rtn->r_name, r_name);
 		/*
 		 * Remove the relocation type record from the hash table since
 		 * its value has been seen.
