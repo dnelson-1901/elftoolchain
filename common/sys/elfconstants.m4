@@ -33,11 +33,21 @@
 # - The "Linkers and Libraries Guide", from Sun Microsystems.
 #
 # - Processor-specific ELF ABI definitions for the aarch64, arm, i386,
-#   ia_64, loongarch, mips, powerpc, riscv, sparc and x86_64 architectures:
+#   ia_64, loongarch, mips, ppc, ppc64, riscv, s390, sparc, vax and
+#   x86_64 architectures:
+#
+#   i386 ::
+#     System V Application Binary Interface
+#     Intel386 Architecture Processor Supplement Version 1.2
+#     https://gitlab.com/x86-psABIs/i386-ABI/-/tree/hjl/x86/master
 #
 #   aarch64 ::
 #     ELF for the Arm® 64-bit Architecture (AArch64)
 #     https://github.com/ARM-software/abi-aa/blob/main/aaelf64/aaelf64.rst
+#
+#   arm ::
+#     ELF for the Arm® Architecture
+#     https://github.com/ARM-software/abi-aa/blob/main/aaelf32/aaelf32.rst
 #
 #   ia_64 ::
 #      Intel® Itanium™ Processor-specific Application Binary Interface (ABI)
@@ -48,9 +58,32 @@
 #     ELF for the LoongArch™ Architecture
 #     https://github.com/loongson/la-abi-specs/blob/release/laelf.adoc.
 #
+#   ppc ::
+#     Power Architecture® 32-bit Application Binary Interface
+#     Supplement 1.0 - Linux® & Embedded
+#     (Archived link) https://web.archive.org/web/20120608002551/\
+#       https://www.power.org/resources/downloads/\
+#       Power-Arch-32-bit-ABI-supp-1.0-Unified.pdf
+#
+#   ppc64 ::
+#     64-bit ELF ABI Specification for OpenPOWER Architecture
+#     https://openpowerfoundation.org/specifications/64bitelfabi/
+#
 #   riscv ::
 #     RISC-V ELF Specification
 #     https://github.com/riscv-non-isa/riscv-elf-psabi-doc/blob/master/riscv-elf.adoc
+#
+#   s390 ::
+#     S/390 ELF Application Binary Interface Supplement
+#     https://refspecs.linuxfoundation.org/ELF/zSeries/lzsabi0_zSeries.htm
+#
+#   sparc ::
+#     Oracle Solaris Linkers and Libraries Guide
+#     November 2024, Document E36783-04.
+#
+#   x86_64 ::
+#     ELF x86-64-ABI psABI
+#     https://gitlab.com/x86-psABIs/x86-64-ABI
 
 define(`VCSID_ELFCONSTANTS_M4',
 	`$Id$')
