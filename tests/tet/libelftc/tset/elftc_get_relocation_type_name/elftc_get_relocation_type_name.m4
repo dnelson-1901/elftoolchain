@@ -804,6 +804,41 @@ static const struct relocation_type_and_name relocation_types_S390[] = {
 	{ 26, "R_390_GOTENT" },
 };
 
+/*
+ * EM_VAX.
+ */
+static const struct relocation_type_range relocation_type_ranges_VAX[] = {
+	{
+		0, /* R_VAX_NONE */
+		7  /* R_VAX_GOT32 */
+	},
+	{
+		13, /* R_VAX_PLT32 */
+		13
+	},
+	{
+		19, /* R_VAX_COPY */
+		22  /* R_VAX_RELATIVE */
+	}
+};
+static const struct relocation_type_and_name relocation_types_VAX[] = {
+	{ 0, "R_VAX_NONE" },
+	{ 1, "R_VAX_32" },
+	{ 2, "R_VAX_16" },
+	{ 3, "R_VAX_8" },
+	{ 4, "R_VAX_PC32" },
+	{ 5, "R_VAX_PC16" },
+	{ 6, "R_VAX_PC8" },
+	{ 7, "R_VAX_GOT32" },
+	/**/
+	{ 13, "R_VAX_PLT32" },
+	/**/
+	{ 19, "R_VAX_COPY" },
+	{ 20, "R_VAX_GLOB_DAT" },
+	{ 21, "R_VAX_JMP_SLOT" },
+	{ 22, "R_VAX_RELATIVE" },
+};
+
 /**
  ** Helper functions used by the test functions below.
  **/
@@ -1088,4 +1123,5 @@ FN(`AARCH64')
 FN(`IA_64')
 FN(`RISCV')
 FN(`S390')
+FN(`VAX')
 FN(`LOONGARCH')
