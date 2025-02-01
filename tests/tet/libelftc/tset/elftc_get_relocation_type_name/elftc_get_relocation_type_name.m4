@@ -676,6 +676,95 @@ static const struct relocation_type_and_name relocation_types_LOONGARCH[] = {
 	{ 126, "R_LARCH_TLS_DESC_PCREL20_S2" },
 };
 
+/*
+ * EM_RISCV.
+ */
+static const struct relocation_type_range relocation_type_ranges_RISCV[] = {
+	{
+		0,  /* R_RISCV_NONE */
+		12, /* R_RISCV_TLSDESC */
+	},
+	{
+		16, /* R_RISCV_BRANCH */
+		41  /* R_RISCV_GOT32_PCREL */
+	},
+	{
+		43, /* R_RISCV_ALIGN */
+		45  /* R_RISCV_RVC_JUMP */
+	},
+	{
+		51, /* R_RISCV_RELAX */
+		65
+	},
+	{
+		191, /* R_RISCV_VENDOR */
+		191
+	}
+};
+static const struct relocation_type_and_name relocation_types_RISCV[] = {
+	{ 0, "R_RISCV_NONE" },
+	{ 1, "R_RISCV_32" },
+	{ 2, "R_RISCV_64" },
+	{ 3, "R_RISCV_RELATIVE" },
+	{ 4, "R_RISCV_COPY" },
+	{ 5, "R_RISCV_JUMP_SLOT" },
+	{ 6, "R_RISCV_TLS_DTPMOD32" },
+	{ 7, "R_RISCV_TLS_DTPMOD64" },
+	{ 8, "R_RISCV_TLS_DTPREL32" },
+	{ 9, "R_RISCV_TLS_DTPREL64" },
+	{ 10, "R_RISCV_TLS_TPREL32" },
+	{ 11, "R_RISCV_TLS_TPREL64" },
+	{ 12, "R_RISCV_TLSDESC" },
+	{ 16, "R_RISCV_BRANCH" },
+	{ 17, "R_RISCV_JAL" },
+	{ 18, "R_RISCV_CALL" },
+	{ 19, "R_RISCV_CALL_PLT" },
+	{ 20, "R_RISCV_GOT_HI20" },
+	{ 21, "R_RISCV_TLS_GOT_HI20" },
+	{ 22, "R_RISCV_TLS_GD_HI20" },
+	{ 23, "R_RISCV_PCREL_HI20" },
+	{ 24, "R_RISCV_PCREL_LO12_I" },
+	{ 25, "R_RISCV_PCREL_LO12_S" },
+	{ 26, "R_RISCV_HI20" },
+	{ 27, "R_RISCV_LO12_I" },
+	{ 28, "R_RISCV_LO12_S" },
+	{ 29, "R_RISCV_TPREL_HI20" },
+	{ 30, "R_RISCV_TPREL_LO12_I" },
+	{ 31, "R_RISCV_TPREL_LO12_S" },
+	{ 32, "R_RISCV_TPREL_ADD" },
+	{ 33, "R_RISCV_ADD8" },
+	{ 34, "R_RISCV_ADD16" },
+	{ 35, "R_RISCV_ADD32" },
+	{ 36, "R_RISCV_ADD64" },
+	{ 37, "R_RISCV_SUB8" },
+	{ 38, "R_RISCV_SUB16" },
+	{ 39, "R_RISCV_SUB32" },
+	{ 40, "R_RISCV_SUB64" },
+	{ 41, "R_RISCV_GOT32_PCREL" },
+	/**/
+	{ 43, "R_RISCV_ALIGN" },
+	{ 44, "R_RISCV_RVC_BRANCH" },
+	{ 45, "R_RISCV_RVC_JUMP" },
+	/**/
+	{ 51, "R_RISCV_RELAX" },
+	{ 52, "R_RISCV_SUB6" },
+	{ 53, "R_RISCV_SET6" },
+	{ 54, "R_RISCV_SET8" },
+	{ 55, "R_RISCV_SET16" },
+	{ 56, "R_RISCV_SET32" },
+	{ 57, "R_RISCV_32_PCREL" },
+	{ 58, "R_RISCV_IRELATIVE" },
+	{ 59, "R_RISCV_PLT32" },
+	{ 60, "R_RISCV_SET_ULEB128" },
+	{ 61, "R_RISCV_SUB_ULEB128" },
+	{ 62, "R_RISCV_TLSDESC_HI20" },
+	{ 63, "R_RISCV_TLSDESC_LOAD_LO12" },
+	{ 64, "R_RISCV_TLSDESC_ADD_LO12" },
+	{ 65, "R_RISCV_TLSDESC_CALL" },
+	/**/
+	{ 191, "R_RISCV_VENDOR" }
+};
+
 /**
  ** Helper functions used by the test functions below.
  **/
@@ -958,4 +1047,5 @@ done:
 FN(`386')
 FN(`AARCH64')
 FN(`IA_64')
+FN(`RISCV')
 FN(`LOONGARCH')
