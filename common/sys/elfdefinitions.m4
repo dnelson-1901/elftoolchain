@@ -72,17 +72,6 @@ divert(0)dnl
  *  GENERATED FROM: VCSID_ELFCONSTANTS_M4
  */
 
-/*
- * These definitions are based on:
- * - The public specification of the ELF format as defined in the
- *   October 2009 draft of System V ABI.
- *   See: http://www.sco.com/developers/gabi/latest/ch4.intro.html
- * - The May 1998 (version 1.5) draft of "The ELF-64 object format".
- * - Processor-specific ELF ABI definitions for sparc, i386, amd64, mips,
- *   ia64, powerpc, and RISC-V processors.
- * - The "Linkers and Libraries Guide", from Sun Microsystems.
- */
-
 #ifndef _SYS_ELFDEFINITIONS_H_
 #define _SYS_ELFDEFINITIONS_H_
 
