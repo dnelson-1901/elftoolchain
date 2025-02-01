@@ -47,6 +47,10 @@
 #   loongarch ::
 #     ELF for the LoongArch™ Architecture
 #     https://github.com/loongson/la-abi-specs/blob/release/laelf.adoc.
+#
+#   riscv ::
+#     RISC-V ELF Specification
+#     https://github.com/riscv-non-isa/riscv-elf-psabi-doc/blob/master/riscv-elf.adoc
 
 define(`VCSID_ELFCONSTANTS_M4',
 	`$Id$')
@@ -2588,6 +2592,8 @@ _(R_RISCV_TLS_DTPREL32,		8)
 _(R_RISCV_TLS_DTPREL64,		9)
 _(R_RISCV_TLS_TPREL32,		10)
 _(R_RISCV_TLS_TPREL64,		11)
+_(R_RISCV_TLSDESC,		12)
+__(`	', `unused: 13-15')
 _(R_RISCV_BRANCH,		16)
 _(R_RISCV_JAL,			17)
 _(R_RISCV_CALL,			18)
@@ -2613,16 +2619,12 @@ _(R_RISCV_SUB8,			37)
 _(R_RISCV_SUB16,		38)
 _(R_RISCV_SUB32,		39)
 _(R_RISCV_SUB64,		40)
-_(R_RISCV_GNU_VTINHERIT,	41)
-_(R_RISCV_GNU_VTENTRY,		42)
+_(R_RISCV_GOT32_PCREL,		41)
+__(`	', `reserved: 42')
 _(R_RISCV_ALIGN,		43)
 _(R_RISCV_RVC_BRANCH,		44)
 _(R_RISCV_RVC_JUMP,		45)
-_(R_RISCV_RVC_LUI,		46)
-_(R_RISCV_GPREL_I,		47)
-_(R_RISCV_GPREL_S,		48)
-_(R_RISCV_TPREL_I,		49)
-_(R_RISCV_TPREL_S,		50)
+__(`	', `reserved: 46-50')
 _(R_RISCV_RELAX,		51)
 _(R_RISCV_SUB6,			52)
 _(R_RISCV_SET6,			53)
@@ -2631,6 +2633,26 @@ _(R_RISCV_SET16,		55)
 _(R_RISCV_SET32,		56)
 _(R_RISCV_32_PCREL,		57)
 _(R_RISCV_IRELATIVE,		58)
+_(R_RISCV_PLT32,		59)
+_(R_RISCV_SET_ULEB128,		60)
+_(R_RISCV_SUB_ULEB128,		61)
+_(R_RISCV_TLSDESC_HI20,		62)
+_(R_RISCV_TLSDESC_LOAD_LO12,	63)
+_(R_RISCV_TLSDESC_ADD_LO12,	64)
+_(R_RISCV_TLSDESC_CALL,		65)
+__(`	', `reserved: 66-190')
+_(R_RISCV_VENDOR,		191)
+__(`	', `reserved: 192-255')
+')
+
+define(`DEFINE_RISCV_OBSOLETE_RELOCATION_TYPES',`
+_(R_RISCV_GNU_VTINHERIT,	41)
+_(R_RISCV_GNU_VTENTRY,		42)
+_(R_RISCV_RVC_LUI,		46)
+_(R_RISCV_GPREL_I,		47)
+_(R_RISCV_GPREL_S,		48)
+_(R_RISCV_TPREL_I,		49)
+_(R_RISCV_TPREL_S,		50)
 ')
 
 define(`DEFINE_S390_RELOCATION_TYPES',`
@@ -2862,6 +2884,7 @@ DEFINE_X86_64_RELOCATION_TYPES()
 # Obsolete relocation types.
 define(`DEFINE_OBSOLETE_RELOCATION_TYPES',`dnl
 DEFINE_ARM_OBSOLETE_RELOCATION_TYPES()
+DEFINE_RISCV_OBSOLETE_RELOCATION_TYPES()
 ')
 
 # Alternate spellings for relocation types.
