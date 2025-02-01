@@ -765,6 +765,45 @@ static const struct relocation_type_and_name relocation_types_RISCV[] = {
 	{ 191, "R_RISCV_VENDOR" }
 };
 
+/*
+ * EM_S390.
+ */
+static const struct relocation_type_range relocation_type_ranges_S390[] = {
+	{
+		0, /* R_390_NONE */
+		26 /* R_390_GOTENT */
+	}
+};
+static const struct relocation_type_and_name relocation_types_S390[] = {
+	{ 0, "R_390_NONE" },
+	{ 1, "R_390_8" },
+	{ 2, "R_390_12" },
+	{ 3, "R_390_16" },
+	{ 4, "R_390_32" },
+	{ 5, "R_390_PC32" },
+	{ 6, "R_390_GOT12" },
+	{ 7, "R_390_GOT32" },
+	{ 8, "R_390_PLT32" },
+	{ 9, "R_390_COPY" },
+	{ 10, "R_390_GLOB_DAT" },
+	{ 11, "R_390_JMP_SLOT" },
+	{ 12, "R_390_RELATIVE" },
+	{ 13, "R_390_GOTOFF" },
+	{ 14, "R_390_GOTPC" },
+	{ 15, "R_390_GOT16" },
+	{ 16, "R_390_PC16" },
+	{ 17, "R_390_PC16DBL" },
+	{ 18, "R_390_PLT16DBL" },
+	{ 19, "R_390_PC32DBL" },
+	{ 20, "R_390_PLT32DBL" },
+	{ 21, "R_390_GOTPCDBL" },
+	{ 22, "R_390_64" },
+	{ 23, "R_390_PC64" },
+	{ 24, "R_390_GOT64" },
+	{ 25, "R_390_PLT64" },
+	{ 26, "R_390_GOTENT" },
+};
+
 /**
  ** Helper functions used by the test functions below.
  **/
@@ -1048,4 +1087,5 @@ FN(`386')
 FN(`AARCH64')
 FN(`IA_64')
 FN(`RISCV')
+FN(`S390')
 FN(`LOONGARCH')
