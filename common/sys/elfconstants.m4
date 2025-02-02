@@ -22,6 +22,10 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
+define(`VCSID_ELFCONSTANTS_M4',
+	`$Id$')
+
+define(`COMPATIBILITY_NOTICE',`dnl
 # These definitions are believed to be compatible with:
 #
 # - The public specification of the ELF format as defined in the
@@ -83,10 +87,7 @@
 #
 #   x86_64 ::
 #     ELF x86-64-ABI psABI
-#     https://gitlab.com/x86-psABIs/x86-64-ABI
-
-define(`VCSID_ELFCONSTANTS_M4',
-	`$Id$')
+#     https://gitlab.com/x86-psABIs/x86-64-ABI')
 
 # In the following definitions, `_' is an M4 macro that is meant to be
 # expanded later.  Its intended usage is:

@@ -72,6 +72,10 @@ divert(0)dnl
  *  GENERATED FROM: VCSID_ELFCONSTANTS_M4
  */
 
+/*
+patsubst(defn(`COMPATIBILITY_NOTICE'), `^#', ` * ')
+ */
+
 #ifndef _SYS_ELFDEFINITIONS_H_
 #define _SYS_ELFDEFINITIONS_H_
 
