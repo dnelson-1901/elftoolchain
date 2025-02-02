@@ -747,7 +747,7 @@ typedef struct {
 	uint32_t	gh_nbuckets;	/* Number of hash buckets. */
 	uint32_t	gh_symndx;	/* First visible symbol in .dynsym. */
 	uint32_t	gh_maskwords;	/* #maskwords used in bloom filter. */
-	uint32_t	gh_shift2;	/* Bloom filter shift count. */
+	uint32_t	gh_shift2;	/* Bloom filter `shift' count. */
 } Elf_GNU_Hash_Header;
 
 #endif	/* _SYS_ELFDEFINITIONS_H_ */
