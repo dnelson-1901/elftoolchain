@@ -944,6 +944,9 @@ static const struct relocation_type_and_name relocation_types_VAX[] = {
 	{ 22, "R_VAX_RELATIVE" },
 };
 
+/*
+ * EM_X86_64.
+ */
 static const struct relocation_type_range relocation_type_ranges_X86_64[] = {
 	{
 		0,  /* R_X86_64_NONE */
@@ -1293,9 +1296,9 @@ done:
 FN(`386')
 FN(`AARCH64')
 FN(`IA_64')
+FN(`LOONGARCH')
 FN(`RISCV')
 FN(`S390')
 FN(`SPARC')
 FN(`VAX')
-FN(`LOONGARCH')
 FN(`X86_64')
