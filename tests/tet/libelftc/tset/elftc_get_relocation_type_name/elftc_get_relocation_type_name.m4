@@ -839,6 +839,73 @@ static const struct relocation_type_and_name relocation_types_VAX[] = {
 	{ 22, "R_VAX_RELATIVE" },
 };
 
+static const struct relocation_type_range relocation_type_ranges_X86_64[] = {
+	{
+		0,  /* R_X86_64_NONE */
+		29  /* R_X86_64_GOTPC64 */
+	},
+	{	31, /* R_X86_64_PLTOFF64 */
+		38, /* R_X86_64_RELATIVE64 */
+	},
+	{
+		41, /* R_X86_64_GOTPCRELX */
+		51  /* R_X86_64_CODE_6_GOTPC32_TLSDESC */
+	}
+};
+static const struct relocation_type_and_name relocation_types_X86_64[] = {
+	{ 0, "R_X86_64_NONE" },
+	{ 1, "R_X86_64_64" },
+	{ 2, "R_X86_64_PC32" },
+	{ 3, "R_X86_64_GOT32" },
+	{ 4, "R_X86_64_PLT32" },
+	{ 5, "R_X86_64_COPY" },
+	{ 6, "R_X86_64_GLOB_DAT" },
+	{ 7, "R_X86_64_JUMP_SLOT" },
+	{ 8, "R_X86_64_RELATIVE" },
+	{ 9, "R_X86_64_GOTPCREL" },
+	{ 10, "R_X86_64_32" },
+	{ 11, "R_X86_64_32S" },
+	{ 12, "R_X86_64_16" },
+	{ 13, "R_X86_64_PC16" },
+	{ 14, "R_X86_64_8" },
+	{ 15, "R_X86_64_PC8" },
+	{ 16, "R_X86_64_DTPMOD64" },
+	{ 17, "R_X86_64_DTPOFF64" },
+	{ 18, "R_X86_64_TPOFF64" },
+	{ 19, "R_X86_64_TLSGD" },
+	{ 20, "R_X86_64_TLSLD" },
+	{ 21, "R_X86_64_DTPOFF32" },
+	{ 22, "R_X86_64_GOTTPOFF" },
+	{ 23, "R_X86_64_TPOFF32" },
+	{ 24, "R_X86_64_PC64" },
+	{ 25, "R_X86_64_GOTOFF64" },
+	{ 26, "R_X86_64_GOTPC32" },
+	{ 27, "R_X86_64_GOT64" },
+	{ 28, "R_X86_64_GOTPCREL64" },
+	{ 29, "R_X86_64_GOTPC64" },
+	/**/
+	{ 31, "R_X86_64_PLTOFF64" },
+	{ 32, "R_X86_64_SIZE32" },
+	{ 33, "R_X86_64_SIZE64" },
+	{ 34, "R_X86_64_GOTPC32_TLSDESC" },
+	{ 35, "R_X86_64_TLSDESC_CALL" },
+	{ 36, "R_X86_64_TLSDESC" },
+	{ 37, "R_X86_64_IRELATIVE" },
+	{ 38, "R_X86_64_RELATIVE64" },
+	/**/
+	{ 41, "R_X86_64_GOTPCRELX" },
+	{ 42, "R_X86_64_REX_GOTPCRELX" },
+	{ 43, "R_X86_64_CODE_4_GOTPCRELX" },
+	{ 44, "R_X86_64_CODE_4_GOTTPOFF" },
+	{ 45, "R_X86_64_CODE_4_GOTPC32_TLSDESC" },
+	{ 46, "R_X86_64_CODE_5_GOTPCRELX" },
+	{ 47, "R_X86_64_CODE_5_GOTTPOFF" },
+	{ 48, "R_X86_64_CODE_5_GOTPC32_TLSDESC" },
+	{ 49, "R_X86_64_CODE_6_GOTPCRELX" },
+	{ 50, "R_X86_64_CODE_6_GOTTPOFF" },
+	{ 51, "R_X86_64_CODE_6_GOTPC32_TLSDESC" },
+};
+
 /**
  ** Helper functions used by the test functions below.
  **/
@@ -1125,3 +1192,4 @@ FN(`RISCV')
 FN(`S390')
 FN(`VAX')
 FN(`LOONGARCH')
+FN(`X86_64')
