@@ -677,6 +677,169 @@ static const struct relocation_type_and_name relocation_types_LOONGARCH[] = {
 };
 
 /*
+ * EM_PPC.
+ */
+static const struct relocation_type_range relocation_type_ranges_PPC[] = {
+	{
+		0,  /* R_PPC_NONE */
+		37  /* R_PPC_ADDR30 */
+	},
+	{
+		67, /* R_PPC_TLS */
+		96  /* R_PPC_TLSD */
+	},
+	{
+		101, /* R_PPC_EMB_NADDR32 */
+		116  /* R_PPC_EMB_RELSDA */
+	},
+	{
+		180, /* R_PPC_DIAB_SDA21_LO */
+		185  /* R_PPC_DIAB_RELSDA_HA */
+	},
+	{
+		201, /* R_PPC_EMB_SPE_DOUBLE */
+		233  /* R_PPC_VLE_ADDR20 */
+	},
+	{
+		249, /* R_PPC_REL16 */
+		252  /* R_PPC_REL16_HA */
+	}
+};
+static const struct relocation_type_and_name relocation_types_PPC[] = {
+	{ 0, "R_PPC_NONE" },
+	{ 1, "R_PPC_ADDR32" },
+	{ 2, "R_PPC_ADDR24" },
+	{ 3, "R_PPC_ADDR16" },
+	{ 4, "R_PPC_ADDR16_LO" },
+	{ 5, "R_PPC_ADDR16_HI" },
+	{ 6, "R_PPC_ADDR16_HA" },
+	{ 7, "R_PPC_ADDR14" },
+	{ 8, "R_PPC_ADDR14_BRTAKEN" },
+	{ 9, "R_PPC_ADDR14_BRNTAKEN" },
+	{ 10, "R_PPC_REL24" },
+	{ 11, "R_PPC_REL14" },
+	{ 12, "R_PPC_REL14_BRTAKEN" },
+	{ 13, "R_PPC_REL14_BRNTAKEN" },
+	{ 14, "R_PPC_GOT16" },
+	{ 15, "R_PPC_GOT16_LO" },
+	{ 16, "R_PPC_GOT16_HI" },
+	{ 17, "R_PPC_GOT16_HA" },
+	{ 18, "R_PPC_PLTREL24" },
+	{ 19, "R_PPC_COPY" },
+	{ 20, "R_PPC_GLOB_DAT" },
+	{ 21, "R_PPC_JMP_SLOT" },
+	{ 22, "R_PPC_RELATIVE" },
+	{ 23, "R_PPC_LOCAL24PC" },
+	{ 24, "R_PPC_UADDR32" },
+	{ 25, "R_PPC_UADDR16" },
+	{ 26, "R_PPC_REL32" },
+	{ 27, "R_PPC_PLT32" },
+	{ 28, "R_PPC_PLTREL32" },
+	{ 29, "R_PPC_PLT16_LO" },
+	{ 30, "R_PPC_PLT16_HI" },
+	{ 31, "R_PPC_PLT16_HA" },
+	{ 32, "R_PPC_SDAREL16" },
+	{ 33, "R_PPC_SECTOFF" },
+	{ 34, "R_PPC_SECTOFF_LO" },
+	{ 35, "R_PPC_SECTOFF_HI" },
+	{ 36, "R_PPC_SECTOFF_HA" },
+	{ 37, "R_PPC_ADDR30" },
+	/**/
+	{ 67, "R_PPC_TLS" },
+	{ 68, "R_PPC_DTPMOD32" },
+	{ 69, "R_PPC_TPREL16" },
+	{ 70, "R_PPC_TPREL16_LO" },
+	{ 71, "R_PPC_TPREL16_HI" },
+	{ 72, "R_PPC_TPREL16_HA" },
+	{ 73, "R_PPC_TPREL32" },
+	{ 74, "R_PPC_DTPREL16" },
+	{ 75, "R_PPC_DTPREL16_LO" },
+	{ 76, "R_PPC_DTPREL16_HI" },
+	{ 77, "R_PPC_DTPREL16_HA" },
+	{ 78, "R_PPC_DTPREL32" },
+	{ 79, "R_PPC_GOT_TLSGD16" },
+	{ 80, "R_PPC_GOT_TLSGD16_LO" },
+	{ 81, "R_PPC_GOT_TLSGD16_HI" },
+	{ 82, "R_PPC_GOT_TLSGD16_HA" },
+	{ 83, "R_PPC_GOT_TLSLD16" },
+	{ 84, "R_PPC_GOT_TLSLD16_LO" },
+	{ 85, "R_PPC_GOT_TLSLD16_HI" },
+	{ 86, "R_PPC_GOT_TLSLD16_HA" },
+	{ 87, "R_PPC_GOT_TPREL16" },
+	{ 88, "R_PPC_GOT_TPREL16_LO" },
+	{ 89, "R_PPC_GOT_TPREL16_HI" },
+	{ 90, "R_PPC_GOT_TPREL16_HA" },
+	{ 91, "R_PPC_GOT_DTPREL16" },
+	{ 92, "R_PPC_GOT_DTPREL16_LO" },
+	{ 93, "R_PPC_GOT_DTPREL16_HI" },
+	{ 94, "R_PPC_GOT_DTPREL16_HA" },
+	{ 95, "R_PPC_TLSGD" },
+	{ 96, "R_PPC_TLSLD" },
+	/**/
+	{ 101, "R_PPC_EMB_NADDR32" },
+	{ 102, "R_PPC_EMB_NADDR16" },
+	{ 103, "R_PPC_EMB_NADDR16_LO" },
+	{ 104, "R_PPC_EMB_NADDR16_HI" },
+	{ 105, "R_PPC_EMB_NADDR16_HA" },
+	{ 106, "R_PPC_EMB_SDAI16" },
+	{ 107, "R_PPC_EMB_SDA2I16" },
+	{ 108, "R_PPC_EMB_SDA2REL" },
+	{ 109, "R_PPC_EMB_SDA21" },
+	{ 110, "R_PPC_EMB_MRKREF" },
+	{ 111, "R_PPC_EMB_RELSEC16" },
+	{ 112, "R_PPC_EMB_RELST_LO" },
+	{ 113, "R_PPC_EMB_RELST_HI" },
+	{ 114, "R_PPC_EMB_RELST_HA" },
+	{ 115, "R_PPC_EMB_BIT_FLD" },
+	{ 116, "R_PPC_EMB_RELSDA" },
+	{ 180, "R_PPC_DIAB_SDA21_LO" },
+	{ 181, "R_PPC_DIAB_SDA21_HI" },
+	{ 182, "R_PPC_DIAB_SDA21_HA" },
+	{ 183, "R_PPC_DIAB_RELSDA_LO" },
+	{ 184, "R_PPC_DIAB_RELSDA_HI" },
+	{ 185, "R_PPC_DIAB_RELSDA_HA" },
+	/**/
+	{ 201, "R_PPC_EMB_SPE_DOUBLE" },
+	{ 202, "R_PPC_EMB_SPE_WORD" },
+	{ 203, "R_PPC_EMB_SPE_HALF" },
+	{ 204, "R_PPC_EMB_SPE_DOUBLE_SDAREL" },
+	{ 205, "R_PPC_EMB_SPE_WORD_SDAREL" },
+	{ 206, "R_PPC_EMB_SPE_HALF_SDAREL" },
+	{ 207, "R_PPC_EMB_SPE_DOUBLE_SDA2REL" },
+	{ 208, "R_PPC_EMB_SPE_WORD_SDA2REL" },
+	{ 209, "R_PPC_EMB_SPE_HALF_SDA2REL" },
+	{ 210, "R_PPC_EMB_SPE_DOUBLE_SDA0REL" },
+	{ 211, "R_PPC_EMB_SPE_WORD_SDA0REL" },
+	{ 212, "R_PPC_EMB_SPE_HALF_SDA0REL" },
+	{ 213, "R_PPC_EMB_SPE_DOUBLE_SDA" },
+	{ 214, "R_PPC_EMB_SPE_WORD_SDA" },
+	{ 215, "R_PPC_EMB_SPE_HALF_SDA" },
+	{ 216, "R_PPC_VLE_REL8" },
+	{ 217, "R_PPC_VLE_REL15" },
+	{ 218, "R_PPC_VLE_REL24" },
+	{ 219, "R_PPC_VLE_LO16A" },
+	{ 220, "R_PPC_VLE_LO16D" },
+	{ 221, "R_PPC_VLE_HI16A" },
+	{ 222, "R_PPC_VLE_HI16D" },
+	{ 223, "R_PPC_VLE_HA16A" },
+	{ 224, "R_PPC_VLE_HA16D" },
+	{ 225, "R_PPC_VLE_SDA21" },
+	{ 226, "R_PPC_VLE_SDA21_LO" },
+	{ 227, "R_PPC_VLE_SDAREL_LO16A" },
+	{ 228, "R_PPC_VLE_SDAREL_LO16D" },
+	{ 229, "R_PPC_VLE_SDAREL_HI16A" },
+	{ 230, "R_PPC_VLE_SDAREL_HI16D" },
+	{ 231, "R_PPC_VLE_SDAREL_HA16A" },
+	{ 232, "R_PPC_VLE_SDAREL_HA16D" },
+	{ 233, "R_PPC_VLE_ADDR20" },
+	/**/
+	{ 249, "R_PPC_REL16" },
+	{ 250, "R_PPC_REL16_LO" },
+	{ 251, "R_PPC_REL16_HI" },
+	{ 252, "R_PPC_REL16_HA" },		
+};
+
+/*
  * EM_PPC64.
  */
 static const struct relocation_type_range relocation_type_ranges_PPC64[] = {
@@ -1504,6 +1667,7 @@ FN(`386')
 FN(`AARCH64')
 FN(`IA_64')
 FN(`LOONGARCH')
+FN(`PPC')
 FN(`PPC64')
 FN(`RISCV')
 FN(`S390')
