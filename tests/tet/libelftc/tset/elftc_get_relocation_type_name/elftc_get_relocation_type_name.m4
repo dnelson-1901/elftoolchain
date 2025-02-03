@@ -686,7 +686,7 @@ static const struct relocation_type_range relocation_type_ranges_PPC[] = {
 	},
 	{
 		67, /* R_PPC_TLS */
-		96  /* R_PPC_TLSD */
+		96  /* R_PPC_TLSLD */
 	},
 	{
 		101, /* R_PPC_EMB_NADDR32 */
@@ -792,6 +792,7 @@ static const struct relocation_type_and_name relocation_types_PPC[] = {
 	{ 114, "R_PPC_EMB_RELST_HA" },
 	{ 115, "R_PPC_EMB_BIT_FLD" },
 	{ 116, "R_PPC_EMB_RELSDA" },
+	/**/
 	{ 180, "R_PPC_DIAB_SDA21_LO" },
 	{ 181, "R_PPC_DIAB_SDA21_HI" },
 	{ 182, "R_PPC_DIAB_SDA21_HA" },
