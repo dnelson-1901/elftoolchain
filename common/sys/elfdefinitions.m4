@@ -42,13 +42,13 @@ define(`_WHITESPACE',
 
 # Format symbol descriptions as C-style comment.
 define(`_DESCRIPTION',
-  `ifelse(eval(len($1) > 0),1,` /* $1 */',
+  `ifelse(eval(len(`$*') > 0),1,` /* $* */',
           `')')
 
 # Expand the `_' macro to a C preprocessor definition that is suitably
 # vertically aligned.  If a symbol description is present, add it as a
 # C-style comment.
-define(`_',``#'define $1`'_WHITESPACE($1)`'$2`'_DESCRIPTION($3)')
+define(`_',``#'define $1`'_WHITESPACE($1)`'$2`'_DESCRIPTION(`$3')')
 
 # Expand the `__' macro to a C-style comment.
 #
