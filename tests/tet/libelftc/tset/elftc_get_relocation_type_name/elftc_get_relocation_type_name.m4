@@ -374,9 +374,9 @@ static const struct relocation_type_and_name relocation_types_ARM[] = {
 	{ 21, "R_ARM_GLOB_DAT" },
 	{ 22, "R_ARM_JUMP_SLOT" },
 	{ 23, "R_ARM_RELATIVE" },
-	{ 24, "R_ARM_GOTOFF32" }, /* Also R_ARM_GOTOFF */
-	{ 25, "R_ARM_BASE_PREL" }, /* GNU R_ARM_GOTPC */
-	{ 26, "R_ARM_GOT_BREL" }, /* GNU R_ARM_GOT32 */
+	{ 24, "R_ARM_GOTOFF32" },
+	{ 25, "R_ARM_BASE_PREL" },
+	{ 26, "R_ARM_GOT_BREL" },
 	{ 27, "R_ARM_PLT32" },
 	{ 28, "R_ARM_CALL" },
 	{ 29, "R_ARM_JUMP24" },
@@ -847,6 +847,180 @@ static const struct relocation_type_and_name relocation_types_LOONGARCH[] = {
 	{ 124, "R_LARCH_TLS_LD_PCREL20_S2" },
 	{ 125, "R_LARCH_TLS_GD_PCREL20_S2" },
 	{ 126, "R_LARCH_TLS_DESC_PCREL20_S2" },
+};
+
+/*
+ * EM_MIPS.
+ */
+static const struct relocation_type_range relocation_type_ranges_MIPS[] = {
+	{
+		0,  /* R_MIPS_NONE */
+		12, /* R_MIPS_GPREL12 */
+	},
+	{
+		16, /* R_MIPS_SHIFT5 */
+		51  /* R_MIPS_GLOB_DAT */
+	},
+	{
+		60, /* R_MIPS_PC21_S2 */
+		65  /* R_MIPS_PCLO16 */
+	},
+	{
+		100, /* R_MIPS_16_26 */
+		112  /* R_MIPS_TLS_TPREL_LO16 */
+	},
+	{
+		126, /* R_MIPS_COPY */
+		127  /* R_MIPS_JUMP_SLOT */
+	},
+	{
+		133, /* R_MICROMIPS_26_S1 */
+		142  /* R_MICROMIPS_CALL16 */
+	},
+	{
+		145, /* R_MICROMIPS_GOT_DISP */
+		157  /* R_MICROMIPS_HI0_LO16 */
+	},
+	{
+		162, /* R_MICROMIPS_TLS_GD */
+		166  /* R_MICROMIPS_TLS_GOTTPREL */
+	},
+	{
+		169, /* R_MICROMIPS_TLS_TPREL_HI16 */
+		170  /* R_MICROMIPS_TLS_TPREL_LO16 */
+	},
+	{
+		172, /* R_MICROMIPS_GPREL7_S2 */
+		177  /* R_MICROMIPS_PC19_S2 */
+	},
+	{
+		248, /* R_MIPS_PC32 */
+		252  /* R_MIPS_GNU_VTENTRY */
+	}
+};
+static const struct relocation_type_and_name relocation_types_MIPS[] = {
+	{ 0, "R_MIPS_NONE" },
+	{ 1, "R_MIPS_16" },
+	{ 2, "R_MIPS_32" },
+	{ 3, "R_MIPS_REL32" },
+	{ 4, "R_MIPS_26" },
+	{ 5, "R_MIPS_HI16" },
+	{ 6, "R_MIPS_LO16" },
+	{ 7, "R_MIPS_GPREL16" },
+	{ 8, "R_MIPS_LITERAL" },
+	{ 9, "R_MIPS_GOT16" },
+	{ 10, "R_MIPS_PC16" },
+	{ 11, "R_MIPS_CALL16" },
+	{ 12, "R_MIPS_GPREL32" },
+	/**/
+	{ 16, "R_MIPS_SHIFT5" },
+	{ 17, "R_MIPS_SHIFT6" },
+	{ 18, "R_MIPS_64" },
+	{ 19, "R_MIPS_GOT_DISP" },
+	{ 20, "R_MIPS_GOT_PAGE" },
+	{ 21, "R_MIPS_GOTHI16" },
+	{ 22, "R_MIPS_GOTLO16" },
+	{ 23, "R_MIPS_GOT_LO16" },
+	{ 24, "R_MIPS_SUB" },
+	{ 25, "R_MIPS_INSERT_A" },
+	{ 26, "R_MIPS_INSERT_B" },
+	{ 27, "R_MIPS_DELETE" },
+	{ 28, "R_MIPS_HIGHER" },
+	{ 29, "R_MIPS_HIGHEST" },
+	{ 30, "R_MIPS_CALLHI16" },
+	{ 31, "R_MIPS_CALLLO16" },
+	{ 32, "R_MIPS_SCN_DISP" },
+	{ 33, "R_MIPS_REL16" },
+	{ 34, "R_MIPS_ADD_IMMEDIATE" },
+	{ 35, "R_MIPS_PJUMP" },
+	{ 36, "R_MIPS_RELGOT" },
+	{ 37, "R_MIPS_JALR" },
+	{ 38, "R_MIPS_TLS_DTPMOD32" },
+	{ 39, "R_MIPS_TLS_DTPREL32" },
+	{ 40, "R_MIPS_TLS_DTPMOD64" },
+	{ 41, "R_MIPS_TLS_DTPREL64" },
+	{ 42, "R_MIPS_TLS_GD" },
+	{ 43, "R_MIPS_TLS_LDM" },
+	{ 44, "R_MIPS_TLS_DTPREL_HI16" },
+	{ 45, "R_MIPS_TLS_DTPREL_LO16" },
+	{ 46, "R_MIPS_TLS_GOTTPREL" },
+	{ 47, "R_MIPS_TLS_TPREL32" },
+	{ 48, "R_MIPS_TLS_TPREL64" },
+	{ 49, "R_MIPS_TLS_TPREL_HI16" },
+	{ 50, "R_MIPS_TLS_TPREL_LO16" },
+	{ 51, "R_MIPS_GLOB_DAT" },
+	/**/
+	{ 60, "R_MIPS_PC21_S2" },
+	{ 61, "R_MIPS_PC26_S2" },
+	{ 62, "R_MIPS_PC18_S3" },
+	{ 63, "R_MIPS_PC19_S2" },
+	{ 64, "R_MIPS_PCHI16" },
+	{ 65, "R_MIPS_PCLO16" },
+	/**/
+	{ 100, "R_MIPS16_26" },
+	{ 101, "R_MIPS16_GPREL" },
+	{ 102, "R_MIPS16_GOT16" },
+	{ 103, "R_MIPS16_CALL16" },
+	{ 104, "R_MIPS16_HI16" },
+	{ 105, "R_MIPS16_LO16" },
+	{ 106, "R_MIPS16_TLS_GD" },
+	{ 107, "R_MIPS16_TLS_LDM" },
+	{ 108, "R_MIPS16_TLS_DTPREL_HI16" },
+	{ 109, "R_MIPS16_TLS_DTPREL_LO16" },
+	{ 110, "R_MIPS16_TLS_GOTTPREL" },
+	{ 111, "R_MIPS16_TLS_TPREL_HI16" },
+	{ 112, "R_MIPS16_TLS_TPREL_LO16" },
+	/**/
+	{ 126, "R_MIPS_COPY" },
+	{ 127, "R_MIPS_JUMP_SLOT" },
+	/**/
+	{ 133, "R_MICROMIPS_26_S1" },
+	{ 134, "R_MICROMIPS_HI16" },
+	{ 135, "R_MICROMIPS_LO16" },
+	{ 136, "R_MICROMIPS_GPREL16" },
+	{ 137, "R_MICROMIPS_LITERAL" },
+	{ 138, "R_MICROMIPS_GOT16" },
+	{ 139, "R_MICROMIPS_PC7_S1" },
+	{ 140, "R_MICROMIPS_PC10_S1" },
+	{ 141, "R_MICROMIPS_PC16_S1" },
+	{ 142, "R_MICROMIPS_CALL16" },
+	/**/
+	{ 145, "R_MICROMIPS_GOT_DISP" },
+	{ 146, "R_MICROMIPS_GOT_PAGE" },
+	{ 147, "R_MICROMIPS_GOT_OFST" },
+	{ 148, "R_MICROMIPS_GOT_HI16" },
+	{ 149, "R_MICROMIPS_GOT_LO16" },
+	{ 150, "R_MICROMIPS_SUB" },
+	{ 151, "R_MICROMIPS_HIGHER" },
+	{ 152, "R_MICROMIPS_HIGHEST" },
+	{ 153, "R_MICROMIPS_CALL_HI16" },
+	{ 154, "R_MICROMIPS_CALL_LO16" },
+	{ 155, "R_MICROMIPS_SCN_DISP" },
+	{ 156, "R_MICROMIPS_JALR" },
+	{ 157, "R_MICROMIPS_HI0_LO16" },
+	/**/
+	{ 162, "R_MICROMIPS_TLS_GD" },
+	{ 163, "R_MICROMIPS_TLS_LDM" },
+	{ 164, "R_MICROMIPS_TLS_DTPREL_HI16" },
+	{ 165, "R_MICROMIPS_TLS_DTPREL_LO16" },
+	{ 166, "R_MICROMIPS_TLS_GOTTPREL" },
+	/**/
+	{ 169, "R_MICROMIPS_TLS_TPREL_HI16" },
+	{ 170, "R_MICROMIPS_TLS_TPREL_LO16" },
+	/**/
+	{ 172, "R_MICROMIPS_GPREL7_S2" },
+	{ 173, "R_MICROMIPS_PC23_S2" },
+	{ 174, "R_MICROMIPS_PC21_S1" },
+	{ 175, "R_MICROMIPS_PC26_S1" },
+	{ 176, "R_MICROMIPS_PC18_S3" },
+	{ 177, "R_MICROMIPS_PC19_S2" },
+	/**/
+	{ 248, "R_MIPS_PC32" },
+	{ 249, "R_MIPS_EH" },
+	/**/
+	{ 250, "R_MIPS_GNU_REL16_S2" },
+	{ 251, "R_MIPS_GNU_VTINHERIT" },
+	{ 252, "R_MIPS_GNU_VTENTRY" },
 };
 
 /*
@@ -1842,6 +2016,7 @@ FN(`AARCH64')
 FN(`ARM')
 FN(`IA_64')
 FN(`LOONGARCH')
+FN(`MIPS')
 FN(`PPC')
 FN(`PPC64')
 FN(`RISCV')
