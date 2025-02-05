@@ -110,6 +110,8 @@ elftc_get_relocation_type_name(unsigned int e_machine, unsigned int r_value)
 		break;
 
 	case EM_SPARC:
+	case EM_SPARC32PLUS:
+	case EM_SPARCV9:
 		EXPAND_RELOCATION_TYPES(SPARC)
 		break;
 
