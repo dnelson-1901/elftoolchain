@@ -44,6 +44,6 @@ check_rlt() # execute command (saving output) and check exit code
 run()
 {
     tpstart "Running test '$1'"
-    check_rlt "$TET_SUITE_ROOT/../../cxxfilt/c++filt $1" 0 "$2"
+    check_rlt "$TET_SUITE_ROOT/../../../cxxfilt/c++filt $1" 0 "$2"
     tpresult
 }
