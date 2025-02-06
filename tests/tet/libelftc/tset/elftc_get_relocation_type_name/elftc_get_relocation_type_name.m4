@@ -39,6 +39,9 @@
 
 include(`elfts.m4')
 
+/*
+ * Verify that an unknown EM_* value results in an error.
+ */
 void
 tcUnknownMachine(void)
 {
@@ -63,7 +66,31 @@ tcUnknownMachine(void)
 
 	tet_result(result);
 }
- 
+
+/*
+ * These tests are meant to detect the following kinds of changes to
+ * the relocation type values in "common/sys/elfconstants.m4":
+ *
+ * 1. Typos introduced in symbol names: the name returned by
+ *    elftc_get_relocation_type_name() would no longer match test data.
+ * 2. Deletions of relocation type definitions: the call to
+ *    elftc_get_relocation_type_name() with the deleted value would fail.
+ * 3. Changes to the value of the relocation type: the call to
+ *    elftc_get_relocation_type_name() with the original value would fail.
+ * 4. The addition of new relocation types: (partially checked) the check
+*     for a NULL return from elftc_get_relocation_type_name() for the values
+*     at the boundaries of known ranges of relocation types would fail.
+ *
+ * The integrity of the test data is itself checked during the test run: test
+ * case setup will fail if any of the following hold:
+ *
+ * 1. If there are duplicate relocation type values in test data.
+ * 2. If there are relocation type values in test data that fall outside
+ *    the known-valid ranges for the ELF architecture being tested.
+ * 3. If there are valid relocation type values that are not being tested
+ *    by test data.
+ */
+
 /*
  * Describes a contiguous range of relocation types.
  */
