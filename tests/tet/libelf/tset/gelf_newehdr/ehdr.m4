@@ -58,9 +58,10 @@ tcGelfGetNullElf$1(void)
 	    "ELF_E_ARGUMENT.");
 
 	result = TET_PASS;
-	if ((eh = gelf_newehdr(NULL,ELFCLASS$1)) != NULL ||
-	   (error = elf_errno()) != ELF_E_ARGUMENT)
-		TP_FAIL("eh=%p, error=\"%s\".", eh, elf_errmsg(error));
+	if ((eh = gelf_newehdr(NULL,ELFCLASS$1)) != NULL)
+		TP_FAIL("gelf_newehdr() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
+		TP_FAIL("error=\"%s\".", elf_errmsg(error));
 
 	tet_result(result);
 }')
@@ -90,8 +91,9 @@ tcDataNonElfDesc$1(void)
 	TS_OPEN_MEMORY(e, data);
 
 	result = TET_PASS;
-	if ((eh = gelf_newehdr(e, ELFCLASS$1)) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
+	if ((eh = gelf_newehdr(e, ELFCLASS$1)) != NULL)
+		TP_FAIL("gelf_newehdr() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
 		TP_FAIL("eh=%p error=%d \"%s\".", (void *) eh,
 		    error, elf_errmsg(error));
 
@@ -131,9 +133,10 @@ tcBadElfVersion$1$2(void)
 	TS_OPEN_MEMORY(e, badelf);
 
 	result = TET_PASS;
-	if ((eh = gelf_newehdr(e, ELFCLASS$2)) != NULL ||
-	    (err = elf_errno()) != ELF_E_VERSION)
-		TP_FAIL("eh=%p error=\"%s\".", (void *) eh, elf_errmsg(err));
+	if ((eh = gelf_newehdr(e, ELFCLASS$2)) != NULL)
+		TP_FAIL("gelf_newehdr() succeeded unexpectedly.");
+	else if ((err = elf_errno()) != ELF_E_VERSION)
+		TP_FAIL("error=\"%s\".", elf_errmsg(err));
 
 	(void) elf_end(e);
 	tet_result(result);
@@ -170,9 +173,10 @@ tcMalformedElf$1$2(void)
 	TS_OPEN_MEMORY(e, badelf);
 
 	result = TET_PASS;
-	if ((eh = gelf_newehdr(e, ELFCLASS$1)) != NULL ||
-	    (err = elf_errno()) != ELF_E_HEADER)
-		TP_FAIL("eh=%p error=\"%s\".", (void *) eh, elf_errmsg(err));
+	if ((eh = gelf_newehdr(e, ELFCLASS$1)) != NULL)
+		TP_FAIL("gelf_newehdr() succeeded unexpectedly.");
+	else if ((err = elf_errno()) != ELF_E_HEADER)
+		TP_FAIL("error=\"%s\".", elf_errmsg(err));
 
 	(void) elf_end(e);
 	tet_result(result);
@@ -208,9 +212,10 @@ tcWrongElfClass$1$2(void)
 	eh = NULL;
 
 	result = TET_PASS;
-	if ((eh = (Elf$2_Ehdr *) gelf_newehdr(e, ELFCLASS$2)) != NULL ||
-	    (error = elf_errno()) != ELF_E_CLASS)
-		TP_FAIL("eh=%p, error=\"%s\".", (void *) eh, elf_errmsg(error));
+	if ((eh = (Elf$2_Ehdr *) gelf_newehdr(e, ELFCLASS$2)) != NULL)
+		TP_FAIL("gelf_newehdr() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_CLASS)
+		TP_FAIL("error=\"%s\".", elf_errmsg(error));
 
 	(void) elf_end(e);
 	(void) close(fd);

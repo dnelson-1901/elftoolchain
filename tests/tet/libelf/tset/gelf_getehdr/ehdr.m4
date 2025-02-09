@@ -105,7 +105,7 @@ tcNonElfFails(void)
 void
 tcBadElfVersion(void)
 {
-	int err;
+	int err, result;
 	Elf *e;
 	void *eh;
 	GElf_Ehdr d;
@@ -124,20 +124,22 @@ tcBadElfVersion(void)
 
 	TS_OPEN_MEMORY(e,badelf);
 
-	if ((eh = gelf_getehdr(e, &d)) != NULL ||
-	    (err = elf_errno()) != ELF_E_VERSION) {
-		tet_printf("fail: error=%d eh=%p.", err, (void *) eh);
-		tet_result(TET_FAIL);
-	} else
-		tet_result(TET_PASS);
+	result = TET_PASS;
 
+	if ((eh = gelf_getehdr(e, &d)) != NULL)
+		TP_FAIL("gelf_getehdr() succeeded unexpectedly.");
+	else if ((err = elf_errno()) != ELF_E_VERSION)
+		TP_FAIL("error=%d.", err);
+
+	tet_result(result);
+	
 	(void) elf_end(e);
 }
 
 void
 tcMalformedElf(void)
 {
-	int err;
+	int err, result;
 	Elf *e;
 	void *eh;
 	GElf_Ehdr d;
@@ -155,12 +157,14 @@ tcMalformedElf(void)
 
 	TS_OPEN_MEMORY(e, badelf);
 
-	if ((eh = gelf_getehdr(e, &d)) != NULL ||
-	    (err = elf_errno()) != ELF_E_HEADER) {
-		tet_printf("fail: error=%d eh=%p.", err, (void *) eh);
-		tet_result(TET_FAIL);
-	} else
-		tet_result(TET_PASS);
+	result = TET_PASS;
+
+	if ((eh = gelf_getehdr(e, &d)) != NULL)
+		TP_FAIL("gelf_getehdr() succeeded unexpectedly.");
+	else if ((err = elf_errno()) != ELF_E_HEADER)
+		TP_FAIL("error=%d.", err);
+
+	tet_result(result);
 
 	(void) elf_end(e);
 }
