@@ -932,33 +932,27 @@ tcArgs_tpNullArgs(void)
 
 	result = TET_PASS;
 
-	if ((r = CallXlator(NULL, &ed, ELFDATA2LSB)) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT) {
-		TP_FAIL("TPFNNAME(NULL, *, LSB) failed: r=%p error=\"%s\".",
+	if ((r = CallXlator(NULL, &ed, ELFDATA2LSB)) != NULL)
+		TP_FAIL("TPFNNAME(NULL,*,LSB) succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
+		TP_FAIL("TPFNNAME(NULL,*,LSB) error=\"%s\".",
+		    elf_errmsg(error));
+	else if ((r = CallXlator(NULL, &ed, ELFDATA2MSB)) != NULL)
+		TP_FAIL("TPFNNAME(NULL,*,MSB) succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
+		TP_FAIL("TPFNNAME(NULL,*,MSB) failed: r=%p error=\"%s\".",
 		    (void *) r, elf_errmsg(error));
-		goto done;
-	}
+	else if ((r = CallXlator(&ed, NULL, ELFDATA2LSB)) != NULL)
+		TP_FAIL("TPFNNAME(*,NULL,LSB) succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
+		TP_FAIL("TPFNNAME(*,NULL,LSB) failed: error=\"%s\".",
+		    elf_errmsg(error));
+	else if ((r = CallXlator(&ed, NULL, ELFDATA2MSB)) != NULL)
+		TP_FAIL("TPFNNAME(*,NULL,MSB) succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
+		TP_FAIL("TPFNNAME(*,NULL,MSB) failed: error=\"%s\".",
+		    elf_errmsg(error));
 
-	if ((r = CallXlator(NULL, &ed, ELFDATA2MSB)) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT) {
-		TP_FAIL("TPFNNAME(NULL, *, MSB) failed: r=%p error=\"%s\".",
-		    (void *) r, elf_errmsg(error));
-		goto done;
-	}
-
-	if ((r = CallXlator(&ed, NULL, ELFDATA2LSB)) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT) {
-		TP_FAIL("TPFNNAME(*, NULL, LSB) failed: r=%p error=\"%s\".",
-		    (void *) r, elf_errmsg(error));
-		goto done;
-	}
-
-	if ((r = CallXlator(&ed, NULL, ELFDATA2MSB)) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
-		TP_FAIL("TPFNNAME(*, NULL, MSB) failed: r=%p error=\"%s\".",
-		    (void *) r, elf_errmsg(error));
-
- done:
 	tet_result(result);
 }
 
@@ -984,34 +978,32 @@ tcArgs_tpBadType(void)
 
 	es.d_type = (Elf_Type) -1;
 
-	if ((r = CallXlator(&ed, &es, ELFDATA2LSB)) != NULL ||
-	    (error = elf_errno()) != ELF_E_DATA) {
-		TP_FAIL("TPFNNAME (*, *, LSB) (%d): r=%p error=\"%s\".",
-		    es.d_type, (void *) r, elf_errmsg(error));
-		goto done;
-	}
+	if ((r = CallXlator(&ed, &es, ELFDATA2LSB)) != NULL)
+		TP_FAIL("TPFNNAME""(*,*,LSB) succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_DATA)
+		TP_FAIL("TPFNNAME""(*,*,LSB) (%d): error=\"%s\".", es.d_type,
+		    elf_errmsg(error));
+	else if ((r = CallXlator(&ed, &es, ELFDATA2MSB)) != NULL)
+		TP_FAIL("TPFNNAME""(*,*,MSB) succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_DATA)
+		TP_FAIL("TPFNNAME""(*,*,MSB) (%d): error=\"%s\".",
+		    es.d_type, elf_errmsg(error));
 
-	if ((r = CallXlator(&ed, &es, ELFDATA2MSB)) != NULL ||
-	    (error = elf_errno()) != ELF_E_DATA) {
-		TP_FAIL("TPFNNAME (*, *, MSB) (%d): r=%p error=\"%s\".",
-		    es.d_type, (void *) r, elf_errmsg(error));
+	if (result != TET_PASS)
 		goto done;
-	}
 
 	es.d_type = ELF_T_NUM;
 
-	if ((r = CallXlator(&ed, &es, ELFDATA2LSB)) != NULL ||
-	    (error = elf_errno()) != ELF_E_DATA) {
-		TP_FAIL("TPFNNAME (*, *, LSB) (%d): r=%p error=%\"%s\".",
+	if ((r = CallXlator(&ed, &es, ELFDATA2LSB)) != NULL)
+		TP_FAIL("TPFNNAME""(*,*,LSB) succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_DATA)
+		TP_FAIL("TPFNNAME""(*,*,LSB) (%d): error=%\"%s\".",
+		    es.d_type, elf_errmsg(error));
+	else if ((r = CallXlator(&ed, &es, ELFDATA2MSB)) != NULL)
+		TP_FAIL("TPFNNAME""(*,*,MSB) succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_DATA)
+		TP_FAIL("TPFNNAME""(*,*,MSB) (%d): r=%p error=\"%s\".",
 		    es.d_type, (void *) r, elf_errmsg(error));
-		goto done;
-	}
-
-	if ((r = CallXlator(&ed, &es, ELFDATA2MSB)) != NULL ||
-	    (error = elf_errno()) != ELF_E_DATA)
-		TP_FAIL("TPFNNAME (*, *, MSB) (%d): r=%p error=\"%s\".",
-		    es.d_type, (void *) r, elf_errmsg(error));
-
 
  done:
 	tet_result(result);
@@ -1031,19 +1023,19 @@ tcArgs_tpBadEncoding(void)
 
 	result = TET_PASS;
 
-	if ((r = CallXlator(&ed, &es, ELFDATANONE-1)) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT) {
-		TP_FAIL("TPFNNAME (*, *, %d): r=%p error=\"%s\".",
-		    ELFDATANONE-1, r, elf_errmsg(error));
-		goto done;
-	}
+	if ((r = CallXlator(&ed, &es, ELFDATANONE-1)) != NULL)
+		TP_FAIL("TPFNNAME""(*,*,%d) succeeded unexpectedly.",
+		    ELFDATANONE-1);
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
+		TP_FAIL("TPFNNAME""(*,*,%d): error=\"%s\".",
+		    ELFDATANONE-1, elf_errmsg(error));
+	else if ((r = CallXlator(&ed, &es, ELFDATA2MSB+1)) != NULL)
+		TP_FAIL("TPFNNAME""(*,*,%d) succeeded unexpectedly.",
+		    ELFDATA2MSB+1);
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
+		TP_FAIL("TPFNNAME""(*,*,%d): error=\"%s\".",
+		    ELFDATA2MSB+1, elf_errmsg(error));
 
-	if ((r = CallXlator(&ed, &es, ELFDATA2MSB+1)) != NULL ||
-	    (error = elf_errno()) != ELF_E_ARGUMENT)
-		TP_FAIL("TPFNNAME (*, *, %d): r=%p error=\"%s\".",
-		    ELFDATA2MSB+1, r, elf_errmsg(error));
-
- done:
 	tet_result(result);
 }
 
@@ -1068,19 +1060,17 @@ tcArgs_tpDstVersion(void)
 
 	result = TET_PASS;
 
-	if ((r = CallXlator(&ed, &es, ELFDATA2LSB)) != NULL ||
-	    (error = elf_errno()) != ELF_E_UNIMPL) {
-		TP_FAIL("TPFNNAME (*,*,LSB) ver=%d r=%p error=\"%s\".",
-		    ed.d_version, r, elf_errmsg(error));
-		goto done;
-	}
+	if ((r = CallXlator(&ed, &es, ELFDATA2LSB)) != NULL)
+		TP_FAIL("TPFNNAME""(*,*,LSB) succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_UNIMPL)
+		TP_FAIL("TPFNNAME""(*,*,LSB) ver=%d error=\"%s\".",
+		    ed.d_version, elf_errmsg(error));
+	else if ((r = CallXlator(&ed, &es, ELFDATA2MSB)) != NULL)
+		TP_FAIL("TPFNNAME""(*,*,MSB) succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_UNIMPL)
+		TP_FAIL("TPFNNAME""(*,*,MSB) ver=%d error=\"%s\".",
+		    ed.d_version, elf_errmsg(error));
 
-	if ((r = CallXlator(&ed, &es, ELFDATA2MSB)) != NULL ||
-	    (error = elf_errno()) != ELF_E_UNIMPL)
-		TP_FAIL("TPFNNAME (*,*,MSB) ver=%d r=%p error=\"%s\".",
-		    ed.d_version, r, elf_errmsg(error));
-
- done:
 	tet_result(result);
 }
 
@@ -1105,19 +1095,17 @@ tcArgs_tpSrcVersion(void)
 
 	result = TET_PASS;
 
-	if ((r = CallXlator(&ed, &es, ELFDATA2LSB)) != NULL ||
-	    (error = elf_errno()) != ELF_E_UNIMPL) {
-		TP_FAIL("TPFNNAME (*,*,LSB) ver=%d r=%p error=\"%s\".",
-		    es.d_version, r, elf_errmsg(error));
-		goto done;
-	}
+	if ((r = CallXlator(&ed, &es, ELFDATA2LSB)) != NULL)
+		TP_FAIL("TPFNNAME""(*,*,LSB) succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_UNIMPL)
+		TP_FAIL("TPFNNAME""(*,*,LSB) ver=%d error=\"%s\".",
+		    es.d_version, elf_errmsg(error));
+	else if ((r = CallXlator(&ed, &es, ELFDATA2MSB)) != NULL)
+		TP_FAIL("TPFNNAME""(*,*,LSB) succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_UNIMPL)
+		TP_FAIL("TPFNNAME""(*,*,MSB) ver=%d error=\"%s\".",
+		    es.d_version, elf_errmsg(error));
 
-	if ((r = CallXlator(&ed, &es, ELFDATA2MSB)) != NULL ||
-	    (error = elf_errno()) != ELF_E_UNIMPL)
-		TP_FAIL("TPFNNAME (*,*,MSB) ver=%d r=%p error=\"%s\".",
-		    es.d_version, r, elf_errmsg(error));
-
- done:
 	tet_result(result);
 }
 
@@ -1161,14 +1149,14 @@ tcArgs_tpUnimplemented(void)
 
 		if ((r = CallXlator(&ed, &es, ELFDATA2LSB)) != NULL ||
 		    (error = elf_errno()) != ELF_E_UNIMPL) {
-			TP_FAIL("TPFNNAME (*,*,LSB): type=%d r=%p "
+			TP_FAIL("TPFNNAME""(*,*,LSB): type=%d r=%p "
 			    "error=\"%s\".", i, r, elf_errmsg(error));
 			goto done;
 		}
 
 		if ((r = CallXlator(&ed, &es, ELFDATA2MSB)) != NULL ||
 		    (error = elf_errno()) != ELF_E_UNIMPL) {
-			TP_FAIL("TPFNNAME (*,*,LSB): type=%d r=%p "
+			TP_FAIL("TPFNNAME""(*,*,LSB): type=%d r=%p "
 			    "error=\"%s\".", i, r, elf_errmsg(error));
 			goto done;
 		}
@@ -1228,19 +1216,15 @@ tcBuffer_tpMisaligned_$1_`'__SZ__`'(void)
 	es.d_buf = sb + 1;	/* Guaranteed to be misaliged. */
 	ed.d_buf = db;')
 
-	if ((r = CallXlator(&ed, &es, ELFDATA2LSB)) != NULL ||
-	    (error = elf_errno()) != ELF_E_DATA) {
-		TP_FAIL("TPFNNAME""(LSB) r=%p error=\"%s\".", r,
-		    elf_errmsg(error));
-		goto done;
-	}
+	if ((r = CallXlator(&ed, &es, ELFDATA2LSB)) != NULL)
+		TP_FAIL("TPFNNAME""(LSB) succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_DATA)
+		TP_FAIL("TPFNNAME""(LSB) error=\"%s\".", elf_errmsg(error));
+	else if ((r = CallXlator(&ed, &es, ELFDATA2MSB)) != NULL)
+		TP_FAIL("TPFNNAME""(MSB) succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_DATA)
+		TP_FAIL("TPFNNAME""(MSB) error=\"%s\".", elf_errmsg(error));
 
-	if ((r = CallXlator(&ed, &es, ELFDATA2MSB)) != NULL ||
-	    (error = elf_errno()) != ELF_E_DATA)
-		TP_FAIL("TPFNNAME""(MSB) r=%p error=\"%s\".", r,
-		    elf_errmsg(error));
-
- done:
 	tet_result(result);
 }')
 
@@ -1279,19 +1263,15 @@ tcBuffer_tpSrcExtra_$1_`'__SZ__`'(void)
 	es.d_size = (count * msz) + 1;
 	ed.d_size = count * fsz;')
 
-	if ((r = CallXlator(&ed, &es, ELFDATA2LSB)) != NULL ||
-	    (error = elf_errno()) != ELF_E_DATA) {
-		TP_FAIL("TPFNNAME""(LSB) r=%p error=\"%s\".", r,
-		    elf_errmsg(error));
-		goto done;
-	}
+	if ((r = CallXlator(&ed, &es, ELFDATA2LSB)) != NULL)
+		TP_FAIL("TPFNNAME""(LSB) succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_DATA)
+		TP_FAIL("TPFNNAME""(LSB) error=\"%s\".", elf_errmsg(error));
+	else if ((r = CallXlator(&ed, &es, ELFDATA2MSB)) != NULL)
+		TP_FAIL("TPFNNAME""(MSB) succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_DATA)
+		TP_FAIL("TPFNNAME""(LSB) error=\"%s\".", elf_errmsg(error));
 
-	if ((r = CallXlator(&ed, &es, ELFDATA2MSB)) != NULL ||
-	    (error = elf_errno()) != ELF_E_DATA)
-		TP_FAIL("TPFNNAME""(LSB) r=%p error=\"%s\".", r,
-		    elf_errmsg(error));
-
- done:
 	tet_result(result);
 
 }')
@@ -1301,10 +1281,10 @@ void
 tcBuffer_tpDstTooSmall_$1_`'__SZ__`'(void)
 {
  	Elf_Data ed, es, *r;
- 	int count, error, result;
+ 	int error, result;
  	struct testdata *td;
- 	size_t fsz, msz;
  	char sb[TPBUFSIZE], db[TPBUFSIZE];
+	TO_M_OR_F(`size_t fsz', `size_t msz');
 
 	TP_ANNOUNCE("TPFNNAME""($1) small destination buffers are rejected "
 	    "with ELF_E_DATA.");
@@ -1312,13 +1292,10 @@ tcBuffer_tpDstTooSmall_$1_`'__SZ__`'(void)
  	result = TET_PASS;
 
 	td = &tests`'__SZ__[ELF_T_$1];
-	fsz = td->tsd_fsz;
-	msz = td->tsd_msz;
+	TO_M_OR_F(`fsz = td->tsd_fsz', `msz = td->tsd_msz');
 
 	(void) memset(&ed, 0, sizeof(ed));
 	(void) memset(&es, 0, sizeof(es));
-
-	count = sizeof(sb) / msz; /* Note: msz >= fsz always. */
 
 	ed.d_type    = es.d_type    = td->tsd_type;
 	ed.d_version = es.d_version = EV_CURRENT;
@@ -1328,19 +1305,15 @@ tcBuffer_tpDstTooSmall_$1_`'__SZ__`'(void)
 	TO_M_OR_F(`es.d_size = sizeof(sb) / fsz;',
 	    `es.d_size = sizeof(sb) / msz;')
 
-	if ((r = CallXlator(&ed, &es, ELFDATA2LSB)) != NULL ||
-	    (error = elf_errno()) != ELF_E_DATA) {
-		TP_FAIL("TPFNNAME""(LSB) r=%p error=\"%s\".", r,
-		    elf_errmsg(error));
-		goto done;
-	}
+	if ((r = CallXlator(&ed, &es, ELFDATA2LSB)) != NULL)
+		TP_FAIL("TPFNNAME""(LSB) succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_DATA)
+		TP_FAIL("TPFNNAME""(LSB) error=\"%s\".", elf_errmsg(error));
+	else if ((r = CallXlator(&ed, &es, ELFDATA2MSB)) != NULL)
+		TP_FAIL("TPFNNAME""(MSB) succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_DATA)
+		TP_FAIL("TPFNNAME""(MSB) error=\"%s\".", elf_errmsg(error));
 
-	if ((r = CallXlator(&ed, &es, ELFDATA2MSB)) != NULL ||
-	    (error = elf_errno()) != ELF_E_DATA)
-		TP_FAIL("TPFNNAME""(LSB) r=%p error=\"%s\".", r,
-		    elf_errmsg(error));
-
- done:
 	tet_result(result);
 }')
 
@@ -1367,20 +1340,22 @@ tcBuffer_tpNullDataPtr(void)
 
 	es.d_buf     = NULL;
 	ed.d_buf     = buf;
-	if ((r = CallXlator(&ed, &es, ELFDATANONE)) != NULL ||
-	    (error = elf_errno()) != ELF_E_DATA) {
-		TP_FAIL("TPFNNAME""(...) src.d_buf=NULL r=%d error=\"%s\".",
-		    r, elf_errmsg(error));
+	if ((r = CallXlator(&ed, &es, ELFDATANONE)) != NULL)
+		TP_FAIL("TPFNNAME""(...) succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_DATA) {
+		TP_FAIL("TPFNNAME""(...) src.d_buf=NULL error=\"%s\".",
+		    elf_errmsg(error));
 		goto done;
 	}
 
 	es.d_buf     = buf;
 	ed.d_buf     = NULL;
 
-	if ((r = CallXlator(&ed, &es, ELFDATANONE)) != NULL ||
-	    (error = elf_errno()) != ELF_E_DATA)
-		TP_FAIL("TPFNNAME""(...) dst.d_buf=NULL r=%d error=\"%s\".",
-		    r, elf_errmsg(error));
+	if ((r = CallXlator(&ed, &es, ELFDATANONE)) != NULL)
+		TP_FAIL("TPFNNAME""(...) succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_DATA)
+		TP_FAIL("TPFNNAME""(...) dst.d_buf=NULL error=\"%s\".",
+		    elf_errmsg(error));
 
  done:
 	tet_result(result);
@@ -1413,9 +1388,10 @@ tcBuffer_tpOverlap(void)
 
 	result = TET_PASS;
 
-	if ((r = CallXlator(&ed, &es, ELFDATANONE)) != NULL ||
-	    (error = elf_errno()) != ELF_E_DATA)
-		TP_FAIL("r=%p error=\"%s\".", r, elf_errmsg(error));
+	if ((r = CallXlator(&ed, &es, ELFDATANONE)) != NULL)
+		TP_FAIL("TPFNNAME""(...) succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_DATA)
+		TP_FAIL("error=\"%s\".", elf_errmsg(error));
 
 	tet_result(result);
 }
