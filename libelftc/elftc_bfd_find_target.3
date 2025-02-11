@@ -23,7 +23,7 @@
 .\"
 .\" $Id$
 .\"
-.Dd August 21, 2020
+.Dd February 11, 2025
 .Dt ELFTC_BFD_FIND_TARGET 3
 .Os
 .Sh NAME
@@ -138,16 +138,22 @@ returns the object format associated with target descriptor
 .Fa target .
 The known object formats are:
 .Bl -tag -offset "XXXX" -width ".Dv ETF_BINARY" -compact
+.It Dv ETF_BINARY
+A raw binary object.
+.It Dv ETF_EFI
+An Extensible Firmware Interface object.
 .It Dv ETF_ELF
 An ELF object.
-.It Dv ETF_BINARY
-Raw binary.
 .It Dv ETF_IHEX
 An object encoded in
 .Tn Intel
 hex format.
 .It Dv ETF_NONE
-An unknown object format.
+An object encoded in an unknown format.
+.It Dv ETF_PE
+A
+.Tn Microsoft
+Portable Executable object.
 .It Dv ETF_SREC
 An object encoded as S-records.
 .El
