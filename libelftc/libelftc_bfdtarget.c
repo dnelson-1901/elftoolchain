@@ -119,6 +119,31 @@ struct _Elftc_Bfd_Target _libelftc_targets[] = {
 	},
 
 	{
+		.bt_name      = "elf32-loongarch",
+		.bt_type      = ETF_ELF,
+		.bt_byteorder = ELFDATA2LSB,
+		.bt_elfclass  = ELFCLASS32,
+		.bt_machine   = EM_LOONGARCH,
+	},
+
+	{
+		.bt_name      = "elf64-loongarch",
+		.bt_type      = ETF_ELF,
+		.bt_byteorder = ELFDATA2LSB,
+		.bt_elfclass  = ELFCLASS64,
+		.bt_machine   = EM_LOONGARCH,
+	},
+
+	{
+		.bt_name      = "elf64-loongarch-freebsd",
+		.bt_type      = ETF_ELF,
+		.bt_byteorder = ELFDATA2LSB,
+		.bt_elfclass  = ELFCLASS64,
+		.bt_machine   = EM_LOONGARCH,
+		.bt_osabi     = ELFOSABI_FREEBSD,
+	},
+
+	{
 		.bt_name      = "elf32-powerpc",
 		.bt_type      = ETF_ELF,
 		.bt_byteorder = ELFDATA2MSB,
