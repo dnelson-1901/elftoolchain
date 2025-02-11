@@ -42,13 +42,13 @@ typedef struct _Elftc_String_Table Elftc_String_Table;
 
 /* Target types. */
 typedef enum {
-	ETF_NONE,
-	ETF_ELF,
-	ETF_BINARY,
-	ETF_SREC,
-	ETF_IHEX,
-	ETF_PE,
-	ETF_EFI,
+	ETF_NONE,	/* Unknown format. */
+	ETF_ELF,	/* Extensible Linking Format. */
+	ETF_BINARY,	/* Raw binary data. */
+	ETF_SREC,	/* Binary data, encoded as S-records. */
+	ETF_IHEX,	/* Intel™ Hex format. */
+	ETF_PE,		/* Microsoft™ Portable Executable format. */
+	ETF_EFI,	/* Extensible Firmware Interface format. */
 } Elftc_Bfd_Target_Flavor;
 
 /*
