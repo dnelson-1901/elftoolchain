@@ -95,7 +95,7 @@ tcDriver(int (*tf)(const char *fn, Elf *e))
 	result = TET_PASS;
 	for (fn = testfns; result == TET_PASS && *fn; fn++) {
 
-		_TS_OPEN_FILE(e,*fn,ELF_C_READ,fd,;);
+		_TS_OPEN_FILE(e,*fn,ELF_C_READ,fd,{});
 
 		if (e == NULL) {
 			result = TET_UNRESOLVED;
@@ -120,8 +120,9 @@ _tcByte(const char *fn, Elf *e)
 {
 	size_t sz;
 	Elf_Data dst, src;
+	unsigned char *ref;
 	int i, offset, result;
-	char *filebuf, *membuf, *t, *ref;
+	char *filebuf, *membuf, *t;
 
 	ref = td_L32_QUAD;
 	sz = sizeof(td_L32_QUAD);
@@ -638,8 +639,8 @@ _tpBadEncoding(const char *fn, Elf *e)
 	int result;
 
 	TP_ANNOUNCE("gelf_xlatetof/"
-	    "gelf_xlatetom()(*,*,BADENCODING) "
-	    "fails with ELF_E_ARGUMENT.");
+	    "gelf_xlatetom(%s)(*,*,BADENCODING) "
+	    "fails with ELF_E_ARGUMENT.", fn);
 
 	result = TET_PASS;
 
@@ -673,8 +674,8 @@ _tpDstSrcVersion(const char *fn, Elf *e)
 	int result;
 	char buf[sizeof(int)];
 
-	TP_ANNOUNCE("gelf_xlateto[fm]() with unequal src,dst versions "
-	    "fails with ELF_E_UNIMPL.");
+	TP_ANNOUNCE("gelf_xlateto[fm](%s) with unequal src,dst versions "
+	    "fails with ELF_E_UNIMPL.", fn);
 
 	es.d_buf     = ed.d_buf = buf;
 	es.d_type    = ELF_T_BYTE;
@@ -714,8 +715,8 @@ _tpUnimplemented(const char *fn, Elf *e)
 	buf = NULL;
 	result = TET_UNRESOLVED;
 
-	TP_ANNOUNCE("gelf_xlateto[fm]() on unimplemented types will "
-	    "fail with ELF_E_UNIMPL.");
+	TP_ANNOUNCE("gelf_xlateto[fm](%s) on unimplemented types will "
+	    "fail with ELF_E_UNIMPL.", fn);
 
 	/*
 	 * allocate a buffer that is large enough for any potential
@@ -1076,10 +1077,11 @@ tcBufferDstTooSmall(void)
 static int
 _tpSharedBufferByte(const char *fn, Elf *e)
 {
-	int i, result;
 	size_t sz;
+	int i, result;
+	char *membuf, *t;
 	Elf_Data dst, src;
-	char *membuf, *t, *ref;
+	unsigned char *ref;
 
 #define	PREPARE_SHARED(T,SZ)	do {					\
 		src.d_buf     = dst.d_buf     = membuf;			\
