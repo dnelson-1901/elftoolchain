@@ -18,7 +18,7 @@ LINKS=	${BINDIR}/ar ${BINDIR}/ranlib
 
 EXTRA_TARGETS=	ranlib
 
-CLEANFILES+= 	${EXTRA_TARGETS}
+CLEANFILES+= 	acplex.c ${EXTRA_TARGETS}
 
 MAN=	ar.1 ranlib.1 ar.5
 

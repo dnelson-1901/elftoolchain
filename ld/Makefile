@@ -35,7 +35,7 @@ LSRC= ld_script_lexer.l
 YSRC= ld_script_parser.y
 
 GENSRCS=	amd64_script.c i386_script.c littlemips_script.c \
-		bigmips_script.c
+		bigmips_script.c ld_script_lexer.c
 
 CLEANFILES+=	${GENSRCS}
 
