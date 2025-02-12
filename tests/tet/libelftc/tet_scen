@@ -1,11 +1,13 @@
 # $Id$
 
 all
+	^elftc_bfd_target
 	^elftc_get_machine_name
 	^elftc_get_relocation_type_name
 	^elftc_string_table
 	^elftc_version
 
+elftc_bfd_target	:include:/tset/elftc_bfd_target/tet_scen
 elftc_get_machine_name	:include:/tset/elftc_get_machine_name/tet_scen
 elftc_get_relocation_type_name	:include:/tset/elftc_get_relocation_type_name/tet_scen
 elftc_string_table	:include:/tset/elftc_string_table/tet_scen
