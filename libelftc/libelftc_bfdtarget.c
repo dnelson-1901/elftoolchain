@@ -45,6 +45,12 @@ struct _Elftc_Bfd_Target _libelftc_targets[] = {
 	},
 
 	{
+		.bt_name      = "efi-app-loongarch64",
+		.bt_type      = ETF_EFI,
+		.bt_machine   = EM_LOONGARCH,
+	},
+
+	{
 		.bt_name      = "efi-app-x86_64",
 		.bt_type      = ETF_EFI,
 		.bt_machine   = EM_X86_64,
