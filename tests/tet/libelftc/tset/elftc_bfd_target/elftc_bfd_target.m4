@@ -38,6 +38,7 @@ include(`elfts.m4')
 static const char *known_target_names[] = {
 	"binary",
 	"efi-app-ia32",
+	"efi-app-loongarch64",
 	"efi-app-x86_64",
 	"elf32-avr",
 	"elf32-big",
