@@ -762,8 +762,10 @@ _(EM_S370,             9U,
 	`IBM System/370 Processor')
 _(EM_MIPS_RS3_LE,      10U,
 	`MIPS RS3000 Little-endian')
+__(`	', `Reserved: 11-14.')
 _(EM_PARISC,           15U,
 	`Hewlett-Packard PA-RISC')
+__(`	', `Reserved: 16.')
 _(EM_VPP500,           17U,
 	`Fujitsu VPP500')
 _(EM_SPARC32PLUS,      18U,
@@ -778,6 +780,7 @@ _(EM_S390,             22U,
 	`IBM System/390 Processor')
 _(EM_SPU,              23U,
 	`IBM SPU/SPC')
+__(`	', `Reserved: 24-35.')
 _(EM_V800,             36U,
 	`NEC V800')
 _(EM_FR20,             37U,
@@ -948,6 +951,7 @@ _(EM_CE,               119U,
 	`Freescale Communication Engine RISC core')
 _(EM_M32C,             120U,
 	`Renesas M32C series microprocessors')
+__(`	', `Reserved: 121-130.')
 _(EM_TSK3000,          131U,
 	`Altium TSK3000 core')
 _(EM_RS08,             132U,
@@ -976,6 +980,7 @@ _(EM_TI_ARP32,         143U,
 	`Texas Instruments Application Specific RISC Processor, 32bit fetch')
 _(EM_TI_PRU,           144U,
 	`Texas Instruments Programmable Realtime Unit')
+__(`	', `Reserved: 145-159.')
 _(EM_MMDSP_PLUS,       160U,
 	`STMicroelectronics 64bit VLIW Data Signal Processor')
 _(EM_CYPRESS_M8C,      161U,
@@ -1020,8 +1025,10 @@ _(EM_L10M,             180U,
 	`Intel L10M')
 _(EM_K10M,             181U,
 	`Intel K10M')
+__(`	', `Reserved for future Intel use: 182.')
 _(EM_AARCH64,          183U,
 	`AArch64 (64-bit ARM)')
+__(`	', `Reserved for future ARM use: 184.')
 _(EM_AVR32,            185U,
 	`Atmel Corporation 32-bit microprocessor family')
 _(EM_STM8,             186U,
@@ -1102,6 +1109,7 @@ _(EM_MOXIE,            223U,
 	`Moxie processor family')
 _(EM_AMDGPU,           224U,
 	`AMD GPU architecture')
+__(`	', `Reserved for future use: 225-242.')
 _(EM_RISCV,            243U,
 	`RISC-V')
 _(EM_LANAI,            244U,
