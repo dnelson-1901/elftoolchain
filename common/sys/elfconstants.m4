@@ -462,7 +462,7 @@ _(`DT_DEPRECATED_SPARC_REGISTER', `DT_SPARC_REGISTER')
 #
 # Flags used in the executable header (field: e_flags).
 #
-define(`DEFINE_EHDR_FLAGS',`
+define(`DEFINE_EHDR_FLAGS_ARM',`dnl
 _(EF_ARM_RELEXEC,      0x00000001U,
 	`dynamic segment describes only how to relocate segments')
 _(EF_ARM_HASENTRY,     0x00000002U,
@@ -477,8 +477,6 @@ _(EF_ARM_BE8,          0x00800000U,
 	`file contains BE-8 code')
 _(EF_ARM_LE8,          0x00400000U,
 	`file contains LE-8 code')
-_(EF_ARM_EABIMASK,     0xFF000000U,
-	`mask for ARM EABI version number (0 denotes GNU or unknown)')
 _(EF_ARM_EABI_UNKNOWN, 0x00000000U,
 	`Unknown or GNU ARM EABI version number')
 _(EF_ARM_EABI_VER1,    0x01000000U,
@@ -511,20 +509,32 @@ _(EF_ARM_VFP_FLOAT,    0x00000400U,
 	`GNU EABI extension')
 _(EF_ARM_MAVERICK_FLOAT, 0x00000800U,
 	`GNU EABI extension')
+')
+define(`DEFINE_EHDR_FLAG_MASKS_ARM',`dnl
+_(EF_ARM_EABIMASK,     0xFF000000U,
+	`mask for ARM EABI version number (0 denotes GNU or unknown)')
+')
+
+define(`DEFINE_EHDR_FLAGS_LOONGARCH',`dnl
 _(EF_LOONGARCH_ABI_SOFT_FLOAT,     0x00000001U,
 	`LoongArch software floating point emulation')
 _(EF_LOONGARCH_ABI_SINGLE_FLOAT,   0x00000002U,
 	`LoongArch 32-bit floating point registers')
 _(EF_LOONGARCH_ABI_DOUBLE_FLOAT,   0x00000003U,
 	`LoongArch 64-bit floating point registers')
-_(EF_LOONGARCH_ABI_MODIFIER_MASK,  0x00000007U,
-	`LoongArch floating point modifier mask')
 _(EF_LOONGARCH_OBJABI_V0,          0x00000000U,
 	`LoongArch object file ABI version 0')
 _(EF_LOONGARCH_OBJABI_V1,          0x00000040U,
 	`LoongArch object file ABI version 1')
+')
+define(`DEFINE_EHDR_FLAG_MASKS_LOONGARCH',`dnl
+_(EF_LOONGARCH_ABI_MODIFIER_MASK,  0x00000007U,
+	`LoongArch floating point modifier mask')
 _(EF_LOONGARCH_OBJABI_MASK,        0x000000C0U,
 	`LoongArch object file ABI version mask')
+')
+
+define(`DEFINE_EHDR_FLAGS_MIPS',`dnl
 _(EF_MIPS_NOREORDER,   0x00000001U,
 	`at least one .noreorder directive appeared in the source')
 _(EF_MIPS_PIC,         0x00000002U,
@@ -539,16 +549,12 @@ _(EF_MIPS_ABI2,        0x00000020U,
 	`file follows MIPS III 32-bit ABI')
 _(EF_MIPS_OPTIONS_FIRST, 0x00000080U,
 	`ld(1) should process .MIPS.options section first')
-_(EF_MIPS_ARCH_ASE,    0x0F000000U,
-	`file uses application-specific architectural extensions')
 _(EF_MIPS_ARCH_ASE_MDMX, 0x08000000U,
 	`file uses MDMX multimedia extensions')
 _(EF_MIPS_ARCH_ASE_M16, 0x04000000U,
 	`file uses MIPS-16 ISA extensions')
 _(EF_MIPS_ARCH_ASE_MICROMIPS, 0x02000000U,
 	`MicroMIPS architecture')
-_(EF_MIPS_ARCH,         0xF0000000U,
-	`4-bit MIPS architecture field')
 _(EF_MIPS_ARCH_1,	0x00000000U,
 	`MIPS I instruction set')
 _(EF_MIPS_ARCH_2,	0x10000000U,
@@ -567,16 +573,26 @@ _(EF_MIPS_ARCH_32R2,	0x70000000U,
 	`Mips32 Revision 2')
 _(EF_MIPS_ARCH_64R2,	0x80000000U,
 	`Mips64 Revision 2')
+')
+define(`DEFINE_EHDR_FLAG_MASKS_MIPS',`dnl
+_(EF_MIPS_ARCH_ASE,	0x0F000000U,
+	`file uses application-specific architectural extensions')
+_(EF_MIPS_ARCH,		0xF0000000U,
+	`4-bit MIPS architecture field')
+')
+
+define(`DEFINE_EHDR_FLAGS_PPC',`dnl
 _(EF_PPC_EMB,          0x80000000U,
 	`Embedded PowerPC flag')
 _(EF_PPC_RELOCATABLE,  0x00010000U,
 	`-mrelocatable flag')
 _(EF_PPC_RELOCATABLE_LIB, 0x00008000U,
 	`-mrelocatable-lib flag')
+')
+
+define(`DEFINE_EHDR_FLAGS_RISCV',`dnl
 _(EF_RISCV_RVC,	    0x00000001U,
 	`Compressed instruction extension')
-_(EF_RISCV_FLOAT_ABI_MASK, 0x00000006U,
-	`Floating point ABI')
 _(EF_RISCV_FLOAT_ABI_SOFT, 0x00000000U,
 	`Software emulated floating point')
 _(EF_RISCV_FLOAT_ABI_SINGLE, 0x00000002U,
@@ -589,8 +605,13 @@ _(EF_RISCV_RVE,	    0x00000008U,
 	`Compressed instruction ABI')
 _(EF_RISCV_TSO,	    0x00000010U,
 	`RVTSO memory consistency model')
-_(EF_SPARC_EXT_MASK,   0x00FFFF00U,
-	`Vendor Extension mask')
+')
+define(`DEFINE_EHDR_FLAG_MASKS_RISCV',`dnl
+_(EF_RISCV_FLOAT_ABI_MASK, 0x00000006U,
+	`Floating point ABI')
+')
+
+define(`DEFINE_EHDR_FLAGS_SPARC',`dnl
 _(EF_SPARC_32PLUS,     0x00000100U,
 	`Generic V8+ features')
 _(EF_SPARC_SUN_US1,    0x00000200U,
@@ -599,14 +620,32 @@ _(EF_SPARC_HAL_R1,     0x00000400U,
 	`HAL R1 Extensions')
 _(EF_SPARC_SUN_US3,    0x00000800U,
 	`Sun UltraSPARC 3 Extensions')
-_(EF_SPARCV9_MM,       0x00000003U,
-	`Mask for Memory Model')
 _(EF_SPARCV9_TSO,      0x00000000U,
 	`Total Store Ordering')
 _(EF_SPARCV9_PSO,      0x00000001U,
 	`Partial Store Ordering')
 _(EF_SPARCV9_RMO,      0x00000002U,
 	`Relaxed Memory Ordering')
+')
+define(`DEFINE_EHDR_FLAG_MASKS_SPARC',`dnl
+_(EF_SPARC_EXT_MASK,   0x00FFFF00U,
+	`Vendor Extension mask')
+_(EF_SPARCV9_MM,       0x00000003U,
+	`Mask for Memory Model')
+')
+
+define(`DEFINE_EHDR_FLAGS',`
+DEFINE_EHDR_FLAGS_ARM()
+DEFINE_EHDR_FLAG_MASKS_ARM()
+DEFINE_EHDR_FLAGS_LOONGARCH()
+DEFINE_EHDR_FLAG_MASKS_LOONGARCH()
+DEFINE_EHDR_FLAGS_MIPS()
+DEFINE_EHDR_FLAG_MASKS_MIPS()
+DEFINE_EHDR_FLAGS_PPC()
+DEFINE_EHDR_FLAGS_RISCV()
+DEFINE_EHDR_FLAG_MASKS_RISCV()
+DEFINE_EHDR_FLAGS_SPARC()
+DEFINE_EHDR_FLAG_MASKS_SPARC()
 ')
 
 #
