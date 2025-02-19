@@ -103,6 +103,11 @@ DEFINE_DYN_TYPE_ALIASES()
 DEFINE_EHDR_FLAGS()
 
 /*
+ * Alternate spellings for executable header flags.
+ */
+DEFINE_EHDR_FLAG_SYNONYMS()
+
+/*
  * Offsets in the `ei_ident[]' field of an ELF executable header.
  */
 DEFINE_EI_OFFSETS()
