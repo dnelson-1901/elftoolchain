@@ -136,47 +136,47 @@ _(`CA_SUNW_SW_1',	2,	`software capability')')
 # Flags used with dynamic linking entries.
 #
 define(`DEFINE_DYN_FLAGS',`
-_(`DF_ORIGIN',           0x1,
+_(`DF_ORIGIN',           0x00000001U,
 	`object being loaded may refer to `$ORIGIN'')
-_(`DF_SYMBOLIC',         0x2,
+_(`DF_SYMBOLIC',         0x00000002U,
 	`search library for references before executable')
-_(`DF_TEXTREL',          0x4,
+_(`DF_TEXTREL',          0x00000004U,
 	`relocation entries may modify text segment')
-_(`DF_BIND_NOW',         0x8,
+_(`DF_BIND_NOW',         0x00000008U,
 	`process relocation entries at load time')
-_(`DF_STATIC_TLS',       0x10,
+_(`DF_STATIC_TLS',       0x00000010U,
 	`uses static thread-local storage')
-_(`DF_1_BIND_NOW',       0x1,
+_(`DF_1_BIND_NOW',       0x00000001U,
 	`process relocation entries at load time')
-_(`DF_1_GLOBAL',         0x2,
+_(`DF_1_GLOBAL',         0x00000002U,
 	`unused')
-_(`DF_1_GROUP',          0x4,
+_(`DF_1_GROUP',          0x00000004U,
 	`object is a member of a group')
-_(`DF_1_NODELETE',       0x8,
+_(`DF_1_NODELETE',       0x00000008U,
 	`object cannot be deleted from a process')
-_(`DF_1_LOADFLTR',       0x10,
+_(`DF_1_LOADFLTR',       0x00000010U,
 	`immediate load filtees')
-_(`DF_1_INITFIRST',      0x20,
+_(`DF_1_INITFIRST',      0x00000020U,
 	`initialize object first')
-_(`DF_1_NOOPEN',         0x40,
+_(`DF_1_NOOPEN',         0x00000040U,
 	`disallow dlopen()')
-_(`DF_1_ORIGIN',         0x80,
+_(`DF_1_ORIGIN',         0x00000080U,
 	`object being loaded may refer to $ORIGIN')
-_(`DF_1_DIRECT',         0x100,
+_(`DF_1_DIRECT',         0x00000100U,
 	`direct bindings enabled')
-_(`DF_1_INTERPOSE',      0x400,
+_(`DF_1_INTERPOSE',      0x00000400U,
 	`object is interposer')
-_(`DF_1_NODEFLIB',       0x800,
+_(`DF_1_NODEFLIB',       0x00000800U,
 	`ignore default library search path')
-_(`DF_1_NODUMP',         0x1000,
+_(`DF_1_NODUMP',         0x00001000U,
 	`disallow dldump()')
-_(`DF_1_CONFALT',        0x2000,
+_(`DF_1_CONFALT',        0x00002000U,
 	`object is a configuration alternative')
-_(`DF_1_ENDFILTEE',      0x4000,
+_(`DF_1_ENDFILTEE',      0x00004000U,
 	`filtee terminates filter search')
-_(`DF_1_DISPRELDNE',     0x8000,
+_(`DF_1_DISPRELDNE',     0x00008000U,
 	`displacement relocation done')
-_(`DF_1_DISPRELPND',     0x10000,
+_(`DF_1_DISPRELPND',     0x00010000U,
 	`displacement relocation pending')')
 
 #
