@@ -1234,6 +1234,9 @@ _(EM_BANG,             266U,
 	`Cambricon BANG')
 _(EM_LOONGGPU,         267U,
 	`Loongson LoongArch GPU')
+__(`	', ` Historical and experimental values. ')
+_(EM_ALPHA_HISTORICAL, 0x9026U,
+	`Prior value used by GNU and NetBSD')
 ')
 
 define(`DEFINE_ELF_MACHINE_TYPE_SYNONYMS',`
