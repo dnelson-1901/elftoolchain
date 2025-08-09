@@ -10,5 +10,6 @@
 
 .SUFFIXES:	.m4 .c
 .m4.c:
-	m4 -D SRCDIR=${.CURDIR} ${M4FLAGS} ${.IMPSRC} > ${.TARGET}
+	m4 -I ${.CURDIR} -I ${TOP}/common -I ${TOP}/common/sys \
+		-D SRCDIR=${.CURDIR} ${M4FLAGS} ${.IMPSRC} > ${.TARGET}
 
