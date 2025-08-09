@@ -13,8 +13,7 @@ CLEANFILES=	${INCS}
 all:	${INCS}
 
 elfdefinitions.h:	elfdefinitions.m4 elfconstants.m4
-	m4 -I${.CURDIR} -D SRCDIR=${.CURDIR} ${M4FLAGS} \
-		elfdefinitions.m4 > ${.TARGET}
+	m4 -I${.CURDIR} ${M4FLAGS} elfdefinitions.m4 > ${.TARGET}
 
 depend cleandepend:
 
