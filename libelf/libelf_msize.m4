@@ -44,7 +44,7 @@ struct msize {
 };
 
 divert(-1)
-include(SRCDIR`/elf_types.m4')
+include(`elf_types.m4')
 
 /*
  * ELF types whose memory representations have a variable size.

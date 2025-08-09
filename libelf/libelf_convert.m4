@@ -45,7 +45,7 @@ divert(-1)
 #
 # These conversions use the type information defined in `elf_types.m4'.
 
-include(SRCDIR`/elf_types.m4')
+include(`elf_types.m4')
 
 # For the purposes of generating conversion code, ELF types may be
 # classified according to the following characteristics:

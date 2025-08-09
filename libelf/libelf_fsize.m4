@@ -41,7 +41,7 @@ ELFTC_VCSID("$Id$");
  */
 
 divert(-1)
-include(SRCDIR`/elf_types.m4')
+include(`elf_types.m4')
 
 /*
  * Translations from structure definitions to the size of their file
