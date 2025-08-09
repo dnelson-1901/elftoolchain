@@ -31,6 +31,6 @@ ELFTC_VCSID("$Id$");
 /* WARNING: GENERATED FROM __file__. */
 
 divert(-1)
-include(SRCDIR`/dwarf_pro_nametbl.m4')
+include(`dwarf_pro_nametbl.m4')
 divert(0)
 MAKE_NAMETBL_PRO_API(pub)
