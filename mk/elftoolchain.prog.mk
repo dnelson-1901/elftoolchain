@@ -16,6 +16,7 @@ LIBELFTC?=	${TOP}/libelftc
 BINDIR?=	/usr/bin
 
 _INCDIRS=	-I. -I${.CURDIR} -I${.CURDIR}/${TOP}/common
+_INCDIRS+=	-I${.OBJDIR} -I${.OBJDIR}/${TOP}/common
 
 CLEANFILES+=	.depend
 
