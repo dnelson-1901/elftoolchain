@@ -1281,11 +1281,11 @@ _(EV_CURRENT, 1U)
 # Flags for section groups.
 #
 define(`DEFINE_GRP_FLAGS',`
-_(GRP_COMDAT, 	0x1,
+_(GRP_COMDAT, 	0x1U,
 	`COMDAT semantics')
-_(GRP_MASKOS,	0x0FF00000,
+_(GRP_MASKOS,	0x0FF00000U,
 	`OS-specific flags')
-_(GRP_MASKPROC, 	0xF0000000,
+_(GRP_MASKPROC, 	0xF0000000U,
 	`processor-specific flags')
 ')
 
@@ -1293,8 +1293,8 @@ _(GRP_MASKPROC, 	0xF0000000,
 # Flags / mask for .gnu.versym sections.
 #
 define(`DEFINE_VERSYMS',`
-_(VERSYM_VERSION,	0x7FFF)
-_(VERSYM_HIDDEN,	0x8000)
+_(VERSYM_VERSION,	0x7FFFU)
+_(VERSYM_HIDDEN,	0x8000U)
 ')
 
 #
@@ -1397,27 +1397,27 @@ _(PT_LOSUNW,	PT_SUNWBSS)
 # Section flags.
 #
 define(`DEFINE_SECTION_FLAGS',`
-_(SHF_WRITE,           0x1U,
+_(SHF_WRITE,           0x00000001U,
 	`writable during program execution')
-_(SHF_ALLOC,           0x2U,
+_(SHF_ALLOC,           0x00000002U,
 	`occupies memory during program execution')
-_(SHF_EXECINSTR,       0x4U,
+_(SHF_EXECINSTR,       0x00000004U,
 	`executable instructions')
-_(SHF_MERGE,           0x10U,
+_(SHF_MERGE,           0x00000010U,
 	`may be merged to prevent duplication')
-_(SHF_STRINGS,         0x20U,
+_(SHF_STRINGS,         0x00000020U,
 	`NUL-terminated character strings')
-_(SHF_INFO_LINK,       0x40U,
+_(SHF_INFO_LINK,       0x00000040U,
 	`the sh_info field holds a link')
-_(SHF_LINK_ORDER,      0x80U,
+_(SHF_LINK_ORDER,      0x00000080U,
 	`special ordering requirements during linking')
-_(SHF_OS_NONCONFORMING, 0x100U,
+_(SHF_OS_NONCONFORMING, 0x00000100U,
 	`requires OS-specific processing during linking')
-_(SHF_GROUP,           0x200U,
+_(SHF_GROUP,           0x00000200U,
 	`member of a section group')
-_(SHF_TLS,             0x400U,
+_(SHF_TLS,             0x00000400U,
 	`holds thread-local storage')
-_(SHF_COMPRESSED,      0x800U,
+_(SHF_COMPRESSED,      0x00000800U,
 	`holds compressed data')
 _(SHF_MASKOS,          0x0FF00000U,
 	`bits reserved for OS-specific semantics')
@@ -1749,15 +1749,15 @@ _(STV_PROTECTED,       3,
 # Symbol flags.
 #
 define(`DEFINE_SYMBOL_FLAGS',`
-_(SYMINFO_FLG_DIRECT,	0x01,
+_(SYMINFO_FLG_DIRECT,	0x0001U,
 	`directly assocated reference')
-_(SYMINFO_FLG_COPY,	0x04,
+_(SYMINFO_FLG_COPY,	0x0004U,
 	`definition by copy-relocation')
-_(SYMINFO_FLG_LAZYLOAD,	0x08,
+_(SYMINFO_FLG_LAZYLOAD,	0x0008U,
 	`object should be lazily loaded')
-_(SYMINFO_FLG_DIRECTBIND,	0x10,
+_(SYMINFO_FLG_DIRECTBIND,	0x0010U,
 	`reference should be directly bound')
-_(SYMINFO_FLG_NOEXTDIRECT, 0x20,
+_(SYMINFO_FLG_NOEXTDIRECT, 0x0020U,
 	`external references not allowed to bind to definition')
 ')
 
