@@ -1283,9 +1283,9 @@ _(EV_CURRENT, 1U)
 define(`DEFINE_GRP_FLAGS',`
 _(GRP_COMDAT, 	0x1,
 	`COMDAT semantics')
-_(GRP_MASKOS,	0x0ff00000,
+_(GRP_MASKOS,	0x0FF00000,
 	`OS-specific flags')
-_(GRP_MASKPROC, 	0xf0000000,
+_(GRP_MASKPROC, 	0xF0000000,
 	`processor-specific flags')
 ')
 
@@ -1293,7 +1293,7 @@ _(GRP_MASKPROC, 	0xf0000000,
 # Flags / mask for .gnu.versym sections.
 #
 define(`DEFINE_VERSYMS',`
-_(VERSYM_VERSION,	0x7fff)
+_(VERSYM_VERSION,	0x7FFF)
 _(VERSYM_HIDDEN,	0x8000)
 ')
 
@@ -1307,9 +1307,9 @@ _(PF_W,                0x2,
 	`Write')
 _(PF_R,                0x4,
 	`Read')
-_(PF_MASKOS,           0x0ff00000,
+_(PF_MASKOS,           0x0FF00000,
 	`OS-specific flags')
-_(PF_MASKPROC,         0xf0000000,
+_(PF_MASKPROC,         0xF0000000,
 	`Processor-specific flags')
 _(PF_ARM_SB,           0x10000000,
 	`segment contains the location addressed by the static base')
