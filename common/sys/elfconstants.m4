@@ -28,9 +28,7 @@ define(`VCSID_ELFCONSTANTS_M4',
 define(`COMPATIBILITY_NOTICE',`dnl
 # These definitions are believed to be compatible with:
 #
-# - The public specification of the ELF format as defined in the
-#   October 2009 draft of System V ABI.
-#   http://www.sco.com/developers/gabi/latest/ch4.intro.html
+# - The ELF object file format specification at: https://gabi.xinuos.com/.
 #
 # - The May 1998 (version 1.5) draft of "The ELF-64 object format".
 #
