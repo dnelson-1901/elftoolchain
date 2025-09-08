@@ -1234,6 +1234,10 @@ _(EM_BANG,             266U,
 	`Cambricon BANG')
 _(EM_LOONGGPU,         267U,
 	`Loongson LoongArch GPU')
+_(EM_SW64,             268U,
+	`Wuxi Institute of Advanced Technology SW64')
+_(EM_AIECTRLCODE,      269U,
+	`AMD/Xilinx AIEngine ctrlcode')
 __(`	', ` Historical and experimental values. ')
 _(EM_ALPHA_HISTORICAL, 0x9026U,
 	`Prior value used by GNU and NetBSD')
