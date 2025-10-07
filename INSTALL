@@ -49,7 +49,7 @@ Prerequisites
     - To build and run the test suite:
 
       #. The current release of the `Test Execution Toolkit`_ needs to
-         be downloaded and unpacked into the ``test/tet/`` directory.
+         be downloaded and unpacked into the ``tests/tet/tet/`` directory.
 
       #. The ``py37-yaml`` package needs to be installed::
 
@@ -65,9 +65,9 @@ Prerequisites
     - To build and run the test suite:
 
       #. The current release of the `Test Execution Toolkit`_ needs to
-         be downloaded and unpacked into the ``test/tet/`` directory::
+         be downloaded and unpacked into the ``tests/tet/tet/`` directory::
 
-            % cd <SRCDIR>/test/tet
+            % cd <SRCDIR>/tests/tet/tet
             % tar -xf /PATH/TO/DOWNLOADED/TET-3.8-SOURCES
 
       #. The ``py39-yaml`` package needs to be installed::
@@ -122,7 +122,7 @@ Prerequisites
     - To build and run the test suite:
 
       #. The current release of the `Test Execution Toolkit`_, needs
-         to be downloaded and unpacked into the ``test/tet/``
+         to be downloaded and unpacked into the ``tests/tet/tet/``
          directory.
 
       #. The following additional package needs to be installed, as
@@ -163,7 +163,7 @@ Prerequisites
     - To build and run the test suite:
 
       #. The current release of the `Test Execution Toolkit`_, needs
-         to be downloaded and unpacked into the ``test/tet/``
+         to be downloaded and unpacked into the ``tests/tet/tet/``
          directory.
 
       #. The following additional packages need to be installed, as
@@ -199,9 +199,9 @@ Prerequisites
     - To build and run the test suite:
 
       #. The current release of the `Test Execution Toolkit`_ needs to
-         be downloaded and unpacked into the ``test/tet/`` directory::
+         be downloaded and unpacked into the ``tests/tet/tet/`` directory::
 
-            % cd <SRCDIR>/test/tet
+            % cd <SRCDIR>/tests/tet/tet
             % tar -xf /PATH/TO/DOWNLOADED/TET-3.8-SOURCES
 
       #. The ``python3-yaml`` package needs to be installed::
