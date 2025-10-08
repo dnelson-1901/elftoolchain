@@ -42,11 +42,11 @@ IC_REQUIRES_VERSION_INIT();
 #define	NO_TESTCASE_FUNCTIONS	/* only want the tables */
 
 #define	TS_XLATESZ	32
-#include "xlate_template.c"
+#include "xlate_c_template.c"
 
 #undef	TS_XLATESZ
 #define	TS_XLATESZ	64
-#include "xlate_template.c"
+#include "xlate_c_template.c"
 
 static int
 check_gelf_xlate(Elf_Data *xlator(Elf *e,Elf_Data *d, const Elf_Data *s, unsigned int enc),
