@@ -770,13 +770,14 @@ tcImageInsertOnly(void)
 	imagesz = 0;
 	image = elftc_string_table_image(table, &imagesz);
 
-	if (image == NULL || imagesz != expectedsize) {
+	if (image == NULL) {
+		TP_FAIL("elftc_string_table_image() returned NULL.");
+		goto done;
+	} else if (imagesz != expectedsize) {
 		TP_FAIL("Incorrect image parameters: [0]=%d, sz=%d != %d",
 		    *image, imagesz, expectedsize);
 		goto done;
-	}
-
-	if (!validate_string_table(nteststrings - 1, image, imagesz,
+	} else if (!validate_string_table(nteststrings - 1, image, imagesz,
 		test_strings)) {
 		TP_FAIL("Image mismatch.");
 		goto done;
@@ -840,13 +841,14 @@ tcImagePartiallyDeleted(void)
 	imagesz = 0;
 	image = elftc_string_table_image(table, &imagesz);
 
-	if (image == NULL || imagesz != expectedsize) {
+	if (image == NULL) {
+		TP_FAIL("elftc_string_table_image() failed.");
+		goto done;
+	} else if (imagesz != expectedsize) {
 		TP_FAIL("Incorrect image parameters: [0]=%d, sz=%d != %d",
 		    *image, imagesz, expectedsize);
 		goto done;
-	}
-
-	if (!validate_string_table(nstr, image, imagesz, savedstr)) {
+	} else if (!validate_string_table(nstr, image, imagesz, savedstr)) {
 		TP_FAIL("Image mismatch.");
 		goto done;
 	}
