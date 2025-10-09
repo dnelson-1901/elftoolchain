@@ -982,7 +982,7 @@ tcRdWrShdrIdempotent$2$1(void)
 	struct stat sb;
 	size_t strtabidx;
 	Elf_Scn *strtabscn;
-	int error, fd, tfd, result;
+	int error, tfd, result;
 	GElf_Shdr strtabshdr;
 	char *srcfile = "newscn.$2$1", *tfn;
 	char *reffile = "newscn2.$2$1";
@@ -995,7 +995,7 @@ tcRdWrShdrIdempotent$2$1(void)
 	result = TET_UNRESOLVED;
 	e = NULL;
 	tfn = NULL;
-	fd = tfd = -1;
+	tfd = -1;
 
 	/* Make a copy of the reference object. */
 	if ((tfn = elfts_copy_file(srcfile, &error)) == NULL) {
@@ -1066,8 +1066,6 @@ tcRdWrShdrIdempotent$2$1(void)
  done:
 	if (e)
 		(void) elf_end(e);
-	if (fd != -1)
-		(void) close(fd);
 	if (tfd != -1)
 		(void) close(tfd);
 	if (tfn != NULL)
@@ -1098,7 +1096,7 @@ tcRdWrShdrIdempotentAppLayout$2$1(void)
 	size_t strtabidx;
 	Elf_Scn *strtabscn;
 	unsigned int flags;
-	int error, fd, tfd, result;
+	int error, tfd, result;
 	GElf_Shdr strtabshdr;
 	char *srcfile = "newscn.$2$1", *tfn;
 
@@ -1110,7 +1108,7 @@ tcRdWrShdrIdempotentAppLayout$2$1(void)
 	result = TET_UNRESOLVED;
 	e = NULL;
 	tfn = NULL;
-	fd = tfd = -1;
+	tfd = -1;
 
 	/* Make a copy of the reference object. */
 	if ((tfn = elfts_copy_file(srcfile, &error)) == NULL) {
@@ -1189,8 +1187,6 @@ tcRdWrShdrIdempotentAppLayout$2$1(void)
  done:
 	if (e)
 		(void) elf_end(e);
-	if (fd != -1)
-		(void) close(fd);
 	if (tfd != -1)
 		(void) close(tfd);
 	if (tfn != NULL)
