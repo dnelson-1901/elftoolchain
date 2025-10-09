@@ -26,6 +26,7 @@
  * $Id$
  */
 
+#include <assert.h>
 #include <libelf.h>
 #include <unistd.h>
 
@@ -136,9 +137,9 @@ tcArArchive$1(void)
 	if (i != $2)
 		TP_FAIL("i=%d expected $2.", i);
 
+	assert(e == NULL);  /* Sanity check. */
+
  done:
-	if (e)
-		(void) elf_end(e);
 	if (fd != -1)
 		(void) close(fd);
 
