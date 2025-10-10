@@ -352,6 +352,8 @@ define(`CHECK_SPECIAL',`
 	}
 
 	CHECK_NAMES();
+
+	(void) elf_end(e); e = NULL;
 ')
 
 define(`CHECK_NAMES',`
