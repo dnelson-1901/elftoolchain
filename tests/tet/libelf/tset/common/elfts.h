@@ -93,11 +93,15 @@
 		if (fstat(_fd, &_sb) < 0) {				\
 			tet_printf("unresolved: fstat("FN") failed: %s.", \
 			    strerror(errno));				\
+			(void) close(_fd);				\
+			_fd = -1;					\
 			ACTION						\
 		}							\
 		if (_sb.st_size < 0) {					\
 			tet_printf("unresolved: \"%s\" had a negative "	\
 				   "size.", FN);			\
+			(void) close(_fd);				\
+			_fd = -1;					\
 			ACTION						\
 		}							\
 		if ((DSZ) < (size_t) _sb.st_size)			\
@@ -107,9 +111,12 @@
 		if ((_rsz = read(_fd, (DATA), _sz)) != _sz) {		\
 			tet_printf("unresolved: read("FN") failed: %s.", \
 			    strerror(errno));				\
+			(void) close(_fd);				\
+			_fd = -1;					\
 			ACTION						\
 		}							\
-		(void) close(_fd);					\
+		if (_fd != -1)						\
+			(void) close(_fd);				\
 	} while (0)
 
 #define	TS_NEWFILE	"new.file"
