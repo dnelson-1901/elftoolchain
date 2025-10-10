@@ -34,6 +34,7 @@
 #include <libelf.h>
 #include <gelf.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
@@ -1068,9 +1069,11 @@ tcRdWrShdrIdempotent$2$1(void)
 		(void) elf_end(e);
 	if (tfd != -1)
 		(void) close(tfd);
-	if (tfn != NULL)
+	if (tfn != NULL) {
 		(void) unlink(tfn);
-
+		free(tfn);
+	}
+		
 	tet_result(result);
 }')
 
@@ -1189,9 +1192,10 @@ tcRdWrShdrIdempotentAppLayout$2$1(void)
 		(void) elf_end(e);
 	if (tfd != -1)
 		(void) close(tfd);
-	if (tfn != NULL)
+	if (tfn != NULL) {
 		(void) unlink(tfn);
-
+		free(tfn);
+	}
 	tet_result(result);
 }')
 
@@ -1481,9 +1485,10 @@ tcRdWrModeNoOp_$1$2(void)
 		(void) elf_end(e);
 	if (fd != -1)
 		(void) close(fd);
-	if (tfn != NULL)
+	if (tfn != NULL) {
 		(void) unlink(tfn);
-
+		free(tfn);
+	}
 	tet_result(result);
 }')
 
@@ -1589,9 +1594,10 @@ tcRdWrModeNoDataChange_$1$2(void)
 		(void) elf_end(e);
 	if (fd != -1)
 		(void) close(fd);
-	if (tfn != NULL)
+	if (tfn != NULL) {
 		(void) unlink(tfn);
-
+		free(tfn);
+	}
 	tet_result(result);
 }')
 
@@ -1703,9 +1709,10 @@ tcRdWrModeEhdrChange_$1$2(void)
 		(void) elf_end(e);
 	if (fd != -1)
 		(void) close(fd);
-	if (tfn != NULL)
+	if (tfn != NULL) {
 		(void) unlink(tfn);
-
+		free(tfn);
+	}
 	tet_result(result);
 }
 ')
@@ -1826,9 +1833,10 @@ tcRdWrExtendSection_$1$2(void)
 		(void) elf_end(e);
 	if (fd != -1)
 		(void) close(fd);
-	if (tfn != NULL)
+	if (tfn != NULL) {
 		(void) unlink(tfn);
-
+		free(tfn);
+	}
 	tet_result(result);
 }
 ')
@@ -1951,9 +1959,10 @@ tcRdWrShrinkSection_$1$2(void)
 		(void) elf_end(e);
 	if (fd != -1)
 		(void) close(fd);
-	if (tfn != NULL)
+	if (tfn != NULL) {
 		(void) unlink(tfn);
-
+		free(tfn);
+	}
 	tet_result(result);
 }
 ')
