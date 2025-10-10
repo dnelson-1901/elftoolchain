@@ -351,7 +351,7 @@ define(`CHECK_SPECIAL',`
 		goto done;
 	}
 
-	CHECK_NAMES();
+	CHECK_NAMES()
 
 	(void) elf_end(e); e = NULL;
 ')
@@ -368,7 +368,6 @@ define(`CHECK_NAMES',`
 			    arh->ar_name);
 			goto done;
 		}
-
 
 		if (memcmp(arh->ar_rawname, fn->rawname, RAWNAME_SIZE) != 0) {
 			TP_FAIL("rawname: \"%s\" != \"%s\".", fn->rawname,
@@ -406,9 +405,9 @@ tcArSpecial$1(void)
 	}
 
 	ifelse($1,`SVR4',`dnl # SVR4
-	CHECK_SPECIAL(`/');
-	CHECK_SPECIAL(`//');',`dnl # BSD
-	CHECK_SPECIAL(`__.SYMDEF');')
+	CHECK_SPECIAL(`/')
+	CHECK_SPECIAL(`//')',`dnl # BSD
+	CHECK_SPECIAL(`__.SYMDEF')')
 
  done:
 	if (e)
@@ -447,9 +446,9 @@ tcArRawnames$1(void)
 	}
 
 	ifelse($1,`SVR4',`dnl # SVR4
-	CHECK_SPECIAL(`/');
-	CHECK_SPECIAL(`//');',`dnl # BSD
-	CHECK_SPECIAL(`__.SYMDEF');')
+	CHECK_SPECIAL(`/')
+	CHECK_SPECIAL(`//')',`dnl # BSD
+	CHECK_SPECIAL(`__.SYMDEF')')
 
 	/* Check the rest of the archive members. */
 
