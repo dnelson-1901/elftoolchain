@@ -26,6 +26,8 @@
  * $Id$
  */
 
+#include <sys/stat.h>
+
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -45,6 +47,7 @@ elfts_copy_file(const char *rfn, int *error)
 {
 	int rfd, wfd;
 	ssize_t nr, nw, wrem;
+	mode_t previous_umask;
 	char buf[ELFTS_BUFSIZE], *bp, *wfn;
 
 	*error = 0;
@@ -56,9 +59,18 @@ elfts_copy_file(const char *rfn, int *error)
 
 	(void) strcpy(wfn, ELFTS_NAME_TEMPLATE);
 
-	if ((wfd = mkstemp(wfn)) == -1)
+	/*
+	 * Explicitly set the process's file mode creation mask since
+	 * older implementations of mkstemp() are not required to use
+	 * use secure file permissions.
+	 */
+	previous_umask = umask(S_IRWXG | S_IRWXO);
+	wfd = mkstemp(wfn);
+	(void) umask(previous_umask);
+	
+	if (wfd == -1)
 		goto error;
-
+	
 	if ((rfd = open(rfn, O_RDONLY)) == -1)
 		goto error;
 
@@ -102,6 +114,7 @@ elfts_copy_file(const char *rfn, int *error)
 		(void) unlink(wfn);
 		free(wfn);
 	}
+	
 	return (NULL);
 }
 

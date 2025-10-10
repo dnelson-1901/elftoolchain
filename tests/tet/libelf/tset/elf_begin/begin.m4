@@ -222,12 +222,16 @@ int
 setup_tempfile(void)
 {
 	int fd;
-
+	mode_t previous_umask;
+	
 	(void) strncpy(filename, TEMPLATE, sizeof(filename));
 	filename[sizeof(filename) - 1] = '\0';
 
-	if ((fd = mkstemp(filename)) < 0 ||
-	    write(fd, TEMPLATE, sizeof(TEMPLATE)) < 0)
+	previous_umask = umask(S_IRWXG | S_IRWXO);
+	fd = mkstemp(filename);
+	(void) umask(previous_umask);
+
+	if (fd < 0 || write(fd, TEMPLATE, sizeof(TEMPLATE)) < 0)
 		return 0;
 
 	(void) close(fd);

@@ -27,6 +27,7 @@
  */
 
 #include <sys/types.h>
+#include <sys/stat.h>
 
 #include <errno.h>
 #include <libelf.h>
@@ -132,7 +133,58 @@ tcReadFDREAD(void)
 	tet_result(result);
 }
 
-static char pathname[PATH_MAX];
+/*
+ * Returns the file descriptor and file name for a temporary
+ * file.
+ */
+static int
+create_temporary_file(char **pathname)
+{
+	int fd;
+	mode_t previous_umask;
+	char temporary_path[PATH_MAX];
+
+	(void) strcpy(temporary_path, "/tmp/TCXXXXXX");
+
+	/*
+	 * Explicitly set the process's umask in order to be
+	 * operate securely with older implementations of
+	 * mkstemp`'().
+	 */
+	previous_umask = umask(S_IRWXG | S_IRWXO);
+
+	fd = mkstemp`'(temporary_path);
+
+	(void) umask(previous_umask);
+
+	if (fd < 0)
+		return (fd);
+
+	if ((*pathname = strdup(temporary_path)) == NULL) {
+		const int saved_errno = errno;
+		(void) unlink(temporary_path);
+		errno = saved_errno;
+		
+		return (-1);
+	}
+	
+	return (fd);
+}
+
+/*
+ * Reclaims resources associated with a temporary file
+ * created by a previous call to create_temporary_file().
+ */
+static void
+delete_temporary_file(int fd, char *pathname)
+{
+	if (fd >= 0)
+		(void) close(fd);
+	if (pathname) {
+		(void) unlink(pathname);
+		free(pathname);
+	}
+}
 
 /*
  * elf_cntl(FDREAD) doesn't make sense for a descriptor opened
@@ -142,10 +194,12 @@ void
 tcWriteFDREAD(void)
 {
 	Elf *e;
+	char *pathname;
 	int err, fd, result, ret;
 
 	e = NULL;
 	fd = -1;
+	pathname = NULL;
 	err = ELF_E_NONE;
 	
 	TP_ANNOUNCE("elf_cntl(e,FDREAD) for a descriptor opened for write "
@@ -153,11 +207,8 @@ tcWriteFDREAD(void)
 
 	TP_CHECK_INITIALIZATION();
 
-	(void) strncpy(pathname, "/tmp/TCXXXXXX", sizeof(pathname));
-	pathname[sizeof(pathname) - 1] = '\0';
-
-	if ((fd = mkstemp(pathname)) == -1) {
-		TP_UNRESOLVED("mkstemp(%s) failed: %s,", pathname,
+	if ((fd = create_temporary_file(&pathname)) < 0) {
+		TP_UNRESOLVED("create_temporary_file() failed: \"%s\".",
 		    strerror(errno));
 		goto done;
 	}
@@ -182,9 +233,9 @@ tcWriteFDREAD(void)
  done:
 	if (e)
 		(void) elf_end(e);
-	if (fd != -1)
-		(void) close(fd);
-	(void) unlink(pathname);
+
+ 	delete_temporary_file(fd, pathname);
+	
 	tet_result(result);
 }
 
@@ -197,11 +248,13 @@ tcWriteFDDONE(void)
 {
 	Elf *e;
 	Elf32_Ehdr *eh;
+	char *pathname;
 	int err, fd, result;
 	off_t ret;
 
 	e = NULL;
 	fd = -1;
+	pathname = NULL;
 	err = ELF_E_NONE;
 	
 	TP_ANNOUNCE("elf_cntl(e,FDDONE) makes a subsequent "
@@ -209,11 +262,9 @@ tcWriteFDDONE(void)
 
 	TP_CHECK_INITIALIZATION();
 
-	(void) strncpy(pathname, "/tmp/TCXXXXXX", sizeof(pathname));
-	pathname[sizeof(pathname) - 1] = '\0';
-
-	if ((fd = mkstemp(pathname)) == -1) {
-		TP_UNRESOLVED("mkstemp(%s) failed.", pathname);
+	if ((fd = create_temporary_file(&pathname)) == -1) {
+		TP_UNRESOLVED("create_temporary_file() failed: \"%s\".",
+		    strerror(errno));
 		goto done;
 	}
 	if ((e = elf_begin(fd, ELF_C_WRITE, NULL)) == NULL) {
@@ -253,7 +304,6 @@ tcWriteFDDONE(void)
 
 	if (e)
 		(void) elf_end(e);
-	if (fd != -1)
-		(void) close(fd);
-	(void) unlink(pathname);
+
+	delete_temporary_file(fd, pathname);
 }
