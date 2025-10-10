@@ -107,7 +107,7 @@ tcArgsBadCmd(void)
 	TS_OPEN_MEMORY(e, rawdata);
 
 	result = TET_PASS;
-	for (c = ELF_C_NULL-1; result == TET_PASS && c < ELF_C_NUM; c++) {
+	for (c = ELF_C_NULL; result == TET_PASS && c < ELF_C_NUM; c++) {
 		if (c == ELF_C_WRITE || c == ELF_C_NULL) /* legal values */
 			continue;
 		if ((offset = elf_update(e, c)) != (off_t) -1)

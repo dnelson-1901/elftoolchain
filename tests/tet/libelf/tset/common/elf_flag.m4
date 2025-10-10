@@ -71,7 +71,7 @@ define(`TP_FLAG_ILLEGAL_CMD',`_TP_FLAG_FN(`tcArgsIllegalCmd',`
 
 	_TP_PROLOGUE',`
 	result = TET_PASS;
-	for (cmd = ELF_C_NULL-1; cmd <= ELF_C_NUM; cmd++) {
+	for (cmd = ELF_C_NULL; cmd <= ELF_C_NUM; cmd++) {
 		if (cmd == ELF_C_CLR || cmd == ELF_C_SET)
 			continue;
 		if ((ret = $1($2, ELF_C_NUM, ELF_F_DIRTY)) != 0) {
