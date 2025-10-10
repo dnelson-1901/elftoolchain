@@ -135,6 +135,11 @@ _libelf_open_object(int fd, Elf_Cmd c, int reporterror)
 
 	assert(c == ELF_C_READ || c == ELF_C_RDWR || c == ELF_C_WRITE);
 
+	if (fd < 0) {
+		LIBELF_SET_ERROR(ARGUMENT, 0);
+	        return (NULL);
+	}
+
 	if (fstat(fd, &sb) < 0) {
 		LIBELF_SET_ERROR(IO, errno);
 		return (NULL);

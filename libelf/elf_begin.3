@@ -23,7 +23,7 @@
 .\"
 .\" $Id$
 .\"
-.Dd December 11, 2011
+.Dd October 10, 2025
 .Dt ELF_BEGIN 3
 .Os
 .Sh NAME
@@ -296,14 +296,13 @@ was empty.
 The underlying file for argument
 .Fa fd
 was of an unsupported type.
+.It Bq Er ELF_E_ARGUMENT
+An invalid file descriptor value was used for argument
+.Fa fd .
 .It Bq Er ELF_E_IO
-The file descriptor in argument
-.Fa fd
-was invalid.
-.It Bq Er ELF_E_IO
-The file descriptor in argument
-.Fa fd
-could not be read or written to.
+An IO error occurred when attempting to use the file
+descriptor value in argument
+.Fa fd .
 .It Bq Er ELF_E_RESOURCE
 An out of memory condition was encountered.
 .It Bq Er ELF_E_SEQUENCE
