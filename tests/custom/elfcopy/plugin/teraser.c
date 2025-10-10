@@ -117,7 +117,8 @@ main(int argc, char **argv)
 			}
 
 		ctend:
-			close(fd);
+			if (fd != -1)
+				close(fd);
 		}
 
 		if (erasetime) {
@@ -139,7 +140,8 @@ main(int argc, char **argv)
 				    *argv, strerror(errno));
 
 		etend:
-			close(fd);
+			if (fd != -1)
+				close(fd);
 		}
 	}
 
