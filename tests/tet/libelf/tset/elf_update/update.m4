@@ -780,7 +780,7 @@ tcSectionType$2$1(void)
  done:
 	if (e)
 		(void) elf_end(e);
-	if (fd)
+	if (fd != -1)
 		(void) close(fd);
 	tet_result(result);
 }')
@@ -860,7 +860,7 @@ tcSectionTypeOSUserProcDefined_$2$1(void)
  done:
 	if (e)
 		(void) elf_end(e);
-	if (fd)
+	if (fd != -1)
 		(void) close(fd);
 	tet_result(result);
 }')
@@ -947,7 +947,7 @@ tc$3_$2$1(void)
  done:
 	if (e)
 		(void) elf_end(e);
-	if (fd)
+	if (fd != -1)
 		(void) close(fd);
 	tet_result(result);
 }')

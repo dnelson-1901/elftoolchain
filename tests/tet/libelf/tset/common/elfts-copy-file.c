@@ -106,9 +106,9 @@ elfts_copy_file(const char *rfn, int *error)
  error:
 	*error = errno;
 
-	if (wfd)
+	if (wfd != -1)
 		(void) close(wfd);
-	if (rfd)
+	if (rfd != -1)
 		(void) close(rfd);
 	if (wfn) {
 		(void) unlink(wfn);
