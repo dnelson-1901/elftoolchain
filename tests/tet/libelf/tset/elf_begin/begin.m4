@@ -633,9 +633,11 @@ tcArMemoryFdIgnored_$1(void)
 		goto done;
 	}
 
-	if ((k = elf_kind(e1)) != ELF_K_ELF)
+	if ((k = elf_kind(e1)) != ELF_K_ELF) {
 		TP_FAIL("kind %d, expected %d.", k, ELF_K_ELF);
-
+		goto done;
+	}
+	
 	result = TET_PASS;
 
  done:
