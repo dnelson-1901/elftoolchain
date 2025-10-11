@@ -186,6 +186,8 @@ _TP_FLAG_FN(`tcArgsNonElf',`
 	int error, ret;
 	Elf *e;
 
+	e = NULL;
+	
 	TP_CHECK_INITIALIZATION();
 
 	TP_ANNOUNCE("Non-ELF files are rejected.");
@@ -197,6 +199,8 @@ _TP_FLAG_FN(`tcArgsNonElf',`
 	} else if ((error = elf_errno()) != ELF_E_ARGUMENT) {
 		TP_FAIL("$1 ret=%d, error=%d \"%s\".", ret, error,
 		    elf_errmsg(error));
-	}',`')')
+	}
+	if (e)
+		(void) elf_end(e);',`')')
 
 divert(0)
