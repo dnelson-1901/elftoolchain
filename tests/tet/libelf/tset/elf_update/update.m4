@@ -960,7 +960,8 @@ FN(64,`lsb',$1,$2,$3,$4)
 FN(64,`msb',$1,$2,$3,$4)
 ')
 
-MKFN(IllegalAlignment, `d->d_align = 3;', DATA, "incorrect alignments")
+MKFN(IllegalAlignment, `/* coverity[UNUSED_VALUE] */ d->d_align = 3;',
+    DATA, "incorrect alignments")
 MKFN(UnsupportedVersion, `d->d_version = EV_CURRENT+1;', VERSION,
     "an unknown version")
 MKFN(UnknownElfType, `d->d_type = ELF_T_NUM;', DATA, "an unknown type")
