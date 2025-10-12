@@ -296,7 +296,8 @@ ld_ehframe_finalize_hdr(struct ld *ld)
 
 	/* Allocate global FDE list. */
 	if (ld->ld_fde == NULL) {
-		if ((ld->ld_fde = calloc(1, sizeof(ld->ld_fde))) == NULL)
+		if ((ld->ld_fde =
+		     calloc(1, sizeof(struct ld_ehframe_fde_head))) == NULL)
 			ld_fatal_std(ld, "calloc");
 		STAILQ_INIT(ld->ld_fde);
 	}
