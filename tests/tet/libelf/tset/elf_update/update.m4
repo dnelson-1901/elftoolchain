@@ -926,7 +926,8 @@ tc$3_$2$1(void)
 	d->d_buf  = (char *) NULL;
 	d->d_size = sizeof(Elf$1_Sym);
 	d->d_type = ELF_T_SYM;
-	d->d_align = 1;
+	/* coverity[UNUSED_VALUE] */
+	d->d_align = 1; /* Overwritten by some test functions. */
 
 	/* Override, on a per test case basis. */
 	$4
@@ -960,7 +961,7 @@ FN(64,`lsb',$1,$2,$3,$4)
 FN(64,`msb',$1,$2,$3,$4)
 ')
 
-MKFN(IllegalAlignment, `/* coverity[UNUSED_VALUE] */ d->d_align = 3;',
+MKFN(IllegalAlignment, `d->d_align = 3;',
     DATA, "incorrect alignments")
 MKFN(UnsupportedVersion, `d->d_version = EV_CURRENT+1;', VERSION,
     "an unknown version")
