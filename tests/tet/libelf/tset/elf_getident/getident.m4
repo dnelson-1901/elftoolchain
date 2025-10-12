@@ -101,6 +101,8 @@ tcMainArIdent(void)
 	    sz != SARMAG || strncmp(p, ARMAG, SARMAG))
 		result = TET_FAIL;
 	tet_result(result);
+
+	(void) elf_end(e);
 }
 
 static char elf_file[] = "\177ELF\001\001\001	\001\000\000\000\000"
@@ -130,6 +132,8 @@ tcMainElfIdent(void)
 	    memcmp(elf_file, p, sz))
 		result = TET_FAIL;
 	tet_result(result);
+
+	(void) elf_end(e);
 }
 
 
@@ -157,6 +161,8 @@ tcMainUnknownData(void)
 	    memcmp(p, unknown_data, sizeof(unknown_data)))
 		result = TET_FAIL;
 	tet_result(result);
+
+	(void) elf_end(e);
 }
 
 /*
