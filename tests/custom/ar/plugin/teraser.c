@@ -117,7 +117,8 @@ main(int argc, char **argv)
 			}
 
 		ctend:
-			close(fd);
+			if (fd != -1)
+				close(fd);
 		}
 
 		if (erasetime) {
