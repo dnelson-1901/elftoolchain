@@ -76,9 +76,12 @@
 		if (write(_fd, (DATA), (DSZ)) != (DSZ)) {		\
 			tet_printf("unresolved: write("FN") failed: %s.",\
 			    strerror(errno));				\
+			(void) close(_fd);				\
+			_fd = -1;					\
 			ACTION						\
 		}							\
-		(void) close(_fd);					\
+		if (fd != -1)						\
+			(void) close(_fd);				\
 	} while (0)
 
 #define	_TS_READ_FILE(FN,DATA,DSZ,ACTION)	do	{		\
