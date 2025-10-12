@@ -64,7 +64,7 @@ tcArgsNull(void)
  * elf_getscn(non-elf) fails.
  */
 
-static char *nonelf = "This is not an ELF file.";
+static char nonelf[] = "This is not an ELF file.";
 
 void
 tcArgsNonElf(void)

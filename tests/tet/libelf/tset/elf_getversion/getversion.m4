@@ -66,7 +66,7 @@ tcArgsNull(void)
 /*
  * elf_getversion() on a non-ELF object fails.
  */
-static char *nonelf = "This is not an ELF object.";
+static char nonelf[] = "This is not an ELF object.";
 
 void
 tcArgsNonElf(void)

@@ -72,7 +72,7 @@ tcArgsNull(void)
 /*
  * elf_getarhdr() on a non-Ar file fails.
  */
-static char *nonar = "This is not an AR file.";
+static char nonar[] = "This is not an AR file.";
 
 void
 tcArgsNonAr(void)

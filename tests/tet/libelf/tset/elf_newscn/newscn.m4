@@ -64,7 +64,7 @@ tcArgsNull(void)
 /*
  * An ELF descriptor for a data file is rejected.
  */
-static char *nonelf = "This is not an ELF file.";
+static char nonelf[] = "This is not an ELF file.";
 
 void
 tcArgsNonElf(void)

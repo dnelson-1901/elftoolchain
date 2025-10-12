@@ -64,7 +64,7 @@ tcArgsNull(void)
 /*
  * elf_getshstrndx() on a non-ELF file fails.
  */
-static char *nonelf = "This is not an ELF file.";
+static char nonelf[] = "This is not an ELF file.";
 
 void
 tcArgsNonElf(void)

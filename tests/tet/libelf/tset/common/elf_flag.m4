@@ -181,7 +181,7 @@ _TP_EPILOGUE')')
  * Check that a non-elf file is rejected.
  */
 define(`TP_FLAG_NON_ELF',`
-char *rawdata = "This is not an ELF file.";
+char rawdata[] = "This is not an ELF file.";
 _TP_FLAG_FN(`tcArgsNonElf',`
 	int error, ret;
 	Elf *e;

@@ -59,8 +59,8 @@ tcArgsNull(void)
  * Invoking elf_next on a non-archive should return ELF_C_NULL.
  */
 
-static char *notar = "This is not an AR archive.";
-static char *elf = "\177ELF\001\001\001	\001\000\000\000\000"
+static char notar[] = "This is not an AR archive.";
+static char elf[] = "\177ELF\001\001\001	\001\000\000\000\000"
 	"\000\000\000\001\000\003\000\001\000\000\000\357\276\255\336"
 	"\000\000\000\000\000\000\000\000\003\000\000\0004\000 \000"
 	"\000\000(\000\000\000\000\000";
