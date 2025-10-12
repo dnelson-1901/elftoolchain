@@ -124,6 +124,7 @@ _tcByte(const char *fn, Elf *e)
 	int i, offset, result;
 	char *filebuf, *membuf, *t;
 
+	filebuf = NULL;
 	ref = td_L32_QUAD;
 	sz = sizeof(td_L32_QUAD);
 
