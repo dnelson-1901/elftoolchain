@@ -69,6 +69,9 @@ tcNestedCount(void)
 	int r1, r2;
 	Elf *e, *e1;
 
+	e = e1 = NULL;
+	r1 = r2 = -1;
+	
 	TP_ANNOUNCE("begin/end pairs nest correctly");
 
 	TP_CHECK_INITIALIZATION();
@@ -76,22 +79,32 @@ tcNestedCount(void)
 	TS_OPEN_MEMORY(e,data);
 
 	if ((e1 = elf_begin(-1, ELF_C_READ, e)) != e) {
+		tet_printf("Differing values returned by elf_begin().");
 		tet_result(TET_UNRESOLVED);
-		return;
+		goto done;
 	}
 
-	if ((r1 = elf_end(e1)) != 1) {
+	r1 = elf_end(e1); e1 = NULL;
+	if (r1 != 1) {
 	   	tet_printf("fail: r1=%d.", r1);
 		tet_result(TET_FAIL);
-		return;
+		goto done;
 	}
-	if ((r2 = elf_end(e)) != 0) {
+	
+	r2 = elf_end(e); e = NULL;
+	if (r2 != 0) {
 		tet_printf("fail: r2=%d.", r2);
 		tet_result(TET_FAIL);
-		return;
+		goto done;
 	}
 
 	tet_result(TET_PASS);
+
+done:
+	if (e1)
+		(void) elf_end(e1);
+	if (e)
+		(void) elf_end(e);
 }
 
 /*

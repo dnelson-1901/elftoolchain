@@ -96,11 +96,13 @@ tcValidElfValidSize(void)
 	if ((e = elf_memory(elf_file, sizeof(elf_file))) == NULL ||
 	    elf_kind(e) != ELF_K_ELF) {
 		tet_result(TET_FAIL);
-		return;
+		goto done;
 	}
 
-	(void) elf_end(e);
 	tet_result(TET_PASS);
+
+done:
+	(void) elf_end(e);
 }
 
 void
