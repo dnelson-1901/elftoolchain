@@ -221,7 +221,7 @@ char	filename[FILENAME_SIZE];
 int
 setup_tempfile(void)
 {
-	int fd;
+	int fd, write_ok;
 	mode_t previous_umask;
 	
 	(void) strncpy(filename, TEMPLATE, sizeof(filename));
@@ -231,12 +231,15 @@ setup_tempfile(void)
 	fd = mkstemp(filename);
 	(void) umask(previous_umask);
 
-	if (fd < 0 || write(fd, TEMPLATE, sizeof(TEMPLATE)) < 0)
+	if (fd < 0)
 		return 0;
 
+	write_ok = write(fd, TEMPLATE, sizeof(TEMPLATE)) ==
+	    sizeof(TEMPLATE);
+	
 	(void) close(fd);
 
-	return 1;
+	return (write_ok);
 
 }
 
@@ -255,6 +258,11 @@ tcCmdWriteFdRead_$1(void)
 	Elf$1_Ehdr *eh;
 	int error, fd, result;
 
+	e = NULL;
+	result = TET_PASS;
+	error = -1;
+	fd = -1;
+	
 	TP_ANNOUNCE("($1): cmd == ELF_C_WRITE fails with a non-writable FD.");
 
 	TP_SET_VERSION();
@@ -264,9 +272,6 @@ tcCmdWriteFdRead_$1(void)
 		TP_UNRESOLVED("setup failed: %s", strerror(errno));
 		goto done;
 	}
-
-	result = TET_PASS;
-	error = -1;
 
 	if ((e = elf_begin(fd, ELF_C_WRITE, NULL)) == NULL) {
 		TP_UNRESOLVED("elf_begin() failed: %s", elf_errmsg(-1));
@@ -290,6 +295,11 @@ tcCmdWriteFdRead_$1(void)
 		    elf_errmsg(error));
 
  done:
+	if (e)
+		(void) elf_end(e);
+	if (fd != -1)
+		(void) close(fd);
+
 	cleanup_tempfile();
 	tet_result(result);
 }')
@@ -303,6 +313,9 @@ tcCmdWriteFdRdwr(void)
 	Elf *e;
 	int error, fd, result;
 
+	e = NULL;
+	fd = -1;
+	
 	TP_ANNOUNCE("cmd == ELF_C_WRITE on an 'rdwr' FD passes.");
 
 	TP_SET_VERSION();
@@ -322,6 +335,11 @@ tcCmdWriteFdRdwr(void)
 	}
 
  done:
+	if (e)
+		(void) elf_end(e);
+	if (fd != -1)
+		(void) close(fd);
+		
 	cleanup_tempfile();
 	tet_result(result);
 }
@@ -332,6 +350,9 @@ tcCmdWriteFdWrite(void)
 	Elf *e;
 	int error, fd, result;
 
+	e = NULL;
+	fd = -1;
+	
 	TP_ANNOUNCE("cmd == ELF_C_WRITE on write-only FD passes.");
 
 	TP_SET_VERSION();
@@ -351,6 +372,11 @@ tcCmdWriteFdWrite(void)
 	}
 
  done:
+	if (e)
+		(void) elf_end(e);
+	if (fd != -1)
+		(void) close(fd);
+		
 	cleanup_tempfile();
 	tet_result(result);
 }
@@ -361,6 +387,9 @@ tcCmdWriteParamIgnored(void)
 	Elf *e, *t;
 	int fd, fd1, result;
 
+	e = t = NULL;
+	fd = fd1 = -1;
+	
 	TP_ANNOUNCE("cmd == ELF_C_WRITE ignores the last parameter.");
 
 	TP_SET_VERSION();
@@ -384,6 +413,16 @@ tcCmdWriteParamIgnored(void)
 	}
 
  done:
+	if (t)
+		(void) elf_end(t);
+	if (e)
+		(void) elf_end(e);
+
+	if (fd != -1)
+		(void) close(fd);
+	if (fd1 != -1)
+		(void) close(fd1);
+		
 	cleanup_tempfile();
 	tet_result(result);
 }
