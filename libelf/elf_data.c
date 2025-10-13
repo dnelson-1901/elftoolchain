@@ -132,7 +132,6 @@ elf_getdata(Elf_Scn *s, Elf_Data *ed)
 
 	assert(msz > 0);
 	assert(count <= SIZE_MAX);
-	assert(msz * count <= SIZE_MAX);
 
 	if ((d = _libelf_allocate_data(s)) == NULL)
 		return (NULL);
