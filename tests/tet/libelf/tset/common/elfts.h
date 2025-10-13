@@ -80,7 +80,7 @@
 			_fd = -1;					\
 			ACTION						\
 		}							\
-		if (fd != -1)						\
+		if (_fd >= 0)						\
 			(void) close(_fd);				\
 	} while (0)
 
