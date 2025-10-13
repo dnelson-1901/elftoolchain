@@ -38,6 +38,11 @@ CLEANFILES+=	${_M4_SRCS:S/.m4$/.c/g} ${TS_DATA}
 
 ${PROG}:	${TS_DATA} 
 
+# Run the test executable and summarize its result.
+run-test:	.PHONY ${PROG}
+	TET_ROOT=${TET_ROOT} ${.OBJDIR}/${PROG}
+	${TOP}/tests/tet/tet/bin/check-tet-journal -j ${.OBJDIR}/tet_xres
+
 .if defined(GENERATE_TEST_SCAFFOLDING)
 _TC_SRC=	${.OBJDIR}/tc.c				# Test driver.
 _TC_SCN=	tet_scen				# Scenario file.
