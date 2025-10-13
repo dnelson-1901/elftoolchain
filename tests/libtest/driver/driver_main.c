@@ -131,7 +131,8 @@ parse_selection_option(const char *option)
 		return (NULL);
 	}
 
-	so = calloc(1, sizeof(*so));
+	if ((so = calloc(1, sizeof(*so))) == NULL)
+		return (NULL);
 	so->so_pattern = option;
 	so->so_selection_scope = scope;
 	so->so_select_tests = select_tests;
@@ -617,7 +618,8 @@ main(int argc, char **argv)
 	struct selection_option_list selections =
 	    STAILQ_HEAD_INITIALIZER(selections);
 
-	tr = test_driver_allocate_run();
+	if ((tr = test_driver_allocate_run()) == NULL)
+		err(EX_SOFTWARE, "Memory allocation failed.");
 
 	/* Parse arguments. */
 	while ((option = getopt(argc, argv, ":R:T:c:ln:p:s:t:v")) != -1) {
@@ -697,7 +699,7 @@ main(int argc, char **argv)
 	 * defaults.
 	 */
 	if (!test_driver_finish_run_initialization(tr, argv[0]))
-		err(EX_OSERR, "cannot initialize test driver");
+		err(EX_SOFTWARE, "cannot initialize test driver");
 
 	/* Choose tests and test cases to act upon. */
 	select_tests(tr, &selections);

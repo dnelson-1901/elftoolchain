@@ -32,6 +32,7 @@
 #include <sys/stat.h>
 #include <sys/time.h>
 
+#include <assert.h>
 #include <err.h>
 #include <libgen.h>
 #include <stdbool.h>
@@ -54,6 +55,8 @@ test_driver_add_search_path(struct test_run *tr, const char *directory_name)
 	char *canonical_path;
 	struct test_search_path_entry *entry;
 
+	assert(directory_name != NULL);
+	
 	if (!test_driver_is_directory(directory_name))
 		return (false);
 
@@ -67,7 +70,8 @@ test_driver_add_search_path(struct test_run *tr, const char *directory_name)
 			return (true);
 	}
 
-	entry = calloc(1, sizeof(*entry));
+	if ((entry = calloc(1, sizeof(*entry))) == NULL)
+		return (false);
 	entry->tsp_directory = canonical_path;
 
 	STAILQ_INSERT_TAIL(&tr->tr_search_path, entry, tsp_next);
@@ -86,7 +90,8 @@ test_driver_allocate_run(void)
 {
 	struct test_run *tr;
 
-	tr = calloc(sizeof(struct test_run), 1);
+	if ((tr = calloc(1, sizeof(struct test_run))) == NULL)
+		return (NULL);
 	tr->tr_action = TEST_RUN_EXECUTE;
 	tr->tr_style = TR_STYLE_LIBTEST;
 	STAILQ_INIT(&tr->tr_test_cases);
@@ -141,16 +146,43 @@ test_driver_free_run(struct test_run *tr)
 }
 
 /*
+ * Add the search paths specified by the environment variable
+ * 'TEST_PATH' to the end of the search list.
+ */
+static void
+test_driver_add_search_paths(struct test_run *tr)
+{
+	assert(tr != NULL);
+
+	const char *search_path = getenv(TEST_SEARCH_PATH_ENV_VAR);
+	if (search_path == NULL || *search_path == '\0')
+		return;
+
+	char *path_copy = strdup(search_path);
+	char *path_element = strtok(path_copy, ":");
+	if (path_element == NULL)
+		return;
+	
+	do {
+		if (!test_driver_add_search_path(tr, path_element))
+			warnx("in environment variable \"%s\": path "
+			      "\"%s\" does not name a directory.",
+			      TEST_SEARCH_PATH_ENV_VAR, path_element);
+	} while ((path_element = strtok(NULL, ":")) != NULL);
+
+	free(path_copy);	
+}
+
+/*
  * Populate unset fields of a struct test_run with defaults.
  */
 bool
 test_driver_finish_run_initialization(struct test_run *tr, const char *argv0)
 {
 	struct timeval tv;
+	char *argv0_copy;
 	const char *basedir;
-	const char *search_path;
 	const char *last_component;
-	char *argv0_copy, *path_copy, *path_element;
 	char test_name[NAME_MAX];
 
 	if (tr->tr_name == NULL) {
@@ -183,22 +215,8 @@ test_driver_finish_run_initialization(struct test_run *tr, const char *argv0)
 			err(1, "realpath(%s) failed", basedir);
 	}
 
-	/*
-	 * Add the search paths specified by the environment variable
-	 * 'TEST_PATH' to the end of the search list.
-	 */
-	if ((search_path = getenv(TEST_SEARCH_PATH_ENV_VAR)) != NULL &&
-	    *search_path != '\0') {
-		path_copy = strdup(search_path);
-		path_element = strtok(path_copy, ":");
-		do {
-			if (!test_driver_add_search_path(tr, path_element))
-				warnx("in environment variable \"%s\": path "
-				    "\"%s\" does not name a directory.",
-				    TEST_SEARCH_PATH_ENV_VAR, path_element);
-		} while ((path_element = strtok(NULL, ":")) != NULL);
-	}
-
+	test_driver_add_search_paths(tr);
+	
 	return (true);
 }
 
