@@ -161,7 +161,7 @@ test_driver_add_search_paths(struct test_run *tr)
 	char *path_copy = strdup(search_path);
 	char *path_element = strtok(path_copy, ":");
 	if (path_element == NULL)
-		return;
+		goto done;
 	
 	do {
 		if (!test_driver_add_search_path(tr, path_element))
@@ -170,6 +170,7 @@ test_driver_add_search_paths(struct test_run *tr)
 			      TEST_SEARCH_PATH_ENV_VAR, path_element);
 	} while ((path_element = strtok(NULL, ":")) != NULL);
 
+ done:
 	free(path_copy);	
 }
 
