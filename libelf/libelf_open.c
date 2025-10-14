@@ -69,6 +69,13 @@ _libelf_read_special_file(int fd, size_t *fsz)
 	do {
 		/* Check if we need to expand the data buffer. */
 		if (datasz == bufsz) {
+			/*
+			 * Be canonically correct and avoid a possible
+			 * underflow on doubling 'bufsz'.
+			 */
+			if (bufsz > SIZE_MAX/2)
+				goto resourceerror;
+
 			bufsz *= 2;
 			if ((t = realloc(buf, bufsz)) == NULL)
 				goto resourceerror;
