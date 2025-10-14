@@ -154,9 +154,8 @@ create_obj_from_file(struct bsdar *bsdar, const char *name, time_t mtime)
 	obj->dev = sb.st_dev;
 	obj->ino = sb.st_ino;
 
-	if (obj->size == 0) {
-		return (obj);
-	}
+	if (obj->size == 0)
+		goto done;
 
 	if ((obj->elf = elf_open(fd)) == NULL) {
 		bsdar_warnc(bsdar, 0, "file initialization failed for %s: %s",
@@ -174,6 +173,7 @@ create_obj_from_file(struct bsdar *bsdar, const char *name, time_t mtime)
 		goto giveup;
 	}
 
+done:
 	if (close(fd) < 0)
 		bsdar_errc(bsdar, errno, "close failed: %s",
 		    obj->name);
