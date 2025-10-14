@@ -294,8 +294,8 @@ long
 getcharacter(void)
 {
 	long rt;
-	int i;
-	char buf[4], c;
+	int i, c;
+	char buf[4];
 
 	rt = EOF;
 	for(i = 0; i < encoding_size; i++) {
