@@ -302,10 +302,12 @@ collect_func(Dwarf_Debug dbg, Dwarf_Die die, struct Func *parent, struct CU *cu)
 		}
 		if (tag == DW_TAG_inlined_subroutine) {
 			f->inlined_caller = parent;
-			dwarf_attrval_unsigned(die, DW_AT_call_file,
-			    &f->call_file, &de);
-			dwarf_attrval_unsigned(die, DW_AT_call_line,
-			    &f->call_line, &de);
+			if (dwarf_attrval_unsigned(die, DW_AT_call_file,
+				&f->call_file, &de) != DW_DLV_OK)
+				goto cont_search;
+			if (dwarf_attrval_unsigned(die, DW_AT_call_line,
+				&f->call_line, &de) != DW_DLV_OK)
+				goto cont_search;
 		}
 		STAILQ_INSERT_TAIL(&cu->funclist, f, next);
 	}
