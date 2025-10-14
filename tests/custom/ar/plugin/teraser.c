@@ -45,6 +45,8 @@ main(int argc, char **argv)
 	checktime = 0;
 	erasetime = 0;
 	tc = NULL;
+	fd = -1;
+	
 	while ((opt = getopt(argc, argv, "cet:")) != -1) {
 		switch(opt) {
 		case 'c':
@@ -140,7 +142,8 @@ main(int argc, char **argv)
 				    *argv, strerror(errno));
 
 		etend:
-			close(fd);
+			if (fd != -1)
+				close(fd);
 		}
 	}
 
