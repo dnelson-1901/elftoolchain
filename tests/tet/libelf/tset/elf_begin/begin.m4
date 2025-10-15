@@ -620,6 +620,7 @@ tcArMemoryFdIgnored_$1(void)
 	int fd, result;
 	Elf_Kind k;
 	struct stat sb;
+	ssize_t rsz;
 	char *b;
 
 	e = e1 = NULL;
@@ -653,9 +654,15 @@ tcArMemoryFdIgnored_$1(void)
 		goto done;
 	}
 
-	if (read(fd, b, sb.st_size) != sb.st_size) {
-		/* Deal with ERESTART? */
+	if ((rsz = read(fd, b, sb.st_size)) < 0) {
 		TP_UNRESOLVED("read failed: %s", strerror(errno));
+		goto done;
+	}
+
+	if (rsz != sb.st_size) {
+		/* Deal with ERESTART? */
+		TP_UNRESOLVED("read failed: rsz=%zd != st_size=%jd",
+		    rsz, (intmax_t) sb.st_size);
 		goto done;
 	}
 
