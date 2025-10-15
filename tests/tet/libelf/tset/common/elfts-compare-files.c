@@ -48,11 +48,13 @@ elfts_compare_files(const char *rfn, const char *fn)
 {
 	int fd, result, rfd;
 	struct stat sb, rsb;
-	char *m, *rm;
+	char *m, *rm;		/* Mmap base addresses. */
+	char *s, *rs;		/* Used for comparing mmap'ed data. */
 	size_t c, nc;
 
 	fd = rfd = -1;
 	m = rm = NULL;
+	s = rs = NULL;
 	result = TET_UNRESOLVED;
 
 	if ((fd = open(fn, O_RDONLY, 0)) < 0) {
@@ -103,11 +105,12 @@ elfts_compare_files(const char *rfn, const char *fn)
 	nc = sb.st_size;
 
 	/* Compare bytes. */
-	for (c = 0; c < nc && *m == *rm; c++, m++, rm++)
+	s = m; rs = rm;
+	for (c = 0; c < nc && *s == *rs; c++, s++, rs++)
 		;
 	if (c != nc) {
 		tet_printf("F: @ offset 0x%x ref[%d] != actual[%d].", c,
-		     *rm, *m);
+		     *rs, *s);
 		result = TET_FAIL;
 	}
 
