@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sysexits.h>
 
 #define COUNTER	"/tmp/bsdar-test-total"
 #define PASSED	"/tmp/bsdar-test-passed"
@@ -237,16 +238,22 @@ incct(const char *pathname)
 	FILE *fp;
 	char buf[16];
 
-	if ((fp = fopen(pathname, "r")) != NULL) {
-		if (fgets(buf, 10, fp) != buf)
-			perror("fgets");
-		snprintf(buf, sizeof buf, "%d\n", atoi(buf) + 1);
-		fclose(fp);
-	}
-	if ((fp = fopen(pathname, "w")) != NULL) {
-		fputs(buf, fp);
-		fclose(fp);
-	}
+	if ((fp = fopen(pathname, "r")) == NULL)
+		errx(EX_OSERR, "Could not open \"%s\" for reading.",
+		     pathname);
+	
+	if (fgets(buf, 10, fp) != buf)
+		perror("fgets");
+	fclose(fp);
+	
+	snprintf(buf, sizeof buf, "%d\n", atoi(buf) + 1);
+	
+	if ((fp = fopen(pathname, "w")) == NULL)
+		errx(EX_OSERR, "Could not open \"%s\" for writing.",
+		     pathname);
+	
+	fputs(buf, fp);
+	fclose(fp);
 }
 
 static void
