@@ -167,6 +167,11 @@ _libelf_ar_gethdr(Elf *e)
 		goto error;
 	eh->ar_mode = (mode_t) n;
 
+	if (_libelf_ar_get_number(arh->ar_date, sizeof(arh->ar_date), 10,
+	    &n) == 0)
+		goto error;
+	eh->ar_date = (time_t) n;
+
 	if (_libelf_ar_get_number(arh->ar_size, sizeof(arh->ar_size), 10,
 	    &n) == 0)
 		goto error;
