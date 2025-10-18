@@ -67,7 +67,7 @@ _libelf_ar_get_number(const char *src, size_t sz, unsigned int base,
 			return (0);
 		v = c - '0';
 		if (v >= base)		/* Illegal digit. */
-			break;
+			return (0);
 		r *= base;
 		r += v;
 	}
