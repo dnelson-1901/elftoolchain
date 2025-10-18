@@ -204,6 +204,8 @@ _libelf_ar_gethdr(Elf *e)
 	e->e_flags &= ~LIBELF_F_AR_HEADER;
 	e->e_hdr.e_rawhdr = (unsigned char *) arh;
 
+	LIBELF_SET_ERROR(ARCHIVE, 0);
+
 	return (NULL);
 }
 
