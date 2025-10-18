@@ -32,6 +32,7 @@
 #include <ar.h>
 #include <errno.h>
 #include <libelf.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
@@ -472,3 +473,102 @@ tcArRawnames$1(void)
 
 ARCHIVE_TESTS(`SVR4')
 ARCHIVE_TESTS(`BSD')
+
+/*
+ * Data used by the tcAr(.*)Field tests below.
+ */
+static const char ar_archive_template[] =
+    ARMAG		/* struct ar_hdr fields: */
+    "s1/             "	/* char ar_name[16] */
+    "0           "	/* char ar_date[12] */
+    "0     "		/* char ar_uid[6] */
+    "0     "		/* char ar_gid[6] */
+    "644     "		/* char ar_mode[8] */
+    "11        "	/* char ar_size[10] */
+    "\140\n"		/* char ar_fmag[2] */
+    "This is s1.";
+
+/* Account for the trailing NUL. */
+#define AR_ARCHIVE_SIZE	(sizeof(ar_archive_template) - 1)
+
+define(`FN',`
+/*
+ * Verify that an error is signalled if the a header field of an ar(1)
+ * archive is invalid.
+ */
+void
+tcAr$1Field(void)
+{
+	Elf *e, *ar;
+	int error, result;
+	char *ar_archive;
+	struct ar_hdr *arh;
+	
+	ar = e = NULL;
+	result = TET_UNRESOLVED;
+	ar_archive = NULL;
+	arh = NULL;
+	
+	TP_CHECK_INITIALIZATION();
+	TP_ANNOUNCE("elf_getarhdr() fails on $3.");
+
+	/*
+	 * Make a copy of the archive template for modification by
+	 * this test.
+	 */
+	if ((ar_archive = strdup(ar_archive_template)) == NULL) {
+		TP_UNRESOLVED("Could not allocate memory.");
+		goto done;
+	}
+
+	/* Skip to the archive header. */
+	arh = (struct ar_hdr *) (ar_archive + SARMAG);
+	/* Modify a specific field in the header for this test. */
+	$2
+
+	/* Open the modified archive. */
+	if ((ar = elf_memory(ar_archive, AR_ARCHIVE_SIZE)) == NULL) {
+		TP_UNRESOLVED("elf_memory() failed: %s.",
+		    elf_errmsg(elf_errno()));
+		goto done;
+	}
+
+	/* Retrieve the first header in the archive. */
+	if ((e = elf_begin(-1, ELF_C_READ, ar)) == NULL) {
+		TP_UNRESOLVED("elf_begin() failed: %s.",
+		    elf_errmsg(elf_errno()));
+		goto done;
+	}
+
+	/* Parsing the bogus data should fail. */
+	result = TET_PASS;
+	if (elf_getarhdr(e) != NULL)
+		TP_FAIL("elf_getarhdr() succeeded unexpectedly.");
+	else if ((error = elf_errno()) != ELF_E_ARCHIVE)
+		TP_FAIL("unexpected error=%d \"%s\".", error,
+		    elf_errmsg(error));
+
+ done:
+ 	if (e)
+		(void) elf_end(e);
+	if (ar)
+		(void) elf_end(ar);
+	if (ar_archive)
+		free(ar_archive);
+		
+	tet_result(result);
+}
+')
+
+FN(NonDecimalDate,
+   `memcpy(arh->ar_date, "Q           ", sizeof(arh->ar_date));',
+   `a non-decimal digit in the date field')
+FN(NonDecimalUid,
+   `memcpy(arh->ar_uid, "Q     ", sizeof(arh->ar_uid));',
+   `a non-decimal digit in the uid field')
+FN(NonDecimalGid,
+   `memcpy(arh->ar_gid, "Q     ", sizeof(arh->ar_gid));',
+   `a non-decimal digit in the gid field')
+FN(NonOctalMode,
+   `memcpy(arh->ar_mode, "      78", sizeof(arh->ar_mode));',
+   `a non-octal character in the mode field')
