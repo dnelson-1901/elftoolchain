@@ -879,7 +879,7 @@ undefine(`ADD_SECTION')
  */
 
 undefine(`FN')
-define(`FN',`
+define(`FN',`pushdef(`SZ',$1)dnl
 void
 tc$3_$2$1(void)
 {
@@ -922,14 +922,7 @@ tc$3_$2$1(void)
 		goto done;
 	}
 
-	/* Setup defaults for the test. */
-	d->d_buf  = (char *) NULL;
-	d->d_size = sizeof(Elf$1_Sym);
-	d->d_type = ELF_T_SYM;
-	/* coverity[UNUSED_VALUE] */
-	d->d_align = 1; /* Overwritten by some test functions. */
-
-	/* Override, on a per test case basis. */
+	/* Set fields of the Elf_Data descriptor. */
 	$4
 
 	if ((offset = elf_update(e, ELF_C_NULL)) != (off_t) -1) {
@@ -952,7 +945,8 @@ tc$3_$2$1(void)
 	if (fd != -1)
 		(void) close(fd);
 	tet_result(result);
-}')
+}
+popdef(`SZ')')
 
 define(`MKFN',`
 FN(32,`lsb',$1,$2,$3,$4)
@@ -961,12 +955,25 @@ FN(64,`lsb',$1,$2,$3,$4)
 FN(64,`msb',$1,$2,$3,$4)
 ')
 
-MKFN(IllegalAlignment, `d->d_align = 3;',
-    DATA, "incorrect alignments")
-MKFN(UnsupportedVersion, `d->d_version = EV_CURRENT+1;', VERSION,
+MKFN(IllegalAlignment,
+	`d->d_size = sizeof(Elf``''SZ()`'_Sym);
+	d->d_type = ELF_T_SYM;
+	d->d_align = 3; /* Incorrect alignment for type ELF_T_SYM. */',
+    DATA,
+    "incorrect alignments")
+MKFN(UnsupportedVersion,
+    `d->d_version = EV_CURRENT+1; /* Unknown version. */',
+    VERSION,
     "an unknown version")
-MKFN(UnknownElfType, `d->d_type = ELF_T_NUM;', DATA, "an unknown type")
-MKFN(IllegalSize, `d->d_size = 1;', DATA, "an illegal size")
+MKFN(UnknownElfType,
+    `d->d_type = ELF_T_NUM; /* Unknown ELF type. */',
+    DATA,
+    "an unknown type")
+MKFN(IllegalSize,
+	`d->d_type = ELF_T_SYM;
+	d->d_align = ifelse(SZ(),32,4,8);
+	d->d_size = 1; /* Too small for ELF_T_SYM. */',
+    DATA, "an illegal size")
 
 
 /*
@@ -2334,7 +2341,7 @@ tcSectionOverlap$1$2(void)
 		goto done;
 	}
 
-	d->d_type = ELF_T_BYTE;
+	/* Set fields that have non-default values. */
 	d->d_off = 0;
 	d->d_buf = base_data;
 	d->d_size = strlen(base_data);
