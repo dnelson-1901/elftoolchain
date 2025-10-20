@@ -23,7 +23,7 @@
 .\"
 .\" $Id$
 .\"
-.Dd August 15, 2006
+.Dd October 20, 2025
 .Dt ELF_GETARHDR 3
 .Os
 .Sh NAME
@@ -81,6 +81,10 @@ Function
 .Fn elf_getarhdr
 may fail with the following errors:
 .Bl -tag -width "[ELF_E_RESOURCE]"
+.It Bq Er ELF_E_ARCHIVE
+The archive member header for argument
+.Fa elf
+was invalid.
 .It Bq Er ELF_E_ARGUMENT
 Argument
 .Fa elf
