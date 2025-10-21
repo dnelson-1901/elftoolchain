@@ -252,6 +252,10 @@ tcArArchive$1(void)
 	tet_result(result);
 }
 
+/*
+ * elf_getarhdr() succeeds on all members of the archive, and returns
+ * a header with the expected content.
+ */
 void
 tcArMember$1(void)
 {
@@ -320,6 +324,12 @@ tcArMember$1(void)
 		if (arh->ar_gid != sb.st_gid) {
 			TP_FAIL("\"%s\" gid: %d != %d.", *fn,
 			    arh->ar_gid, sb.st_gid);
+			goto done;
+		}
+
+		if (arh->ar_date != sb.st_mtime) {
+			TP_FAIL("\"%s\" time: (ar) %jd != (file) %jd.", *fn,
+			    (intmax_t) arh->ar_date, (intmax_t) sb.st_mtime);
 			goto done;
 		}
 
