@@ -249,7 +249,15 @@ _(`DT_PREINIT_ARRAY',    32,
 	`pointers to pre-initialization functions')
 _(`DT_PREINIT_ARRAYSZ',  33,
 	`size of pre-initialization array')
-_(`DT_MAXPOSTAGS',       34,
+_(`DT_SYMTAB_SHNDX',     34,
+	`the address of the SHT_SYMTAB_SHNDX section for the DT_SYMTAB entry')
+_(`DT_RELRSZ',           35,
+	`the total size in bytes of the DT_RELR relocation table')
+_(`DT_RELR',             36,
+	`The address of a table with relative relocation entries')
+_(`DT_RELRENT',          37,
+	`The size in bytes of a DT_RELR relocation entry')
+_(`DT_MAXPOSTAGS',       38,
 	`the number of positive tags')
 _(`DT_LOOS',             0x6000000D,
 	`start of OS-specific types')
@@ -1529,6 +1537,8 @@ _(SHT_PREINIT_ARRAY,   16U,
 _(SHT_GROUP,           17U, `defines a section group')
 _(SHT_SYMTAB_SHNDX,    18U,
 	`used for extended section numbering')
+_(SHT_RELR,            19U,
+	`used to encode relative relocations')
 _(SHT_LOOS,            0x60000000U,
 	`start of OS-specific range')
 _(SHT_SUNW_dof,	     0x6FFFFFF4U,
