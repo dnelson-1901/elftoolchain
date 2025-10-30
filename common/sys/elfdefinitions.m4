@@ -656,6 +656,11 @@ typedef struct {
 	Elf64_Sxword	r_addend;    /* constant addend */
 } Elf64_Rela;
 
+/*
+ * Relative relocations.
+ */
+typedef Elf32_Word	Elf32_Relr;
+typedef Elf64_Xword	Elf64_Relr;
 
 #define ELF32_R_SYM(I)		((I) >> 8)
 #define ELF32_R_TYPE(I)		((unsigned char) (I))
