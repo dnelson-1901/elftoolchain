@@ -257,6 +257,8 @@ _(`DT_RELR',             36,
 	`The address of a table with relative relocation entries')
 _(`DT_RELRENT',          37,
 	`The size in bytes of a DT_RELR relocation entry')
+_(`DT_SYMTABSZ',	 39,
+	`The size in bytes of the DT_SYMTAB symbol table')
 _(`DT_LOOS',             0x6000000D,
 	`start of OS-specific types')
 _(`DT_SUNW_AUXILIARY',   0x6000000D,
