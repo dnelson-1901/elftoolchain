@@ -3408,18 +3408,16 @@ _(LL_DELTA,		0x20,
 	`')
 ')
 
+# ELF Note types.
 #
-# Note tags
-#
-define(`DEFINE_NOTE_ENTRY_TYPES',`
+# These values are used in the n_type field of the Elf Note header.
+define(`DEFINE_COMMON_NOTE_TYPES',`
 _(NT_ABI_TAG,			1,
-	`Tag indicating the ABI')
-_(NT_GNU_HWCAP,			2,
-	`Hardware capabilities')
-_(NT_GNU_BUILD_ID,		3,
-	`Build id, set by ld(1)')
-_(NT_GNU_GOLD_VERSION,		4,
-	`Version number of the GNU gold linker')
+	`Tag indicating the OS ABI')
+')
+
+define(`DEFINE_CORE_FILE_NOTE_TYPES',`
+__(`Note types used in core files.')
 _(NT_PRSTATUS,			1,
 	`Process status')
 _(NT_FPREGSET,			2,
@@ -3428,8 +3426,6 @@ _(NT_PRPSINFO,			3,
 	`Process information')
 _(NT_AUXV,			6,
 	`Auxiliary vector')
-_(NT_PRXFPREG,		0x46E62B7FU,
-	`Linux user_xfpregs structure')
 _(NT_PSTATUS,			10,
 	`Linux process status')
 _(NT_FPREGS,			12,
@@ -3440,6 +3436,26 @@ _(NT_LWPSTATUS,			16,
 	`Linux lwpstatus_t type')
 _(NT_LWPSINFO,			17,
 	`Linux lwpinfo_t type')
+_(NT_PRXFPREG,		0x46E62B7FU,
+	`Linux user_xfpregs structure')
+')
+
+define(`DEFINE_GNU_NOTE_TYPES',`
+__(`GNU note types')
+_(NT_GNU_ABI_TAG,		1,
+	`GNU ABI version')
+_(NT_GNU_HWCAP,			2,
+	`Hardware capabilities')
+_(NT_GNU_BUILD_ID,		3,
+	`Build id, set by ld(1)')
+_(NT_GNU_GOLD_VERSION,		4,
+	`Version number of the GNU gold linker')
+')
+
+define(`DEFINE_FREEBSD_NOTE_TYPES',`
+__(`FreeBSD note types.')
+_(NT_FREEBSD_ABI_TAG,		1,
+	`FreeBSD ABI version')
 _(NT_FREEBSD_NOINIT_TAG,	2,
 	`FreeBSD no .init tag')
 _(NT_FREEBSD_ARCH_TAG,		3,
@@ -3448,10 +3464,15 @@ _(NT_FREEBSD_FEATURE_CTL,	4,
 	`FreeBSD feature control')
 ')
 
+define(`DEFINE_NOTE_TYPES',`dnl
+DEFINE_COMMON_NOTE_TYPES()dnl
+DEFINE_GNU_NOTE_TYPES()dnl
+DEFINE_FREEBSD_NOTE_TYPES()dnl
+DEFINE_CORE_FILE_NOTE_TYPES()dnl
+')
+
 # Aliases for the ABI tag.
-define(`DEFINE_NOTE_ENTRY_ALIASES',`
-_(NT_FREEBSD_ABI_TAG,	NT_ABI_TAG)
-_(NT_GNU_ABI_TAG,		NT_ABI_TAG)
+define(`DEFINE_NOTE_TYPE_ALIASES',`
 _(NT_NETBSD_IDENT,	NT_ABI_TAG)
 _(NT_OPENBSD_IDENT,	NT_ABI_TAG)
 ')

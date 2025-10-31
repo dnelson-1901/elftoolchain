@@ -413,11 +413,11 @@ typedef struct {
 DEFINE_LL_FLAGS()
 
 /*
- * Note tags
+ * ELF Note types.
  */
-DEFINE_NOTE_ENTRY_TYPES()
+DEFINE_NOTE_TYPES()
 /* Aliases for the ABI tag. */
-DEFINE_NOTE_ENTRY_ALIASES()
+DEFINE_NOTE_TYPE_ALIASES()
 
 /*
  * Note descriptors.
