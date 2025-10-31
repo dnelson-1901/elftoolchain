@@ -755,7 +755,6 @@ dt_type(unsigned int mach, unsigned int dtype)
 	case DT_FLAGS: return "FLAGS";
 	case DT_PREINIT_ARRAY: return "PREINIT_ARRAY";
 	case DT_PREINIT_ARRAYSZ: return "PREINIT_ARRAYSZ";
-	case DT_MAXPOSTAGS: return "MAXPOSTAGS";
 	case DT_SUNW_AUXILIARY: return "SUNW_AUXILIARY";
 	case DT_SUNW_RTLDINF: return "SUNW_RTLDINF";
 	case DT_SUNW_FILTER: return "SUNW_FILTER";
