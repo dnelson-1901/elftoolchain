@@ -1732,18 +1732,6 @@ _(STT_NUM,             7,
 ')
 
 #
-# Symbol binding.
-#
-define(`DEFINE_SYMBOL_BINDING_KINDS',`
-_(SYMINFO_BT_SELF,	0xFFFFU,
-	`bound to self')
-_(SYMINFO_BT_PARENT,	0xFFFEU,
-	`bound to parent')
-_(SYMINFO_BT_NONE,	0xFFFDU,
-	`no special binding')
-')
-
-#
 # Symbol visibility.
 #
 define(`DEFINE_SYMBOL_VISIBILITIES',`
@@ -1757,12 +1745,12 @@ _(STV_PROTECTED,       3,
 	`local references are not preemptable')
 ')
 
-#
-# Symbol flags.
-#
-define(`DEFINE_SYMBOL_FLAGS',`
+# Syminfo flags.
+define(`DEFINE_SYMINFO_FLAGS',`
 _(SYMINFO_FLG_DIRECT,	0x0001U,
 	`directly assocated reference')
+_(SYMINFO_FLG_FILTER, 0x0002U,
+	`associated with a filter')
 _(SYMINFO_FLG_COPY,	0x0004U,
 	`definition by copy-relocation')
 _(SYMINFO_FLG_LAZYLOAD,	0x0008U,
@@ -1771,6 +1759,36 @@ _(SYMINFO_FLG_DIRECTBIND,	0x0010U,
 	`reference should be directly bound')
 _(SYMINFO_FLG_NOEXTDIRECT, 0x0020U,
 	`external references not allowed to bind to definition')
+_(SYMINFO_FLG_AUXILIARY,   0x0040U,
+	`auxiliary filter')
+_(SYMINFO_FLG_INTERPOSE,   0x0080U,
+	`interposer symbol')
+_(SYMINFO_FLG_CAP,	   0x0100U,
+	`associated with capabilities')
+_(SYMINFO_FLG_DEFERRED,	   0x0200U,
+	`deferred reference')
+_(SYMINFO_FLG_WEAKFILTER,  0x0400U,
+	`weak filter')
+')
+
+# Syminfo bindings.
+define(`DEFINE_SYMINFO_BINDINGS',`
+_(SYMINFO_BT_SELF,	0xFFFFU,
+	`bound to self')
+_(SYMINFO_BT_PARENT,	0xFFFEU,
+	`bound to parent')
+_(SYMINFO_BT_NONE,	0xFFFDU,
+	`no special binding')
+_(SYMINFO_BT_EXTERN,	0xFFFCU,
+	`defined as external')
+')
+
+# The version of the syminfo table.  Stored at index 0 of the table.
+define(`DEFINE_SYMINFO_VERSIONS',`
+_(SYMINFO_NONE,		0,
+	`no version')
+_(SYMINFO_CURRENT,	1,
+	`current version')
 ')
 
 #

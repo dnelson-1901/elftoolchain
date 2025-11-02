@@ -208,19 +208,24 @@ DEFINE_SYMBOL_TYPES()
 DEFINE_SYMBOL_TYPES_ADDITIONAL_CONSTANTS()
 
 /*
- * Symbol binding.
- */
-DEFINE_SYMBOL_BINDING_KINDS()
-
-/*
  * Symbol visibility.
  */
 DEFINE_SYMBOL_VISIBILITIES()
 
 /*
- * Symbol flags.
+ * Syminfo flags.
  */
-DEFINE_SYMBOL_FLAGS()
+DEFINE_SYMINFO_FLAGS()
+
+/*
+ * Syminfo bindigs.
+ */
+DEFINE_SYMINFO_BINDINGS()
+
+/*
+ * Syminfo section versions.
+ */
+DEFINE_SYMINFO_VERSIONS()
 
 /*
  * Versioning dependencies.
