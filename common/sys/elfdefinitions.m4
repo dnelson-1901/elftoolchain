@@ -608,16 +608,22 @@ typedef struct {
 	Elf64_Xword	st_size;     /* size of associated data */
 } Elf64_Sym;
 
-#define ELF32_ST_BIND(I)	((I) >> 4)
-#define ELF32_ST_TYPE(I)	((I) & 0xFU)
-#define ELF32_ST_INFO(B,T)	(((B) << 4) + ((T) & 0xF))
+#define ELF_ST_BIND(I)		((I) >> 4)
+#define ELF_ST_TYPE(I)		((I) & 0xFU)
+#define ELF_ST_INFO(B, T)	(((B) << 4) + ((T) & 0xFU))
 
-#define ELF64_ST_BIND(I)	((I) >> 4)
-#define ELF64_ST_TYPE(I)	((I) & 0xFU)
-#define ELF64_ST_INFO(B,T)	(((B) << 4) + ((T) & 0xF))
+#define ELF32_ST_BIND(I)	ELF_ST_BIND(I)
+#define ELF32_ST_TYPE(I)	ELF_ST_TYPE(I)
+#define ELF32_ST_INFO(B,T)	ELF_ST_INFO(B,T)
 
-#define ELF32_ST_VISIBILITY(O)	((O) & 0x3)
-#define ELF64_ST_VISIBILITY(O)	((O) & 0x3)
+#define ELF64_ST_BIND(I)	ELF_ST_BIND(I)
+#define ELF64_ST_TYPE(I)	ELF_ST_TYPE(I)
+#define ELF64_ST_INFO(B,T)	ELF_ST_INFO(B,T)
+
+#define ELF_ST_VISIBILITY(O)	((O) & 0x3U)
+
+#define ELF32_ST_VISIBILITY(O)	ELF_ST_VISIBILITY(O)
+#define ELF64_ST_VISIBILITY(O)	ELF_ST_VISIBILITY(O)
 
 /*
  * Syminfo descriptors, containing additional symbol information.
