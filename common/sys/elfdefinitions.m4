@@ -686,6 +686,8 @@ typedef Elf64_Xword	Elf64_Relr;
  * Symbol versioning structures.
  */
 
+#define ELF_VER_CHR	'@'	/* Used in versioned names. */
+
 /* 32-bit structures. */
 typedef struct
 {
