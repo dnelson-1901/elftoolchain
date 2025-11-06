@@ -755,8 +755,8 @@ _(ELFMAG3, 0x46U)
 
 # Additional ELFMAG related constants.
 define(`DEFINE_ELF_MAGIC_ADDITIONAL_CONSTANTS',`
-_(ELFMAG,  "\177ELF")
-_(SELFMAG, 4)
+_(ELFMAG,  "\177ELF",	`ELF magic bytes as a string.')
+_(SELFMAG, 4,		`The number of ELF magic bytes.')
 ')
 
 #
