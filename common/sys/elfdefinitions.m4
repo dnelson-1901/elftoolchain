@@ -699,7 +699,7 @@ typedef struct
 {
 	Elf32_Word	vna_hash;    /* Hash value of dependency name. */
 	Elf32_Half	vna_flags;   /* Flags. */
-	Elf32_Half	vna_other;   /* Unused. */
+	Elf32_Half	vna_other;   /* Version index, if non-zero. */
 	Elf32_Word	vna_name;    /* Offset to dependency name. */
 	Elf32_Word	vna_next;    /* Offset to next vernaux entry. */
 } Elf32_Vernaux;
@@ -736,7 +736,7 @@ typedef struct {
 typedef struct {
 	Elf64_Word	vna_hash;    /* Hash value of dependency name. */
 	Elf64_Half	vna_flags;   /* Flags. */
-	Elf64_Half	vna_other;   /* Unused. */
+	Elf64_Half	vna_other;   /* Version index, if non-zero. */
 	Elf64_Word	vna_name;    /* Offset to dependency name. */
 	Elf64_Word	vna_next;    /* Offset to next vernaux entry. */
 } Elf64_Vernaux;
