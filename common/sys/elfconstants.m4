@@ -1809,6 +1809,8 @@ _(VER_FLG_BASE,		0x1,
 	`file version')
 _(VER_FLG_WEAK,		0x2,
 	`weak version')
+_(VER_FLG_INFO,		0x4,
+	`informational-only version')
 ')
 
 #
