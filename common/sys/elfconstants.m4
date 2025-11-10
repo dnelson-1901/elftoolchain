@@ -1799,6 +1799,8 @@ _(VER_NDX_LOCAL,	0,
 	`local scope')
 _(VER_NDX_GLOBAL,	1,
 	`global scope')
+_(VER_NDX_GIVEN,	2,
+	`global, with user-specified versioning')
 ')
 
 #

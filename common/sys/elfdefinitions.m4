@@ -761,6 +761,11 @@ typedef struct {
 
 typedef Elf64_Half	Elf64_Versym;
 
+#define VER_NDX_HIDDEN	0x8000U	    /* Ignore symbol presence. */
+#define VER_NDX(X)	((X) & ~VER_NDX_HIDDEN)
+
+#define VER_NEED_HIDDEN	VER_NDX_HIDDEN
+#define VER_NEED_IDX(X)	VER_NDX(X)
 
 /*
  * The header for GNU-style hash sections.
