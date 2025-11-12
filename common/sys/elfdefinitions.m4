@@ -90,6 +90,11 @@ DEFINE_CAPABILITIES()
 DEFINE_DYN_FLAGS()
 
 /*
+ * Aliases for the DF_* symbols.
+ */
+DEFINE_DYN_FLAG_ALIASES()
+
+/*
  * Dynamic linking entry types.
  */
 DEFINE_DYN_TYPES()

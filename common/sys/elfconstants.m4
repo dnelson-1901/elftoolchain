@@ -175,7 +175,38 @@ _(DF_1_ENDFILTEE,      0x00004000U,
 _(DF_1_DISPRELDNE,     0x00008000U,
 	`displacement relocation done')
 _(DF_1_DISPRELPND,     0x00010000U,
-	`displacement relocation pending')')
+	`displacement relocation pending')
+_(DF_1_NODIRECT,       0x00020000U,
+	`object contains non-direct bindings')
+_(DF_1_IGNMULDEF,      0x00040000U,
+	`unused')
+_(DF_1_NOKSYMS,        0x00080000U,
+	`unused')
+_(DF_1_NOHDR,          0x00100000U,
+	`unused')
+_(DF_1_EDITED,         0x00200000U,
+	`object has been modified')
+_(DF_1_NORELOC,        0x00400000U,
+	`unused')
+_(DF_1_SYMINTPOSE,     0x00800000U,
+	`symbol interposers exist')
+_(DF_1_GLOBAUDIT,      0x01000000U,
+	`global auditing')
+_(DF_1_SINGLETON,      0x02000000U,
+	`contains singleton symbols')
+_(DF_1_STUB,           0x04000000U,
+	`stub object')
+_(DF_1_PIE,            0x08000000U,
+	`position-independent executable')
+_(DF_1_KMOD,           0x10000000U,
+	`kernel module')
+_(DF_1_WEAKFILTER,     0x20000000U,
+	`object is a weak filter')
+')
+
+define(`DEFINE_DYN_FLAG_ALIASES',`
+_(DF_1_NOW,	DF_1_BIND_NOW)
+')
 
 #
 # Dynamic linking entry types.
