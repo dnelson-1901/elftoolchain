@@ -772,6 +772,8 @@ typedef Elf64_Half	Elf64_Versym;
 #define VER_NEED_HIDDEN	VER_NDX_HIDDEN
 #define VER_NEED_IDX(X)	VER_NDX(X)
 
+#define VER_DEF_IDX(X)	VER_NDX(X)
+
 /*
  * The header for GNU-style hash sections.
  */
