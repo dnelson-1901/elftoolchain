@@ -776,12 +776,16 @@ _(ELFDATA2MSB, 2U,
 #
 # The magic numbers used in the initial four bytes of an ELF object.
 #
-# These numbers are: 0x7F, 'E', 'L' and 'F'.
+# These numbers are: 0x7F, and the characters 'E', 'L' and 'F' encoded
+# in ASCII.
+#
+# This definition needs an expansion of `_' that replaces `@' characters
+# with single quotes.
 define(`DEFINE_ELF_MAGIC_VALUES',`
 _(ELFMAG0, 0x7FU)
-_(ELFMAG1, 0x45U)
-_(ELFMAG2, 0x4CU)
-_(ELFMAG3, 0x46U)
+_(ELFMAG1, 0x45U, @E@)
+_(ELFMAG2, 0x4CU, @L@)
+_(ELFMAG3, 0x46U, @F@)
 ')
 
 # Additional ELFMAG related constants.

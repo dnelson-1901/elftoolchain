@@ -127,12 +127,20 @@ DEFINE_ELF_CLASSES()
  */
 DEFINE_ELF_DATA_ENDIANNESSES()
 
+changequote([,])dnl
 /*
  * The magic numbers used in the initial four bytes of an ELF object.
  *
- * These numbers are: 0x7F, 'E', 'L' and 'F'.
+ * These numbers are 0x7F, and the characters 'E', 'L' and 'F' encoded
+ * in ASCII.
  */
+pushdef([_],[[#]define $1	$2[]ifelse(eval(len($3) > 0),1,
+					   [ ]/* translit($3,@,') */,
+					   [])])dnl
 DEFINE_ELF_MAGIC_VALUES()
+popdef([_])dnl
+changequote([`],['])dnl
+
 /* Additional magic-related constants. */
 DEFINE_ELF_MAGIC_ADDITIONAL_CONSTANTS()
 
