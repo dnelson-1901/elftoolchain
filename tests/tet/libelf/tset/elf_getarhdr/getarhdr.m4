@@ -252,6 +252,8 @@ tcArArchive$1(void)
 	tet_result(result);
 }
 
+#define TS_TIMESTAMP	1763654762 /* TS_TIMESTAMP in the Makefile. */
+
 /*
  * elf_getarhdr() succeeds on all members of the archive, and returns
  * a header with the expected content.
@@ -327,9 +329,9 @@ tcArMember$1(void)
 			goto done;
 		}
 
-		if (arh->ar_date != sb.st_mtime) {
-			TP_FAIL("\"%s\" time: (ar) %jd != (file) %jd.", *fn,
-			    (intmax_t) arh->ar_date, (intmax_t) sb.st_mtime);
+		if (arh->ar_date != TS_TIMESTAMP) {
+			TP_FAIL("\"%s\" time: (ar) %jd != (expected) %jd.", *fn,
+			    (intmax_t) arh->ar_date, (intmax_t) TS_TIMESTAMP);
 			goto done;
 		}
 
