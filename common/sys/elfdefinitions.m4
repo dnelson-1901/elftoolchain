@@ -73,8 +73,26 @@ divert(0)dnl
  */
 
 /*
+ * Compile-time knobs controlling the inclusion of this file's
+ * contents.
+ */
+#define _USE_SYS_ELFDEFINITIONS_H_	1
+#if defined(__NetBSD__) && defined(_SYS_EXEC_ELF_H_)
+/*
+ * Ignore the definitions provided by this file if <sys/exec_elf.h> has
+ * already been included.
+ *
+ * Doing so allows NetBSD code to use either (or both) <sys/exec_elf.h>
+ * or this file without breaking the build.
+ */
+#undef _USE_SYS_ELFDEFINITIONS_H_
+#endif /* defined(__NetBSD__) && defined(_SYS_EXEC_ELF_H_) */
+
+/*
 patsubst(defn(`COMPATIBILITY_NOTICE'), `^#', ` * ')
  */
+ 
+#if defined(_USE_SYS_ELFDEFINITIONS_H_)
 
 #ifndef _SYS_ELFDEFINITIONS_H_
 #define _SYS_ELFDEFINITIONS_H_
@@ -796,3 +814,6 @@ typedef struct {
 } Elf_GNU_Hash_Header;
 
 #endif	/* _SYS_ELFDEFINITIONS_H_ */
+
+#undef _USE_SYS_ELFDEFINITIONS_H_
+#endif  /* defined(_USE_SYS_ELFDEFINITIONS_H_) */
