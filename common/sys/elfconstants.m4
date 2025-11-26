@@ -1438,6 +1438,61 @@ _(PT_HISUNW,	PT_HIOS)
 _(PT_LOSUNW,	PT_SUNWBSS)
 ')
 
+define(`DEFINE_ARM_PLATFORM_FLAGS',`
+_(PT_ARM_ARCHEXT_FMTMSK,    0xFF000000U,
+	`Mask bits describing the format of subsequent data')
+_(PT_ARM_ARCHEXT_PROFMSK,   0x00FF0000U,
+	`Mask bits describing the architecture profile required')
+_(PT_ARM_ARCHEXT_ARCHMSK,   0x000000FFU,
+	`Mask bits describing the base architecture required')
+_(PT_ARM_ARCHEXT_FMT_OS,    0x00000000U,
+	`No additional words of data')
+_(PT_ARM_ARCHEXT_FMT_ABI,   0x01000000U,
+	`ABI format defines the following words of data')
+_(PT_ARM_ARCHEXT_PROF_NONE, 0x00000000U,
+	`No profile-specific constraints')
+_(PT_ARM_ARCHEXT_PROF_ARM,  0x00410000U,
+	`Executable requires the Application profile')
+_(PT_ARM_ARCHEXT_PROF_RT,   0x00520000U,
+	`Executable requires the Real-Time profile')
+_(PT_ARM_ARCHEXT_PROF_MC,   0x004D0000U,
+	`Executable requires the Microcontroller profile')
+_(PT_ARM_ARCHEXT_PROF_CLASSIC, 0x00530000U,
+	`Executable requires the A or R profile exception model')
+_(PT_ARM_ARCHEXT_ARCH_UNKNOWN, 0x00000000U,
+	`Unspecified architecture')
+_(PT_ARM_ARCHEXT_ARCHv4,    0x00000001U,
+	`Architecture v4')
+_(PT_ARM_ARCHEXT_ARCHv4T,   0x00000002U,
+	`Architecture v4T')
+_(PT_ARM_ARCHEXT_ARCHv5T,   0x00000003U,
+	`Architecture v5T')
+_(PT_ARM_ARCHEXT_ARCHv5TE,  0x00000004U,
+	`Architecture v5TE')
+_(PT_ARM_ARCHEXT_ARCHv5TEJ, 0x00000005U,
+	`Architecture v5TE')
+_(PT_ARM_ARCHEXT_ARCHv6,    0x00000006U,
+	`Architecture v6')
+_(PT_ARM_ARCHEXT_ARCHv6KZ,  0x00000007U,
+	`Architecture v6KZ')
+_(PT_ARM_ARCHEXT_ARCHv6T2,  0x00000008U,
+	`Architecture v6KT2')
+_(PT_ARM_ARCHEXT_ARCHv6K,   0x00000009U,
+	`Architecture v6K')
+_(PT_ARM_ARCHEXT_ARCHv7,    0x0000000AU,
+	`Architecture v7')
+_(PT_ARM_ARCHEXT_ARCHv6M,   0x0000000BU,
+	`Architecture v6M')
+_(PT_ARM_ARCHEXT_ARCHv6SM,  0x0000000CU,
+	`Architecture v6S-M')
+_(PT_ARM_ARCHEXT_ARCHv7EM,  0x0000000DU,
+	`Architecture v7E-M')
+')
+
+define(`DEFINE_PLATFORM_SPECIFIC_FLAGS',`dnl
+DEFINE_ARM_PLATFORM_FLAGS()
+')
+
 #
 # Section flags.
 #

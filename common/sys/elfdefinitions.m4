@@ -210,6 +210,11 @@ DEFINE_PHDR_TYPES()
 DEFINE_PHDR_TYPE_SYNONYMS()
 
 /*
+ * Platform-specific flags.
+ */
+DEFINE_PLATFORM_SPECIFIC_FLAGS()
+
+/*
  * Section flags.
  */
 DEFINE_SECTION_FLAGS()
