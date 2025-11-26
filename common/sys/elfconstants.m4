@@ -1612,6 +1612,16 @@ _(SHT_HIOS,            0x6FFFFFFFU,
 	`end of OS-specific range')
 _(SHT_LOPROC,          0x70000000U,
 	`start of processor-specific range')
+_(SHT_AARCH64_ATTRIBUTES,  0x70000003U,
+	`object file compatibility attributes')
+_(SHT_AARCH64_AUTH_RELR,   0x70000004U,
+	`compressed signed relative relocations')
+_(SHT_AARCH64_AUTH_SYM,   0x70000005U,
+	`symbol signing information')
+_(SHT_AARCH64_MEMTAG_GLOBALS_STATIC,  0x70000007U,
+	`used to tag global variables')
+_(SHT_AARCH64_MEMTAG_GLOBALS_DYNAMIC,  0x70000008U,
+	`used to tag global variables')
 _(SHT_ARM_EXIDX,       0x70000001U,
 	`exception index table')
 _(SHT_ARM_PREEMPTMAP,  0x70000002U,
