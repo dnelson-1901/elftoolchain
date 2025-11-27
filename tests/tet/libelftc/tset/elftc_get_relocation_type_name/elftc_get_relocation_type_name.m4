@@ -476,6 +476,10 @@ static const struct relocation_type_range relocation_type_ranges_ARM[] = {
 	{
 		160,  /* R_ARM_IRELATIVE */
 		176  /* R_ARM_PRIVATE_31 */
+	},
+	{
+		249, /* R_ARM_RXPC25 */
+		255  /* R_ARM_RBASE */
 	}
 };
 static const struct relocation_type_and_name relocation_types_ARM[] = {
@@ -635,7 +639,15 @@ static const struct relocation_type_and_name relocation_types_ARM[] = {
 	{ 173, "R_ARM_PRIVATE_28" },
 	{ 174, "R_ARM_PRIVATE_29" },
 	{ 175, "R_ARM_PRIVATE_30" },
-	{ 176, "R_ARM_PRIVATE_31" }	
+	{ 176, "R_ARM_PRIVATE_31" },
+	/**/
+	{ 249, "R_ARM_RXPC25" },
+	{ 250, "R_ARM_RSBREL32" },
+	{ 251, "R_ARM_THM_RPC22" },
+	{ 252, "R_ARM_RREL32" },
+	{ 253, "R_ARM_RABS32" },
+	{ 254, "R_ARM_RPC24" },
+	{ 255, "R_ARM_RBASE" }
 };
 
 /*
