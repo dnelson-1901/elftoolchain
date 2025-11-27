@@ -1525,6 +1525,8 @@ _(SHF_AMD64_LARGE,     0x10000000U,
 	`section uses large code model')
 _(SHF_ENTRYSECT,       0x10000000U,
 	`section contains an entry point (ARM)')
+_(SHF_ARM_PURECODE,    0x20000000U,
+	`section has only code without data (ARM)')
 _(SHF_COMDEF,          0x80000000U,
 	`section may be multiply defined in input to link step (ARM)')
 _(SHF_MIPS_GPREL,      0x10000000U,
