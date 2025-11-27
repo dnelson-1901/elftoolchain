@@ -501,7 +501,7 @@ _(`DT_DEPRECATED_SPARC_REGISTER', `DT_SPARC_REGISTER')
 #
 define(`DEFINE_EHDR_FLAGS_ARM',`dnl
 _(EF_ARM_RELEXEC,      0x00000001U,
-	`dynamic segment describes only how to relocate segments')
+	`GNU pre-EABI, deprecated')
 _(EF_ARM_HASENTRY,     0x00000002U,
 	`e_entry contains a program entry point')
 _(EF_ARM_SYMSARESORTED, 0x00000004U,
@@ -527,19 +527,19 @@ _(EF_ARM_EABI_VER4,    0x04000000U,
 _(EF_ARM_EABI_VER5,    0x05000000U,
 	`ARM EABI version 5')
 _(EF_ARM_INTERWORK,    0x00000004U,
-	`GNU EABI extension')
+	`GNU pre-EABI, deprecated')
 _(EF_ARM_APCS_26,      0x00000008U,
-	`GNU EABI extension')
+	`GNU pre-EABI, deprecated')
 _(EF_ARM_APCS_FLOAT,   0x00000010U,
-	`GNU EABI extension')
+	`GNU pre-EABI, deprecated')
 _(EF_ARM_PIC,          0x00000020U,
-	`GNU EABI extension')
+	`GNU pre-EABI, deprecated')
 _(EF_ARM_ALIGN8,       0x00000040U,
-	`GNU EABI extension')
+	`GNU pre-EABI, deprecated')
 _(EF_ARM_NEW_ABI,      0x00000080U,
-	`GNU EABI extension')
+	`GNU pre-EABI, deprecated')
 _(EF_ARM_OLD_ABI,      0x00000100U,
-	`GNU EABI extension')
+	`GNU pre-EABI, deprecated')
 _(EF_ARM_ABI_FLOAT_SOFT,   0x00000200U,
 	`Object uses the software floating point procedure call standard.')
 _(EF_ARM_ABI_FLOAT_HARD,   0x00000400U,
@@ -547,6 +547,7 @@ _(EF_ARM_ABI_FLOAT_HARD,   0x00000400U,
 _(EF_ARM_MAVERICK_FLOAT, 0x00000800U,
 	`GNU EABI extension')
 ')
+
 define(`DEFINE_EHDR_FLAG_MASKS_ARM',`dnl
 _(EF_ARM_EABIMASK,     0xFF000000U,
 	`mask for ARM EABI version number (0 denotes GNU or unknown)')
