@@ -377,7 +377,7 @@ _(`DT_VERNEEDNUM',       0x6FFFFFFF,
 	`the number of version needed entries')
 _(`DT_LOPROC',           0x70000000,
 	`start of processor-specific types')
-_(`DT_ALPHA_PLTRO',      0xx70000000,
+_(`DT_ALPHA_PLTRO',      0x70000000,
 	`secure (read-only) PLT')
 _(`DT_ARM_SYMTABSZ',     0x70000001,
 	`number of entries in the dynamic symbol table')
