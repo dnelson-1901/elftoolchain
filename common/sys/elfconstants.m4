@@ -55,9 +55,9 @@ define(`COMPATIBILITY_NOTICE',`dnl
 #     Believed to be compatible with NetBSD/Alpha and GNU binutils.
 #
 #   ia_64 ::
-#      Intel® Itanium™ Processor-specific Application Binary Interface (ABI)
-#      Document Number: 245370-003
-#      http://refspecs.linux-foundation.org/elf/IA64-SysV-psABI.pdf
+#     Intel® Itanium™ Processor-specific Application Binary Interface (ABI)
+#     Document Number: 245370-003
+#     http://refspecs.linux-foundation.org/elf/IA64-SysV-psABI.pdf
 #
 #   loongarch ::
 #     ELF for the LoongArch™ Architecture
