@@ -77,6 +77,10 @@ elftc_get_relocation_type_name(unsigned int e_machine, unsigned int r_value)
 		EXPAND_RELOCATION_TYPES(AARCH64)
 		break;
 
+	case EM_ALPHA:
+		EXPAND_RELOCATION_TYPES(ALPHA)
+		break;
+
 	case EM_ARM:
 		EXPAND_RELOCATION_TYPES(ARM)
 		break;
