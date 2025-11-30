@@ -2251,6 +2251,89 @@ define(`DEFINE_AARCH64_RELOCATION_TYPE_SYNONYMS',`
 _(R_AARCH64_TLS_TPREL64,			R_AARCH64_TLS_TPREL)
 ')
 
+define(`DEFINE_ALPHA_RELOCATION_TYPES',`
+_(R_ALPHA_NONE,			0,
+	`No relocation')
+_(R_ALPHA_REFLONG,		1,
+	`32 bit direct')
+_(R_ALPHA_REFQUAD,		2,
+	`64 bit direct')
+_(R_ALPHA_GPREL32,		3,
+	`GP-relative 32-bit')
+_(R_ALPHA_LITERAL,		4,
+	`GP-relative 16-bit')
+_(R_ALPHA_LITUSE,		5,
+	`Optimization hint for LITERAL')
+_(R_ALPHA_GPDISP,		6,
+	`Add displacement to GP')
+_(R_ALPHA_BRADDR,		7,
+	`PC+4-relative 23-bit shifted')
+_(R_ALPHA_HINT,		        8,
+	`PC+4-relative 16-bit shifted')
+_(R_ALPHA_SREL16,		9,
+	`PC-relative 16 bit')
+_(R_ALPHA_SREL32,		10,
+	`PC-relative 32 bit')
+_(R_ALPHA_SREL64,		11,
+	`PC-relative 64 bit')
+_(R_ALPHA_OP_PUSH,		12,
+	`deprecated, ECOFF OP stack push')
+_(R_ALPHA_OP_STORE,		13,
+	`deprecated, ECOFF OP pop and store')
+_(R_ALPHA_OP_PSUB,		14,
+	`deprecated, ECOFF OP stack subtract')
+_(R_ALPHA_OP_PRSHIFT,		15,
+	`deprecated, ECOFF OP stack right `shift'')
+_(R_ALPHA_GPVALUE,   	        16,
+	`deprecated, ECOFF relocation')
+_(R_ALPHA_GPRELHIGH,		17,
+	`GP-relative 32-bit high 16 bits')
+_(R_ALPHA_GPRELLOW,  	    	18,
+	`GP-relative 32-bit low 16 bits')
+_(R_ALPHA_GPREL16,   	    	19,
+	`GP-relative 16-bit')
+_(R_ALPHA_IMMED_GP_HI32,	20,
+	`deprecated ECOFF relocation')
+_(R_ALPHA_IMMED_SCN_HI32,	21,
+	`deprecated ECOFF relocation')
+_(R_ALPHA_IMMED_BR_HI32,	22,
+	`deprecated ECOFF relocation')
+_(R_ALPHA_IMMED_LO32,		23,
+	`deprecated ECOFF relocation')
+__(`	', `Relocations for shared libraries')	
+_(R_ALPHA_COPY,			24,
+	`copy symbol at runtime')
+_(R_ALPHA_GLOB_DAT,		25,
+	`create GOT entry')
+_(R_ALPHA_JMP_SLOT,		26,
+	`create PLT entry')
+_(R_ALPHA_RELATIVE,		27,
+	`adjust by program base')
+_(R_ALPHA_BRSGP,		28,
+	`PC relative with target address adjustment')
+__(`	', `TLS relocations')
+_(R_ALPHA_TLSGD,     	  	29)
+_(R_ALPHA_TLSDM,		30)
+_(R_ALPHA_DTPMOD64,		31)
+_(R_ALPHA_GOTDTPREL,		32)
+_(R_ALPHA_DTPREL64,		33)
+_(R_ALPHA_DTPRELHI,		34)
+_(R_ALPHA_DTPRELLO,		35)
+_(R_ALPHA_DTPREL16,		36)
+_(R_ALPHA_GOTTPREL,		37)
+_(R_ALPHA_TPREL64,		38)
+_(R_ALPHA_TPRELHI,		39)
+_(R_ALPHA_TPRELLO,		40)
+_(R_ALPHA_TPREL16,		41)
+')
+
+define(`DEFINE_ALPHA_RELOCATION_TYPE_SYNONYMS',`
+_(R_ALPHA_TLS_GD,		R_ALPHA_TLSGD,
+	`NetBSD spelling')
+_(R_ALPHA_IMMED_GP_16,		R_ALPHA_GPREL16,
+	`NetBSD spelling')
+')
+
 #
 # Relocation definitions from the ARM ELF ABI, version "ARM IHI
 # 0044E" released on 30th November 2012.
@@ -2435,89 +2518,6 @@ _(R_ARM_GOTPC,			25)
 _(R_ARM_GOT32,			26)
 _(R_ARM_THM_PC11,		102)
 _(R_ARM_THM_PC9,		103)
-')
-
-define(`DEFINE_ALPHA_RELOCATION_TYPES',`
-_(R_ALPHA_NONE,			0,
-	`No relocation')
-_(R_ALPHA_REFLONG,		1,
-	`32 bit direct')
-_(R_ALPHA_REFQUAD,		2,
-	`64 bit direct')
-_(R_ALPHA_GPREL32,		3,
-	`GP-relative 32-bit')
-_(R_ALPHA_LITERAL,		4,
-	`GP-relative 16-bit')
-_(R_ALPHA_LITUSE,		5,
-	`Optimization hint for LITERAL')
-_(R_ALPHA_GPDISP,		6,
-	`Add displacement to GP')
-_(R_ALPHA_BRADDR,		7,
-	`PC+4-relative 23-bit shifted')
-_(R_ALPHA_HINT,		        8,
-	`PC+4-relative 16-bit shifted')
-_(R_ALPHA_SREL16,		9,
-	`PC-relative 16 bit')
-_(R_ALPHA_SREL32,		10,
-	`PC-relative 32 bit')
-_(R_ALPHA_SREL64,		11,
-	`PC-relative 64 bit')
-_(R_ALPHA_OP_PUSH,		12,
-	`deprecated, ECOFF OP stack push')
-_(R_ALPHA_OP_STORE,		13,
-	`deprecated, ECOFF OP pop and store')
-_(R_ALPHA_OP_PSUB,		14,
-	`deprecated, ECOFF OP stack subtract')
-_(R_ALPHA_OP_PRSHIFT,		15,
-	`deprecated, ECOFF OP stack right `shift'')
-_(R_ALPHA_GPVALUE,   	        16,
-	`deprecated, ECOFF relocation')
-_(R_ALPHA_GPRELHIGH,		17,
-	`GP-relative 32-bit high 16 bits')
-_(R_ALPHA_GPRELLOW,  	    	18,
-	`GP-relative 32-bit low 16 bits')
-_(R_ALPHA_GPREL16,   	    	19,
-	`GP-relative 16-bit')
-_(R_ALPHA_IMMED_GP_HI32,	20,
-	`deprecated ECOFF relocation')
-_(R_ALPHA_IMMED_SCN_HI32,	21,
-	`deprecated ECOFF relocation')
-_(R_ALPHA_IMMED_BR_HI32,	22,
-	`deprecated ECOFF relocation')
-_(R_ALPHA_IMMED_LO32,		23,
-	`deprecated ECOFF relocation')
-__(`	', `Relocations for shared libraries')	
-_(R_ALPHA_COPY,			24,
-	`copy symbol at runtime')
-_(R_ALPHA_GLOB_DAT,		25,
-	`create GOT entry')
-_(R_ALPHA_JMP_SLOT,		26,
-	`create PLT entry')
-_(R_ALPHA_RELATIVE,		27,
-	`adjust by program base')
-_(R_ALPHA_BRSGP,		28,
-	`PC relative with target address adjustment')
-__(`	', `TLS relocations')
-_(R_ALPHA_TLSGD,     	  	29)
-_(R_ALPHA_TLSDM,		30)
-_(R_ALPHA_DTPMOD64,		31)
-_(R_ALPHA_GOTDTPREL,		32)
-_(R_ALPHA_DTPREL64,		33)
-_(R_ALPHA_DTPRELHI,		34)
-_(R_ALPHA_DTPRELLO,		35)
-_(R_ALPHA_DTPREL16,		36)
-_(R_ALPHA_GOTTPREL,		37)
-_(R_ALPHA_TPREL64,		38)
-_(R_ALPHA_TPRELHI,		39)
-_(R_ALPHA_TPRELLO,		40)
-_(R_ALPHA_TPREL16,		41)
-')
-
-define(`DEFINE_ALPHA_RELOCATION_TYPE_SYNONYMS',`
-_(R_ALPHA_TLS_GD,		R_ALPHA_TLSGD,
-	`NetBSD spelling')
-_(R_ALPHA_IMMED_GP_16,		R_ALPHA_GPREL16,
-	`NetBSD spelling')
 ')
 
 define(`DEFINE_IA_64_RELOCATION_TYPES',`
