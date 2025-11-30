@@ -466,6 +466,60 @@ static const struct relocation_type_and_name relocation_types_AARCH64[] = {
 };
 
 /*
+ * EM_ALPHA.
+ */
+static const struct relocation_type_range relocation_type_ranges_ALPHA[] = {
+	{
+		0,  /* R_ALPHA_NONE */
+		41  /* R_ALPHA_TPREL16 */
+	}
+};
+static const struct relocation_type_and_name relocation_types_ALPHA[] = {
+	{ 0, "R_ALPHA_NONE" },
+	{ 1, "R_ALPHA_REFLONG" },
+	{ 2, "R_ALPHA_REFQUAD" },
+	{ 3, "R_ALPHA_GPREL32" },
+	{ 4, "R_ALPHA_LITERAL" },
+	{ 5, "R_ALPHA_LITUSE" },
+	{ 6, "R_ALPHA_GPDISP" },
+	{ 7, "R_ALPHA_BRADDR" },
+	{ 8, "R_ALPHA_HINT" },
+	{ 9, "R_ALPHA_SREL16" },
+	{ 10, "R_ALPHA_SREL32" },
+	{ 11, "R_ALPHA_SREL64" },
+	{ 12, "R_ALPHA_OP_PUSH" },
+	{ 13, "R_ALPHA_OP_STORE" },
+	{ 14, "R_ALPHA_OP_PSUB" },
+	{ 15, "R_ALPHA_OP_PRSHIFT" },
+	{ 16, "R_ALPHA_GPVALUE" },
+	{ 17, "R_ALPHA_GPRELHIGH" },
+	{ 18, "R_ALPHA_GPRELLOW" },
+	{ 19, "R_ALPHA_GPREL16" },
+	{ 20, "R_ALPHA_IMMED_GP_HI32" },
+	{ 21, "R_ALPHA_IMMED_SCN_HI32" },
+	{ 22, "R_ALPHA_IMMED_BR_HI32" },
+	{ 23, "R_ALPHA_IMMED_LO32" },
+	{ 24, "R_ALPHA_COPY" },
+	{ 25, "R_ALPHA_GLOB_DAT" },
+	{ 26, "R_ALPHA_JMP_SLOT" },
+	{ 27, "R_ALPHA_RELATIVE" },
+	{ 28, "R_ALPHA_BRSGP" },
+	{ 29, "R_ALPHA_TLSGD" },
+	{ 30, "R_ALPHA_TLSDM" },
+	{ 31, "R_ALPHA_DTPMOD64" },
+	{ 32, "R_ALPHA_GOTDTPREL" },
+	{ 33, "R_ALPHA_DTPREL64" },
+	{ 34, "R_ALPHA_DTPRELHI" },
+	{ 35, "R_ALPHA_DTPRELLO" },
+	{ 36, "R_ALPHA_DTPREL16" },
+	{ 37, "R_ALPHA_GOTTPREL" },
+	{ 38, "R_ALPHA_TPREL64" },
+	{ 39, "R_ALPHA_TPRELHI" },
+	{ 40, "R_ALPHA_TPRELLO" },
+	{ 41, "R_ALPHA_TPREL16" },
+};
+
+/*
  * EM_ARM.
  */
 static const struct relocation_type_range relocation_type_ranges_ARM[] = {
@@ -2154,6 +2208,7 @@ done:
 
 FN(`386')
 FN(`AARCH64')
+FN(`ALPHA')
 FN(`ARM')
 FN(`IA_64')
 FN(`LOONGARCH')
