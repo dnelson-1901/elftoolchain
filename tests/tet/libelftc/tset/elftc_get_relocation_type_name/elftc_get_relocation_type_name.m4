@@ -1243,7 +1243,7 @@ static const struct relocation_type_range relocation_type_ranges_PPC[] = {
 		233  /* R_PPC_VLE_ADDR20 */
 	},
 	{
-		249, /* R_PPC_REL16 */
+		248, /* R_PPC_IRELATIVE */
 		252  /* R_PPC_REL16_HA */
 	}
 };
@@ -1376,6 +1376,7 @@ static const struct relocation_type_and_name relocation_types_PPC[] = {
 	{ 232, "R_PPC_VLE_SDAREL_HA16D" },
 	{ 233, "R_PPC_VLE_ADDR20" },
 	/**/
+	{ 248, "R_PPC_IRELATIVE" },
 	{ 249, "R_PPC_REL16" },
 	{ 250, "R_PPC_REL16_LO" },
 	{ 251, "R_PPC_REL16_HI" },
