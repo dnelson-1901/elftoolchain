@@ -1219,6 +1219,276 @@ static const struct relocation_type_and_name relocation_types_MIPS[] = {
 };
 
 /*
+ * EM_PARISC.
+ */
+static const struct relocation_type_range relocation_type_ranges_PARISC[] = {
+	{
+		0,  /* R_PARISC_NONE */
+		4   /* R_PARISC_DIR17F */
+	},
+	{
+		6,  /* R_PARISC_DIR14R */
+		15
+	},
+	{
+		18, /* R_PARISC_DPREL21L */
+		20  /* R_PARISC_DPREL14DR */
+	},
+	{
+		22, /* R_PARISC_DPREL14R */
+		23  /* R_PARISC_DPREL14F */
+	},
+	{
+		26, /* R_PARISC_DPREL21L */
+		26
+	},
+	{
+		30, /* R_PARISC_DLTREL14R */
+		31  /* R_PARISC_DLTREL14F */
+	},
+	{
+		34, /* R_PARISC_DLTIND21L */
+		34
+	},
+	{
+		38, /* R_PARISC_DLTIND14R */
+		44  /* R_PARISC_BASEREL17F */
+	},
+	{
+		46, /* R_PARISC_BASEREL14R */
+		50  /* R_PARISC_PLTOFF21L */
+	},
+	{
+		54, /* R_PARISC_PLTOFF14R */
+		55  /* R_PARISC_PLTOFF14F */
+	},
+	{
+		57, /* R_PARISC_LTOFF_FPTR32 */
+		58  /* R_PARISC_LTOFF_FPTR21L */
+	},
+	{
+		62, /* R_PARISC_LTOFF_FPTR14R */
+		62
+	},
+	{
+		64, /* R_PARISC_FPTR64 */
+		66  /* R_PARISC_PLABEL21L */
+	},
+	{
+		70, /* R_PARISC_PLABEL14R */
+		70
+	},
+	{
+		72, /* R_PARISC_PCREL64 */
+		88  /* R_PARISC_GPREL64 */
+	},
+	{
+		91, /* R_PARISC_DLTREL14WR */
+		96  /* R_PARISC_LTOFF64 */
+	},
+	{
+		99, /* R_PARISC_DLTIND14WR */
+		104 /* R_PARISC_SECREL64 */
+	},
+	{
+		107, /* R_PARISC_BASEREL14WR */
+		108  /* R_PARISC_BASEREL14DR */
+	},
+	{
+		112, /* R_PARISC_SEGREL64 */
+		112
+	},
+	{
+		115, /* R_PARISC_PLTOFF14WR */
+		120  /* R_PARISC_LTOFF_FPTR64 */
+	},
+	{
+		123, /* R_PARISC_LTOFF_FPTR14WR */
+		130  /* R_PARISC_EPLT */
+	},
+	{
+		153, /* R_PARISC_TPREL32 */
+		154  /* R_PARISC_TPREL21L */
+	},
+	{
+		158, /* R_PARISC_TPREL14R */
+		158
+	},
+	{
+		162, /* R_PARISC_LTOFF_TP21L */
+		162
+	},
+	{
+		166, /* R_PARISC_LTOFF_TP14R */
+		167  /* R_PARISC_LTOFF_TP14F */
+	},
+	{
+		216, /* R_PARISC_TPREL64 */
+		216
+	},
+	{
+		219, /* R_PARISC_TPREL14WR */
+		224  /* R_PARISC_LTOFF_TP64 */
+	},
+	{
+		227, /* R_PARISC_LTOFF_TP14WR */
+		245  /* R_PARISC_TLS_DTPOFF64 */
+	}
+};
+static const struct relocation_type_and_name relocation_types_PARISC[] = {
+	{ 0,	"R_PARISC_NONE" },
+	{ 1,	"R_PARISC_DIR32" },
+	{ 2,	"R_PARISC_DIR21L" },
+	{ 3,	"R_PARISC_DIR17R" },
+	{ 4,	"R_PARISC_DIR17F" },
+	/**/
+	{ 6,	"R_PARISC_DIR14R" },
+	{ 7,	"R_PARISC_DIR14F" },
+	{ 8,	"R_PARISC_PCREL12F" },
+	{ 9,	"R_PARISC_PCREL32" },
+	{ 10,	"R_PARISC_PCREL21L" },
+	{ 11,	"R_PARISC_PCREL17R" },
+	{ 12,	"R_PARISC_PCREL17F" },
+	{ 13,	"R_PARISC_PCREL17C" },
+	{ 14,	"R_PARISC_PCREL14R" },
+	{ 15,	"R_PARISC_PCREL14F" },
+	/**/
+	{ 18,	"R_PARISC_DPREL21L" },
+	{ 19,	"R_PARISC_DPREL14WR" },
+	{ 20,	"R_PARISC_DPREL14DR" },
+	/**/
+	{ 22,	"R_PARISC_DPREL14R" },
+	{ 23,	"R_PARISC_DPREL14F" },
+	/**/
+	{ 26,	"R_PARISC_DLTREL21L" },
+	/**/
+	{ 30,	"R_PARISC_DLTREL14R" },
+	{ 31,	"R_PARISC_DLTREL14F" },
+	/**/
+	{ 34,	"R_PARISC_DLTIND21L" },
+	/**/
+	{ 38,	"R_PARISC_DLTIND14R" },
+	{ 39,	"R_PARISC_DLTIND14F" },
+	{ 40,	"R_PARISC_SETBASE" },
+	{ 41,	"R_PARISC_SECREL32" },
+	{ 42,	"R_PARISC_BASEREL21L" },
+	{ 43,	"R_PARISC_BASEREL17R" },
+	{ 44,	"R_PARISC_BASEREL17F" },
+	/**/
+	{ 46,	"R_PARISC_BASEREL14R" },
+	{ 47,	"R_PARISC_BASEREL14F" },
+	{ 48,	"R_PARISC_SEGBASE" },
+	{ 49,	"R_PARISC_SEGREL32" },
+	{ 50,	"R_PARISC_PLTOFF21L" },
+	/**/
+	{ 54,	"R_PARISC_PLTOFF14R" },
+	{ 55,	"R_PARISC_PLTOFF14F" },
+	/**/
+	{ 57,	"R_PARISC_LTOFF_FPTR32" },
+	{ 58,	"R_PARISC_LTOFF_FPTR21L" },
+	/**/
+	{ 62,	"R_PARISC_LTOFF_FPTR14R" },
+	/**/
+	{ 64,	"R_PARISC_FPTR64" },
+	{ 65,	"R_PARISC_PLABEL32" },
+	{ 66,	"R_PARISC_PLABEL21L" },
+	/**/
+	{ 70,	"R_PARISC_PLABEL14R" },
+	/**/
+	{ 72,	"R_PARISC_PCREL64" },
+	{ 73,	"R_PARISC_PCREL22C" },
+	{ 74,	"R_PARISC_PCREL22F" },
+	{ 75,	"R_PARISC_PCREL14WR" },
+	{ 76,	"R_PARISC_PCREL14DR" },
+	{ 77,	"R_PARISC_PCREL16F" },
+	{ 78,	"R_PARISC_PCREL16WF" },
+	{ 79,	"R_PARISC_PCREL16DF" },
+	{ 80,	"R_PARISC_DIR64" },
+	{ 81,	"R_PARISC_DIR64WR" },
+	{ 82,	"R_PARISC_DIR64DR" },
+	{ 83,	"R_PARISC_DIR14WR" },
+	{ 84,	"R_PARISC_DIR14DR" },
+	{ 85,	"R_PARISC_DIR16F" },
+	{ 86,	"R_PARISC_DIR16WF" },
+	{ 87,	"R_PARISC_DIR16DF" },
+	{ 88,	"R_PARISC_GPREL64" },
+	/**/
+	{ 91,	"R_PARISC_DLTREL14WR" },
+	{ 92,	"R_PARISC_DLTREL14DR" },
+	{ 93,	"R_PARISC_GPREL16F" },
+	{ 94,	"R_PARISC_GPREL16WF" },
+	{ 95,	"R_PARISC_GPREL16DF" },
+	{ 96,	"R_PARISC_LTOFF64" },
+	/**/
+	{ 99,	"R_PARISC_DLTIND14WR" },
+	{ 100,	"R_PARISC_DLTIND14DR" },
+	{ 101,	"R_PARISC_LTOFF16F" },
+	{ 102,	"R_PARISC_LTOFF16WF" },
+	{ 103,	"R_PARISC_LTOFF16DF" },
+	{ 104,	"R_PARISC_SECREL64" },
+	/**/
+	{ 107,	"R_PARISC_BASEREL14WR" },
+	{ 108,	"R_PARISC_BASEREL14DR" },
+	/**/
+	{ 112,	"R_PARISC_SEGREL64" },
+	/**/
+	{ 115,	"R_PARISC_PLTOFF14WR" },
+	{ 116,	"R_PARISC_PLTOFF14DR" },
+	{ 117,	"R_PARISC_PLTOFF16F" },
+	{ 118,	"R_PARISC_PLTOFF16WF" },
+	{ 119,	"R_PARISC_PLTOFF16DF" },
+	{ 120,	"R_PARISC_LTOFF_FPTR64" },
+	/**/
+	{ 123,	"R_PARISC_LTOFF_FPTR14WR" },
+	{ 124,	"R_PARISC_LTOFF_FPTR14DR" },
+	{ 125,	"R_PARISC_LTOFF_FPTR16F" },
+	{ 126,	"R_PARISC_LTOFF_FPTR16WF" },
+	{ 127,	"R_PARISC_LTOFF_FPTR16DF" },
+	{ 128,	"R_PARISC_COPY" },
+	{ 129,	"R_PARISC_IPLT" },
+	{ 130,	"R_PARISC_EPLT" },
+	/**/
+	{ 153,	"R_PARISC_TPREL32" },
+	{ 154,	"R_PARISC_TPREL21L" },
+	/**/
+	{ 158,	"R_PARISC_TPREL14R" },
+	/**/
+	{ 162,	"R_PARISC_LTOFF_TP21L" },
+	/**/
+	{ 166,	"R_PARISC_LTOFF_TP14R" },
+	{ 167,	"R_PARISC_LTOFF_TP14F" },
+	/**/
+	{ 216,	"R_PARISC_TPREL64" },
+	/**/
+	{ 219,	"R_PARISC_TPREL14WR" },
+	{ 220,	"R_PARISC_TPREL14DR" },
+	{ 221,	"R_PARISC_TPREL16F" },
+	{ 222,	"R_PARISC_TPREL16WF" },
+	{ 223,	"R_PARISC_TPREL16DF" },
+	{ 224,	"R_PARISC_LTOFF_TP64" },
+	/**/
+	{ 227,	"R_PARISC_LTOFF_TP14WR" },
+	{ 228,	"R_PARISC_LTOFF_TP14DR" },
+	{ 229,	"R_PARISC_LTOFF_TP16F" },
+	{ 230,	"R_PARISC_LTOFF_TP16WF" },
+	{ 231,	"R_PARISC_LTOFF_TP16DF" },
+	{ 232,	"R_PARISC_GNU_VTENTRY" },
+	{ 233,	"R_PARISC_GNU_VTINHERIT" },
+	{ 234,	"R_PARISC_TLS_GD21L" },
+	{ 235,	"R_PARISC_TLS_GD14R" },
+	{ 236,	"R_PARISC_TLS_GDCALL" },
+	{ 237,	"R_PARISC_TLS_LDM21L" },
+	{ 238,	"R_PARISC_TLS_LDM14R" },
+	{ 239,	"R_PARISC_TLS_LDMCALL" },
+	{ 240,	"R_PARISC_TLS_LDO21L" },
+	{ 241,	"R_PARISC_TLS_LDO14R" },
+	{ 242,	"R_PARISC_TLS_DTPMOD32" },
+	{ 243,	"R_PARISC_TLS_DTPMOD64" },
+	{ 244,	"R_PARISC_TLS_DTPOFF32" },
+	{ 245,	"R_PARISC_TLS_DTPOFF64" },	
+};
+
+/*
  * EM_PPC.
  */
 static const struct relocation_type_range relocation_type_ranges_PPC[] = {
@@ -1719,6 +1989,157 @@ static const struct relocation_type_and_name relocation_types_S390[] = {
 };
 
 /*
+ * EM_SH.
+ */
+static const struct relocation_type_range relocation_type_ranges_SH[] = {
+	{
+		0,  /* R_SH_NONE */
+		11  /* R_SH_LOOP_END */
+	},
+	{
+		22, /* R_SH_GNU_VTINHERIT */
+		51  /* R_SH_DIR10SQ */
+	},
+	{
+		53, /* R_SH_DIR16S */
+		53
+	},
+	{
+		144, /* R_SH_TLS_GD_32 */
+		151  /* R_SH_TLS_TPOFF32 */
+	},
+	{
+		160, /* R_SH_GOT32 */
+		196  /* R_SH_RELATIVE64 */
+	},
+	{
+		201, /* R_SH_GOT20 */
+		208  /* R_SH_FUNCDESC_VALUE */
+	},
+	{
+		242, /* R_SH_SHMEDIA_CODE */
+		255  /* R_SH_64_PCREL */
+	}
+};
+static const struct relocation_type_and_name relocation_types_SH[] = {
+	{ 0,	"R_SH_NONE" },
+	{ 1,	"R_SH_DIR32" },
+	{ 2,	"R_SH_REL32" },
+	{ 3,	"R_SH_DIR8WPN" },
+	{ 4,	"R_SH_IND12W" },
+	{ 5,	"R_SH_DIR8WPL" },
+	{ 6,	"R_SH_DIR8WPZ" },
+	{ 7,	"R_SH_DIR8BP" },
+	{ 8,	"R_SH_DIR8W" },
+	{ 9,	"R_SH_DIR8L" },
+	{ 10,	"R_SH_LOOP_START" },
+	{ 11,	"R_SH_LOOP_END" },
+	/**/
+	{ 22,	"R_SH_GNU_VTINHERIT" },
+	{ 23,	"R_SH_GNU_VTENTRY" },
+	{ 24,	"R_SH_SWITCH8" },
+	{ 25,	"R_SH_SWITCH16" },
+	{ 26,	"R_SH_SWITCH32" },
+	{ 27,	"R_SH_USES" },
+	{ 28,	"R_SH_COUNT" },
+	{ 29,	"R_SH_ALIGN" },
+	{ 30,	"R_SH_CODE" },
+	{ 31,	"R_SH_DATA" },
+	{ 32,	"R_SH_LABEL" },
+	{ 33,	"R_SH_DIR16" },
+	{ 34,	"R_SH_DIR8" },
+	{ 35,	"R_SH_DIR8UL" },
+	{ 36,	"R_SH_DIR8UW" },
+	{ 37,	"R_SH_DIR8U" },
+	{ 38,	"R_SH_DIR8SW" },
+	{ 39,	"R_SH_DIR8S" },
+	{ 40,	"R_SH_DIR4UL" },
+	{ 41,	"R_SH_DIR4UW" },
+	{ 42,	"R_SH_DIR4U" },
+	{ 43,	"R_SH_PSHA" },
+	{ 44,	"R_SH_PSHL" },
+	{ 45,	"R_SH_DIR5U" },
+	{ 46,	"R_SH_DIR6U" },
+	{ 47,	"R_SH_DIR6S" },
+	{ 48,	"R_SH_DIR10S" },
+	{ 49,	"R_SH_DIR10SW" },
+	{ 50,	"R_SH_DIR10SL" },
+	{ 51,	"R_SH_DIR10SQ" },
+	/**/
+	{ 53,	"R_SH_DIR16S" },
+	/**/
+	{ 144,	"R_SH_TLS_GD_32" },
+	{ 145,	"R_SH_TLS_LD_32" },
+	{ 146,	"R_SH_TLS_LDO_32" },
+	{ 147,	"R_SH_TLS_IE_32" },
+	{ 148,	"R_SH_TLS_LE_32" },
+	{ 149,	"R_SH_TLS_DTPMOD32" },
+	{ 150,	"R_SH_TLS_DTPOFF32" },
+	{ 151,	"R_SH_TLS_TPOFF32" },
+	/**/
+	{ 160,	"R_SH_GOT32" },
+	{ 161,	"R_SH_PLT32" },
+	{ 162,	"R_SH_COPY" },
+	{ 163,	"R_SH_GLOB_DAT" },
+	{ 164,	"R_SH_JMP_SLOT" },
+	{ 165,	"R_SH_RELATIVE" },
+	{ 166,	"R_SH_GOTOFF" },
+	{ 167,	"R_SH_GOTPC" },
+	{ 168,	"R_SH_GOTPLT32" },
+	{ 169,	"R_SH_GOT_LOW16" },
+	{ 170,	"R_SH_GOT_MEDLOW16" },
+	{ 171,	"R_SH_GOT_MEDHI16" },
+	{ 172,	"R_SH_GOT_HI16" },
+	{ 173,	"R_SH_GOTPLT_LOW16" },
+	{ 174,	"R_SH_GOTPLT_MEDLOW16" },
+	{ 175,	"R_SH_GOTPLT_MEDHI16" },
+	{ 176,	"R_SH_GOTPLT_HI16" },
+	{ 177,	"R_SH_PLT_LOW16" },
+	{ 178,	"R_SH_PLT_MEDLOW16" },
+	{ 179,	"R_SH_PLT_MEDHI16" },
+	{ 180,	"R_SH_PLT_HI16" },
+	{ 181,	"R_SH_GOTOFF_LOW16" },
+	{ 182,	"R_SH_GOTOFF_MEDLOW16" },
+	{ 183,	"R_SH_GOTOFF_MEDHI16" },
+	{ 184,	"R_SH_GOTOFF_HI16" },
+	{ 185,	"R_SH_GOTPC_LOW16" },
+	{ 186,	"R_SH_GOTPC_MEDLOW16" },
+	{ 187,	"R_SH_GOTPC_MEDHI16" },
+	{ 188,	"R_SH_GOTPC_HI16" },
+	{ 189,	"R_SH_GOT10BY4" },
+	{ 190,	"R_SH_GOTPLT10BY4" },
+	{ 191,	"R_SH_GOT10BY8" },
+	{ 192,	"R_SH_GOTPLT10BY8" },
+	{ 193,	"R_SH_COPY64" },
+	{ 194,	"R_SH_GLOB_DAT64" },
+	{ 195,	"R_SH_JMP_SLOT64" },
+	{ 196,	"R_SH_RELATIVE64" },
+	/**/
+	{ 201,	"R_SH_GOT20" },
+	{ 202,	"R_SH_GOTOFF20" },
+	{ 203,	"R_SH_GOTFUNCDESC" },
+	{ 204,	"R_SH_GOTFUNCDESC20" },
+	{ 205,	"R_SH_GOTOFFFUNCDESC" },
+	{ 206,	"R_SH_GOTOFFFUNCDESC20" },
+	{ 207,	"R_SH_FUNCDESC" },
+	{ 208,	"R_SH_FUNCDESC_VALUE" },
+	{ 242,	"R_SH_SHMEDIA_CODE" },
+	{ 243,	"R_SH_PT_16" },
+	{ 244,	"R_SH_IMMS16" },
+	{ 245,	"R_SH_IMMU16" },
+	{ 246,	"R_SH_IMM_LOW16" },
+	{ 247,	"R_SH_IMM_LOW16_PCREL" },
+	{ 248,	"R_SH_IMM_MEDLOW16" },
+	{ 249,	"R_SH_IMM_MEDLOW16_PCREL" },
+	{ 250,	"R_SH_IMM_MEDHI16" },
+	{ 251,	"R_SH_IMM_MEDHI16_PCREL" },
+	{ 252,	"R_SH_IMM_HI16" },
+	{ 253,	"R_SH_IMM_HI16_PCREL" },
+	{ 254,	"R_SH_64" },
+	{ 255,	"R_SH_64_PCREL" }
+};
+
+/*
  * EM_SPARC.
  */
 static const struct relocation_type_range relocation_type_ranges_SPARC[] = {
@@ -2214,10 +2635,12 @@ FN(`ARM')
 FN(`IA_64')
 FN(`LOONGARCH')
 FN(`MIPS')
+FN(`PARISC')
 FN(`PPC')
 FN(`PPC64')
 FN(`RISCV')
 FN(`S390')
+FN(`SH')
 FN(`SPARC')
 FN(`VAX')
 FN(`X86_64')
