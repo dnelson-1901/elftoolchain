@@ -97,6 +97,10 @@ elftc_get_relocation_type_name(unsigned int e_machine, unsigned int r_value)
 		EXPAND_RELOCATION_TYPES(MIPS)
 		break;
 
+	case EM_PARISC:
+		EXPAND_RELOCATION_TYPES(PARISC)
+		break;
+
 	case EM_PPC:
 		EXPAND_RELOCATION_TYPES(PPC)
 		break;
@@ -111,6 +115,10 @@ elftc_get_relocation_type_name(unsigned int e_machine, unsigned int r_value)
 
 	case EM_S390:
 		EXPAND_RELOCATION_TYPES(S390);
+		break;
+
+	case EM_SH:
+		EXPAND_RELOCATION_TYPES(SH)
 		break;
 
 	case EM_SPARC:
