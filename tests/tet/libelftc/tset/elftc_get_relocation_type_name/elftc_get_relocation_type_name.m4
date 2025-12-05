@@ -2150,6 +2150,10 @@ static const struct relocation_type_range relocation_type_ranges_SPARC[] = {
 	{
 		43, /* R_SPARC_7 */
 		88  /* R_SPARC_WDISP10 */
+	},
+	{
+		248, /* R_SPARC_JMP_IREL */
+		249  /* R_SPARC_IRELATIVE */
 	}
 };
 static const struct relocation_type_and_name relocation_types_SPARC[] = {
@@ -2241,7 +2245,10 @@ static const struct relocation_type_and_name relocation_types_SPARC[] = {
 	{ 85, "R_SPARC_H34" },
 	{ 86, "R_SPARC_SIZE32" },
 	{ 87, "R_SPARC_SIZE64" },
-	{ 88, "R_SPARC_WDISP10" },	
+	{ 88, "R_SPARC_WDISP10" },
+	/**/
+	{ 248, "R_SPARC_JMP_IREL" },
+	{ 249, "R_SPARC_IRELATIVE" }
 };
 
 /*
