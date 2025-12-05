@@ -1219,6 +1219,73 @@ static const struct relocation_type_and_name relocation_types_MIPS[] = {
 };
 
 /*
+ * EM_OPENRISC.
+ */
+static const struct relocation_type_range relocation_type_ranges_OPENRISC[] = {
+	{
+		0,  /* R_OR1K_NONE */
+		54, /* R_OR1K_GOT_AHI16 */
+	}
+};
+static const struct relocation_type_and_name relocation_types_OPENRISC[] = {
+	{ 0,	"R_OR1K_NONE" },
+	{ 1,	"R_OR1K_32" },
+	{ 2,	"R_OR1K_16" },
+	{ 3,	"R_OR1K_8" },
+	{ 4,	"R_OR1K_LO_16_IN_INSN" },
+	{ 5,	"R_OR1K_HI_16_IN_INSN" },
+	{ 6,	"R_OR1K_INSN_REL_26" },
+	{ 7,	"R_OR1K_GNU_VTENTRY" },
+	{ 8,	"R_OR1K_GNU_VTINHERIT" },
+	{ 9,	"R_OR1K_32_PCREL" },
+	{ 10,	"R_OR1K_16_PCREL" },
+	{ 11,	"R_OR1K_8_PCREL" },
+	{ 12,	"R_OR1K_GOTPC_HI16" },
+	{ 13,	"R_OR1K_GOTPC_LO16" },
+	{ 14,	"R_OR1K_GOT16" },
+	{ 15,	"R_OR1K_PLT26" },
+	{ 16,	"R_OR1K_GOTOFF_HI16" },
+	{ 17,	"R_OR1K_GOTOFF_LO16" },
+	{ 18,	"R_OR1K_COPY" },
+	{ 19,	"R_OR1K_GLOB_DAT" },
+	{ 20,	"R_OR1K_JMP_SLOT" },
+	{ 21,	"R_OR1K_RELATIVE" },
+	{ 22,	"R_OR1K_TLS_GD_HI16" },
+	{ 23,	"R_OR1K_TLS_GD_LO16" },
+	{ 24,	"R_OR1K_TLS_LDM_HI16" },
+	{ 25,	"R_OR1K_TLS_LDM_LO16" },
+	{ 26,	"R_OR1K_TLS_LDO_HI16" },
+	{ 27,	"R_OR1K_TLS_LDO_LO16" },
+	{ 28,	"R_OR1K_TLS_IE_HI16" },
+	{ 29,	"R_OR1K_TLS_IE_LO16" },
+	{ 30,	"R_OR1K_TLS_LE_HI16" },
+	{ 31,	"R_OR1K_TLS_LE_LO16" },
+	{ 32,	"R_OR1K_TLS_TPOFF" },
+	{ 33,	"R_OR1K_TLS_DTPOFF" },
+	{ 34,	"R_OR1K_TLS_DTPMOD" },
+	{ 35,	"R_OR1K_AHI16" },
+	{ 36,	"R_OR1K_GOTOFF_AHI16" },
+	{ 37,	"R_OR1K_TLS_IE_AHI16" },
+	{ 38,	"R_OR1K_TLS_LE_AHI16" },
+	{ 39,	"R_OR1K_SLO16" },
+	{ 40,	"R_OR1K_GOTOFF_SLO16" },
+	{ 41,	"R_OR1K_TLS_LE_SLO16" },
+	{ 42,	"R_OR1K_PCREL_PG21" },
+	{ 43,	"R_OR1K_GOT_PG21" },
+	{ 44,	"R_OR1K_TLS_GD_PG21" },
+	{ 45,	"R_OR1K_TLS_LDM_PG21" },
+	{ 46,	"R_OR1K_TLS_IE_PG21" },
+	{ 47,	"R_OR1K_LO13" },
+	{ 48,	"R_OR1K_GOT_LO13" },
+	{ 49,	"R_OR1K_TLS_GD_LO13" },
+	{ 50,	"R_OR1K_TLS_LDM_LO13" },
+	{ 51,	"R_OR1K_TLS_IE_LO13" },
+	{ 52,	"R_OR1K_SLO13" },
+	{ 53,	"R_OR1K_PLTA26" },
+	{ 54,	"R_OR1K_GOT_AHI16" },
+};
+
+/*
  * EM_PARISC.
  */
 static const struct relocation_type_range relocation_type_ranges_PARISC[] = {
@@ -2642,6 +2709,7 @@ FN(`ARM')
 FN(`IA_64')
 FN(`LOONGARCH')
 FN(`MIPS')
+FN(`OPENRISC')
 FN(`PARISC')
 FN(`PPC')
 FN(`PPC64')
