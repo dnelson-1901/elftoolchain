@@ -788,7 +788,9 @@ _(EF_SPARCV9_RMO,      0x00000002U,
 ')
 define(`DEFINE_EHDR_FLAG_MASKS_SPARC',`dnl
 _(EF_SPARC_EXT_MASK,   0x00FFFF00U,
-	`Vendor Extension mask')
+	`SPARC International vendor extension mask')
+_(EF_SPARC_32PLUS_MASK, 0x00FFFF00U,
+	`mask for V8+ cpu features')
 _(EF_SPARCV9_MM,       0x00000003U,
 	`Mask for Memory Model')
 ')
@@ -3886,6 +3888,8 @@ _(R_SPARC_H34,		85)
 _(R_SPARC_SIZE32,	86)
 _(R_SPARC_SIZE64,	87)
 _(R_SPARC_WDISP10,	88)
+_(R_SPARC_JMP_IREL,	248, `GNU')
+_(R_SPARC_IRELATIVE,	249, `GNU')
 ')
 
 define(`DEFINE_SPARC_OBSOLETE_RELOCATION_TYPES',`
