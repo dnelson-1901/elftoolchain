@@ -68,6 +68,10 @@ elftc_get_relocation_type_name(unsigned int e_machine, unsigned int r_value)
 {
 	switch (e_machine)
 	{
+	case EM_68K:
+		EXPAND_RELOCATION_TYPES(68K)
+		break;
+		
 	case EM_386:
 	case EM_IAMCU:
 		EXPAND_RELOCATION_TYPES(386)
