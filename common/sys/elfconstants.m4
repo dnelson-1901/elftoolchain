@@ -43,6 +43,10 @@ define(`COMPATIBILITY_NOTICE',`dnl
 #     Intel386 Architecture Processor Supplement Version 1.2
 #     https://gitlab.com/x86-psABIs/i386-ABI/-/tree/hjl/x86/master
 #
+#   68k ::
+#     System V Application Binary Interface
+#     Motorola 68000 Processor Family Supplement
+#
 #   aarch64 ::
 #     ELF for the Arm® 64-bit Architecture (AArch64)
 #     https://github.com/ARM-software/abi-aa/blob/main/aaelf64/aaelf64.rst
@@ -526,6 +530,20 @@ _(`DT_DEPRECATED_SPARC_REGISTER', `DT_SPARC_REGISTER')
 #
 # Flags used in the executable header (field: e_flags).
 #
+define(`DEFINE_EHDR_FLAGS_68K',`dnl
+_(EF_M68K_CPU32,	0x00810000U, `low-cost 68020 variant, GNU spelling')
+_(EF_M68K_M68000,	0x01000000U, `GNU spelling')
+_(EF_M68K_CFV4E,	0x00008000U, `ColdFire Version 4e')
+_(EF_M68K_FIDO,		0x02000000U, `real-time optimized variant')
+')
+define(`DEFINE_EHDR_FLAG_MASKS_68K',`dnl
+_(EF_M68K_ARCH_MASK,	0x03818000U, `bitwise OR of CPU flags')
+')
+define(`DEFINE_EHDR_FLAG_SYNONYMS_68K',`dnl
+_(EF_CPU32,		EF_M68K_CPU32, `NetBSD spelling')
+_(EF_M68000,		EF_M68K_M68000, `NetBSD spelling')
+')
+
 define(`DEFINE_EHDR_FLAGS_ARM',`dnl
 _(EF_ARM_RELEXEC,      0x00000001U,
 	`GNU pre-EABI, deprecated')
@@ -804,6 +822,8 @@ _(EF_SPARCV9_MM,       0x00000003U,
 ')
 
 define(`DEFINE_EHDR_FLAGS',`
+DEFINE_EHDR_FLAGS_68K()
+DEFINE_EHDR_FLAG_MASKS_68K()
 DEFINE_EHDR_FLAGS_ARM()
 DEFINE_EHDR_FLAG_MASKS_ARM()
 DEFINE_EHDR_FLAGS_IA_64()
@@ -825,6 +845,7 @@ DEFINE_EHDR_FLAG_MASKS_SPARC()
 ')
 
 define(`DEFINE_EHDR_FLAG_SYNONYMS',`
+DEFINE_EHDR_FLAG_SYNONYMS_68K()
 DEFINE_EHDR_FLAG_SYNONYMS_ARM()
 DEFINE_EHDR_FLAG_SYNONYMS_MIPS()
 DEFINE_EHDR_FLAG_SYNONYMS_SH()
@@ -2148,6 +2169,51 @@ _(R_386_GOT32X,		43)
 
 define(`DEFINE_386_RELOCATION_TYPE_SYNONYMS',`
 _(R_386_JMP_SLOT, R_386_JUMP_SLOT)
+')
+
+define(`DEFINE_68K_RELOCATION_TYPES',`
+_(R_68K_NONE,		0)
+_(R_68K_32,		1)
+_(R_68K_16,		2)
+_(R_68K_8,		3)
+_(R_68K_PC32,		4)
+_(R_68K_PC16,		5)
+_(R_68K_PC8,		6)
+_(R_68K_GOT32,		7)
+_(R_68K_GOT16,		8)
+_(R_68K_GOT8,		9)
+_(R_68K_GOT32O,		10)
+_(R_68K_GOT16O,		11)
+_(R_68K_GOT8O,		12)
+_(R_68K_PLT32,		13)
+_(R_68K_PLT16,		14)
+_(R_68K_PLT8,		15)
+_(R_68K_PLT32O,		16)
+_(R_68K_PLT16O,		17)
+_(R_68K_PLT8O,		18)
+_(R_68K_COPY,		19)
+_(R_68K_GLOB_DAT,	20)
+_(R_68K_JMP_SLOT,	21)
+_(R_68K_RELATIVE,	22)
+__(`	', `TLS relocations')
+_(R_68K_TLS_GD32,	25)
+_(R_68K_TLS_GD16,	26)
+_(R_68K_TLS_GD8,	27)
+_(R_68K_TLS_LDM32,	28)
+_(R_68K_TLS_LDM16,	29)
+_(R_68K_TLS_LDM8,	30)
+_(R_68K_TLS_LDO32,	31)
+_(R_68K_TLS_LDO16,	32)
+_(R_68K_TLS_LDO8,	33)
+_(R_68K_TLS_IE32,	34)
+_(R_68K_TLS_IE16,	35)
+_(R_68K_TLS_IE8,	36)
+_(R_68K_TLS_LE32,	37)
+_(R_68K_TLS_LE16,	38)
+_(R_68K_TLS_LE8,	39)
+_(R_68K_TLS_DTPMOD32,	40)
+_(R_68K_TLS_DTPREL32,	41)
+_(R_68K_TLS_TPREL32,	42)
 ')
 
 define(`DEFINE_AARCH64_RELOCATION_TYPES',`
@@ -4103,6 +4169,7 @@ _(R_AMD64_GOTPC32,	R_X86_64_PC32)
 
 define(`DEFINE_RELOCATION_TYPES',`
 DEFINE_386_RELOCATION_TYPES()
+DEFINE_68K_RELOCATION_TYPES()
 DEFINE_AARCH64_RELOCATION_TYPES()
 DEFINE_ARM_RELOCATION_TYPES()
 DEFINE_ALPHA_RELOCATION_TYPES()
