@@ -180,6 +180,64 @@ static const struct relocation_type_and_name relocation_types_386[] = {
 };
 
 /*
+ * EM_68K.
+ */
+static const struct relocation_type_range relocation_type_ranges_68K[] = {
+	{
+		0,  /* R_68K_NONE */
+		22  /* R_68K_RELATIVE */
+	},
+	{
+		25, /* R_68K_TLS_GD32 */
+		42  /* R_68K_TLS_TPREL32 */
+	}
+};
+static const struct relocation_type_and_name relocation_types_68K[] = {
+	{ 0,	"R_68K_NONE" },
+	{ 1,	"R_68K_32" },
+	{ 2,	"R_68K_16" },
+	{ 3,	"R_68K_8" },
+	{ 4,	"R_68K_PC32" },
+	{ 5,	"R_68K_PC16" },
+	{ 6,	"R_68K_PC8" },
+	{ 7,	"R_68K_GOT32" },
+	{ 8,	"R_68K_GOT16" },
+	{ 9,	"R_68K_GOT8" },
+	{ 10,	"R_68K_GOT32O" },
+	{ 11,	"R_68K_GOT16O" },
+	{ 12,	"R_68K_GOT8O" },
+	{ 13,	"R_68K_PLT32" },
+	{ 14,	"R_68K_PLT16" },
+	{ 15,	"R_68K_PLT8" },
+	{ 16,	"R_68K_PLT32O" },
+	{ 17,	"R_68K_PLT16O" },
+	{ 18,	"R_68K_PLT8O" },
+	{ 19,	"R_68K_COPY" },
+	{ 20,	"R_68K_GLOB_DAT" },
+	{ 21,	"R_68K_JMP_SLOT" },
+	{ 22,	"R_68K_RELATIVE" },
+	/**/
+	{ 25,	"R_68K_TLS_GD32" },
+	{ 26,	"R_68K_TLS_GD16" },
+	{ 27,	"R_68K_TLS_GD8" },
+	{ 28,	"R_68K_TLS_LDM32" },
+	{ 29,	"R_68K_TLS_LDM16" },
+	{ 30,	"R_68K_TLS_LDM8" },
+	{ 31,	"R_68K_TLS_LDO32" },
+	{ 32,	"R_68K_TLS_LDO16" },
+	{ 33,	"R_68K_TLS_LDO8" },
+	{ 34,	"R_68K_TLS_IE32" },
+	{ 35,	"R_68K_TLS_IE16" },
+	{ 36,	"R_68K_TLS_IE8" },
+	{ 37,	"R_68K_TLS_LE32" },
+	{ 38,	"R_68K_TLS_LE16" },
+	{ 39,	"R_68K_TLS_LE8" },
+	{ 40,	"R_68K_TLS_DTPMOD32" },
+	{ 41,	"R_68K_TLS_DTPREL32" },
+	{ 42,	"R_68K_TLS_TPREL32" }
+};
+
+/*
  * EM_AARCH64.
  */
 static const struct relocation_type_range relocation_type_ranges_AARCH64[] = {
@@ -2703,6 +2761,7 @@ done:
 ')
 
 FN(`386')
+FN(`68K')
 FN(`AARCH64')
 FN(`ALPHA')
 FN(`ARM')
