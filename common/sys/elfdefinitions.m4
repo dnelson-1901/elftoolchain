@@ -259,6 +259,7 @@ DEFINE_SYMBOL_VISIBILITIES()
  * Syminfo flags.
  */
 DEFINE_SYMINFO_FLAGS()
+DEFINE_SYMINFO_FLAG_SYNONYMS()
 
 /*
  * Syminfo bindigs.

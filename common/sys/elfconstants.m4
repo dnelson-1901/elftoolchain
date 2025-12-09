@@ -501,6 +501,8 @@ _(`DT_MIPS_RWPLT',       0x70000034,
 	`address of a writable PLT')
 _(`DT_MIPS_RLD_MAP_REL', 0x70000035,
 	`(GNU) RLD_MAP usable in a PIE')
+_(`DT_MIPS_XHASH',	 0x70000036,
+	`(GNU) GNU-style hash table') 
 _(`DT_PPC_GOT',          0x70000000,
 	`value of _GLOBAL_OFFSET_TABLE_')
 _(`DT_PPC_TLSOPT',       0x70000001,
@@ -980,6 +982,7 @@ _(ELFOSABI_STANDALONE, 255U,
 # OS ABI aliases.
 define(`DEFINE_ELF_OSABI_ALIASES',`
 _(ELFOSABI_LINUX,	ELFOSABI_GNU)
+_(ELFOSABI_MONTEREY,	ELFOSABI_AIX, `Project Monterey')
 ')
 
 #
@@ -1421,6 +1424,8 @@ _(EM_AMD64, EM_X86_64)
 _(EM_ARC_A5, EM_ARC_COMPACT)
 _(EM_ECOG1, EM_ECOG1X)
 _(EM_INTELGT, EM_INTEL205)
+_(EM_OR1K,	EM_OPENRISC, `GNU spelling')
+_(EM_OLD_ALPHA,	EM_ALPHA, `GNU spelling')
 ')
 
 #
@@ -1519,6 +1524,7 @@ _(PT_PHDR,             6U,
 	`describes the program header itself')
 _(PT_TLS,              7U,
 	`thread local storage')
+_(PT_NUM,	       8U, `the number of basic PHDR types')
 _(PT_LOOS,             0x60000000U,
 	`start of OS-specific range')
 _(PT_SUNW_UNWIND,      0x6464E550U,
@@ -1563,6 +1569,8 @@ _(PT_MIPS_RTPROC,      0x70000001U,
 	`runtime procedure table')
 _(PT_MIPS_OPTIONS,     0x70000002U,
 	`options segment')
+_(PT_MIPS_ABIFLAGS,    0x70000003U,
+	`segment contains a .MIPS.abiflags section')
 _(PT_PARISC_ARCHEXT,   0x70000000U,
 	`segment contains the .PARISC.archext section')
 _(PT_PARISC_UNWIND,    0x70000001U,
@@ -1793,6 +1801,8 @@ _(SHT_RELR,            19U,
 	`used to encode relative relocations')
 _(SHT_LOOS,            0x60000000U,
 	`start of OS-specific range')
+_(SHT_GNU_INCREMENTAL_INPUTS,	0x6FFFF4700U,
+	`incremental build information')
 _(SHT_SUNW_dof,	     0x6FFFFFF4U,
 	`used by dtrace')
 _(SHT_SUNW_cap,	     0x6FFFFFF5U,
@@ -1923,6 +1933,8 @@ _(SHT_MIPS_PDR_EXCEPTION, 0x70000029U,
 	`runtime procedure descriptor table exception information')
 _(SHT_MIPS_ABIFLAGS,   0x7000002AU,
 	`ABI flags')
+_(SHT_MIPS_XHASH,      0x7000002BU,
+	`GNU-style hash table')
 _(SHT_SPARC_GOTDATA,   0x70000000U,
 	`SPARC-specific data')
 _(SHT_X86_64_UNWIND,   0x70000001U,
@@ -2062,6 +2074,9 @@ _(SYMINFO_FLG_DEFERRED,		0x0200U,
 _(SYMINFO_FLG_WEAKFILTER,	0x0400U,
 	`weak filter')
 ')
+define(`DEFINE_SYMINFO_FLAG_SYNONYMS',`dnl
+_(SYMINFO_FLG_PASSTHRU,		SYMINFO_FLG_FILTER, `GNU spelling')
+')
 
 # Syminfo bindings.
 define(`DEFINE_SYMINFO_BINDINGS',`
@@ -2073,6 +2088,8 @@ _(SYMINFO_BT_NONE,		0xFFFDU,
 	`no special binding')
 _(SYMINFO_BT_EXTERN,		0xFFFCU,
 	`defined as external')
+_(SYMINFO_BT_LOWRESERVE,	0xFF00U,
+	`start of reserved entries')
 ')
 
 # The version of the syminfo table.  Stored at index 0 of the table.
@@ -2081,6 +2098,7 @@ _(SYMINFO_NONE,		0,
 	`no version')
 _(SYMINFO_CURRENT,	1,
 	`current version')
+_(SYMINFO_NUM,		2, `(GNU)')
 ')
 
 #
