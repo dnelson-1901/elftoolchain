@@ -2025,6 +2025,12 @@ _(STV_HIDDEN,          2,
 	`hidden from other components')
 _(STV_PROTECTED,       3,
 	`local references are not preemptable')
+_(STV_EXPORTED,        4,
+	`symbol is always global')
+_(STV_SINGLETON,       5,
+	`all references to this symbol bind to a single instance')
+_(STV_ELIMINATE,       6,
+	`symbol is not to be added to the dynamic symbol table')
 ')
 
 # Syminfo flags.
