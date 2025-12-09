@@ -2029,39 +2029,39 @@ _(STV_PROTECTED,       3,
 
 # Syminfo flags.
 define(`DEFINE_SYMINFO_FLAGS',`
-_(SYMINFO_FLG_DIRECT,	0x0001U,
+_(SYMINFO_FLG_DIRECT,		0x0001U,
 	`directly assocated reference')
-_(SYMINFO_FLG_FILTER, 0x0002U,
+_(SYMINFO_FLG_FILTER,		0x0002U,
 	`associated with a filter')
-_(SYMINFO_FLG_COPY,	0x0004U,
+_(SYMINFO_FLG_COPY,		0x0004U,
 	`definition by copy-relocation')
-_(SYMINFO_FLG_LAZYLOAD,	0x0008U,
+_(SYMINFO_FLG_LAZYLOAD,		0x0008U,
 	`object should be lazily loaded')
 _(SYMINFO_FLG_DIRECTBIND,	0x0010U,
 	`reference should be directly bound')
-_(SYMINFO_FLG_NOEXTDIRECT, 0x0020U,
+_(SYMINFO_FLG_NOEXTDIRECT,	0x0020U,
 	`external references not allowed to bind to definition')
-_(SYMINFO_FLG_AUXILIARY,   0x0040U,
+_(SYMINFO_FLG_AUXILIARY,	0x0040U,
 	`auxiliary filter')
-_(SYMINFO_FLG_INTERPOSE,   0x0080U,
+_(SYMINFO_FLG_INTERPOSE,	0x0080U,
 	`interposer symbol')
-_(SYMINFO_FLG_CAP,	   0x0100U,
+_(SYMINFO_FLG_CAP,		0x0100U,
 	`associated with capabilities')
-_(SYMINFO_FLG_DEFERRED,	   0x0200U,
+_(SYMINFO_FLG_DEFERRED,		0x0200U,
 	`deferred reference')
-_(SYMINFO_FLG_WEAKFILTER,  0x0400U,
+_(SYMINFO_FLG_WEAKFILTER,	0x0400U,
 	`weak filter')
 ')
 
 # Syminfo bindings.
 define(`DEFINE_SYMINFO_BINDINGS',`
-_(SYMINFO_BT_SELF,	0xFFFFU,
+_(SYMINFO_BT_SELF,		0xFFFFU,
 	`bound to self')
-_(SYMINFO_BT_PARENT,	0xFFFEU,
+_(SYMINFO_BT_PARENT,		0xFFFEU,
 	`bound to parent')
-_(SYMINFO_BT_NONE,	0xFFFDU,
+_(SYMINFO_BT_NONE,		0xFFFDU,
 	`no special binding')
-_(SYMINFO_BT_EXTERN,	0xFFFCU,
+_(SYMINFO_BT_EXTERN,		0xFFFCU,
 	`defined as external')
 ')
 
