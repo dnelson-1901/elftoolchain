@@ -401,7 +401,7 @@ typedef struct {
 
 /* 32 bit EHDR. */
 typedef struct {
-	unsigned char   e_ident[EI_NIDENT]; /* ELF identification. */
+	Elf32_Byte      e_ident[EI_NIDENT]; /* ELF identification. */
 	Elf32_Half      e_type;	     /* Object file type (ET_*). */
 	Elf32_Half      e_machine;   /* Machine type (EM_*). */
 	Elf32_Word      e_version;   /* File format version (EV_*). */
@@ -420,7 +420,7 @@ typedef struct {
 
 /* 64 bit EHDR. */
 typedef struct {
-	unsigned char   e_ident[EI_NIDENT]; /* ELF identification. */
+	Elf64_Byte      e_ident[EI_NIDENT]; /* ELF identification. */
 	Elf64_Half      e_type;	     /* Object file type (ET_*). */
 	Elf64_Half      e_machine;   /* Machine type (EM_*). */
 	Elf64_Word      e_version;   /* File format version (EV_*). */
@@ -638,15 +638,15 @@ typedef struct {
 	Elf32_Word	st_name;     /* index of symbol's name */
 	Elf32_Addr	st_value;    /* value for the symbol */
 	Elf32_Word	st_size;     /* size of associated data */
-	unsigned char	st_info;     /* type and binding attributes */
-	unsigned char	st_other;    /* visibility */
+	Elf32_Byte	st_info;     /* type and binding attributes */
+	Elf32_Byte	st_other;    /* visibility */
 	Elf32_Half	st_shndx;    /* index of related section */
 } Elf32_Sym;
 
 typedef struct {
 	Elf64_Word	st_name;     /* index of symbol's name */
-	unsigned char	st_info;     /* type and binding attributes */
-	unsigned char	st_other;    /* visibility */
+	Elf64_Byte	st_info;     /* type and binding attributes */
+	Elf64_Byte	st_other;    /* visibility */
 	Elf64_Half	st_shndx;    /* index of related section */
 	Elf64_Addr	st_value;    /* value for the symbol */
 	Elf64_Xword	st_size;     /* size of associated data */
