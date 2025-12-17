@@ -39,6 +39,7 @@ SUBDIR+=	elf_newscn
 SUBDIR+=	elf_nextscn
 SUBDIR+=	elf_rand
 SUBDIR+=	elf_rawfile
+SUBDIR+=	elf_relocation_macros
 SUBDIR+=	elf_strptr
 SUBDIR+=	elf_update
 SUBDIR+=	elf_version
