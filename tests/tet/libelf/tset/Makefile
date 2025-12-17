@@ -33,6 +33,7 @@ SUBDIR+=	elf_getversion
 SUBDIR+=	elf_hash
 SUBDIR+=	elf_kind
 SUBDIR+=	elf_memory
+SUBDIR+=	elf_move_macros
 SUBDIR+=	elf_ndxscn
 SUBDIR+=	elf_next
 SUBDIR+=	elf_newscn
