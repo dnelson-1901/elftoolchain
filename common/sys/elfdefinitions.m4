@@ -590,12 +590,12 @@ typedef struct {
 } Elf64_Move;
 
 #define ELF32_M_SYM(I)		((I) >> 8)
-#define ELF32_M_SIZE(I)		((unsigned char) (I))
-#define ELF32_M_INFO(M, S)	(((M) << 8) + (unsigned char) (S))
+#define ELF32_M_SIZE(I)		((I) & 0xFFU)
+#define ELF32_M_INFO(M, S)	(((M) << 8) + ((S) & 0xFFU))
 
 #define ELF64_M_SYM(I)		((I) >> 8)
-#define ELF64_M_SIZE(I)		((unsigned char) (I))
-#define ELF64_M_INFO(M, S)	(((M) << 8) + (unsigned char) (S))
+#define ELF64_M_SIZE(I)		((I) & 0xFFU)
+#define ELF64_M_INFO(M, S)	(((M) << 8) + ((S) & 0xFFU))
 
 /*
  * Section Header Table (SHDR) entries.
@@ -718,8 +718,8 @@ typedef Elf32_Word	Elf32_Relr;
 typedef Elf64_Xword	Elf64_Relr;
 
 #define ELF32_R_SYM(I)		((I) >> 8)
-#define ELF32_R_TYPE(I)		((unsigned char) (I))
-#define ELF32_R_INFO(S,T)	(((S) << 8) + (unsigned char) (T))
+#define ELF32_R_TYPE(I)		((I) & 0xFFU)
+#define ELF32_R_INFO(S,T)	(((S) << 8) + ((T) & 0xFFU))
 
 #define ELF64_R_SYM(I)		((I) >> 32)
 #define ELF64_R_TYPE(I)		((I) & 0xFFFFFFFFUL)
