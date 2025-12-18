@@ -82,9 +82,21 @@ tcElf$1_ST_macros(void)
 	}
 
 	if ((t = ELF$1_ST_INFO(7, 8)) != 0x78U) {
-		TP_FAIL("M_INFO() failed: expected 0x78U, actual 0x%X", t);
+		TP_FAIL("ST_INFO() failed: expected 0x78U, actual 0x%X", t);
 	}
-	
+
+	const TYPE st_other = 0x4F;
+
+	if ((t = ELF$1_ST_VISIBILITY(st_other)) != 0x3) {
+		TP_FAIL("ST_VISIBILITY() failed: expected 0x3, actual 0x%X",
+		    t);
+        }
+
+	if ((t = ELF$1_ST_VISIBILITY(0x40 | 0x2)) != 0x2) {
+		TP_FAIL("ST_VISIBILITY() failed: expected 0x2, actual 0x%X",
+		    t);
+        }
+
 	tet_result(result);
 }
 popdef(`TYPE')dnl
