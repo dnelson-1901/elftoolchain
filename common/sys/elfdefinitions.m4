@@ -335,6 +335,7 @@ typedef uint64_t	Elf64_Lword;	/* Unsigned long integer. */
 typedef uint64_t	Elf64_Xword;	/* Unsigned long integer. */
 typedef int64_t		Elf64_Sxword;	/* Signed long integer. */
 
+typedef uint8_t		Elf_Byte;	/* Synonym used in NetBSD. */
 
 /*
  * Capability descriptors.
