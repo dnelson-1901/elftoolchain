@@ -589,13 +589,17 @@ typedef struct {
 	Elf64_Half	m_stride;    /* Number of units to skip. */
 } Elf64_Move;
 
-#define ELF32_M_SYM(I)		((I) >> 8)
-#define ELF32_M_SIZE(I)		((I) & 0xFFU)
-#define ELF32_M_INFO(M, S)	(((M) << 8) + ((S) & 0xFFU))
+#define ELF_M_SYM(I)		((I) >> 8)
+#define ELF_M_SIZE(I)		((I) & 0xFFU)
+#define ELF_M_INFO(M, S)	(((M) << 8) + ((S) & 0xFFU))
 
-#define ELF64_M_SYM(I)		((I) >> 8)
-#define ELF64_M_SIZE(I)		((I) & 0xFFU)
-#define ELF64_M_INFO(M, S)	(((M) << 8) + ((S) & 0xFFU))
+#define ELF32_M_SYM(I)		ELF_M_SYM(I)
+#define ELF32_M_SIZE(I)		ELF_M_SIZE(I)
+#define ELF32_M_INFO(M, S)	ELF_M_INFO(M, S)
+
+#define ELF64_M_SYM(I)		ELF_M_SYM(I)
+#define ELF64_M_SIZE(I)		ELF_M_SIZE(I)
+#define ELF64_M_INFO(M, S)	ELF_M_INFO(M, S)
 
 /*
  * Section Header Table (SHDR) entries.
