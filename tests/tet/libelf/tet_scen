@@ -52,6 +52,7 @@ all
 	^elf_rawfile
 	^elf_relocation_macros
 	^elf_strptr
+	^elf_symbol_macros
 	^elf_update
 	^elf_version
 	^gelf_getclass
@@ -106,6 +107,7 @@ elf_nextscn	:include:/tset/elf_nextscn/tet_scen
 elf_rawfile	:include:/tset/elf_rawfile/tet_scen
 elf_relocation_macros	:include:/tset/elf_relocation_macros/tet_scen
 elf_strptr	:include:/tset/elf_strptr/tet_scen
+elf_symbol_macros	:include:/tset/elf_symbol_macros/tet_scen
 elf_update	:include:/tset/elf_update/tet_scen
 elf_version	:include:/tset/elf_version/tet_scen
 gelf_getclass	:include:/tset/gelf_getclass/tet_scen
