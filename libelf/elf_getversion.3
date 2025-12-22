@@ -23,7 +23,7 @@
 .\"
 .\" $Id$
 .\"
-.Dd March 7, 2021
+.Dd December 22, 2025
 .Dt ELF_GETVERSION 3
 .Os
 .Sh NAME
@@ -36,35 +36,14 @@
 .Ft unsigned int
 .Fn elf_getversion "Elf *elf"
 .Sh DESCRIPTION
-.Em Important :
-The function
-.Fn elf_getversion
-is an extension to the
-.Xr ELF 3
-API.
-Applications that need to be portable to other implementations of
-.Li libelf
-should take care not to use this function.
-.Pp
 The function
 .Fn elf_getversion
 returns the operating version for the ELF descriptor pointed to by
 argument
 .Fa elf .
-.Pp
-This descriptor must have been allocated by a previous call to one of
-the functions that return an ELF descriptor, such as
-.Xr elf_begin 3 ,
-.Xr elf_memory 3 ,
-.Xr elf_open 3
-and
-.Xr elf_openmemory 3 .
-The object associated with the descriptor
-.Fa elf
-should be an ELF object.
 .Sh RETURN VALUES
 The function returns the operating version for the ELF object if
-successful or
+successful, or
 .Dv EV_NONE
 if an error occurred.
 .Sh COMPATIBILITY
@@ -86,6 +65,5 @@ was not an ELF object.
 .El
 .Sh SEE ALSO
 .Xr elf 3 ,
-.Xr elf_begin 3 ,
 .Xr elf_errno 3 ,
 .Xr elf_version 3
