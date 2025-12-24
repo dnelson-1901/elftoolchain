@@ -7,7 +7,9 @@ LIB=	elf
 SRCS=	elf.c							\
 	elf_begin.c						\
 	elf_cntl.c						\
-	elf_end.c elf_errmsg.c elf_errno.c			\
+	elf_end.c						\
+	elf_errmsg.c						\
+	elf_errno.c						\
 	elf_data.c						\
 	elf_fill.c						\
 	elf_flag.c						\
