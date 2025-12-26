@@ -107,7 +107,7 @@ c \
 }' -e \
 '/@ELFTC-USE-DOWNSTREAM-VCSID@/ {
 c \
-__RCSID("$NetBSD$");
+__RCSID("\$NetBSD\$");
 }' -e \
 '/@ELFTC-INCLUDE-SYS-CDEFS@/ {
 c \
@@ -142,7 +142,7 @@ compare_and_move_or_diff() {
 
 # Manual pages need a CVS ID, and renaming of their SVN IDs.
 handle_manual_page() {
-  echo '.\"	$NetBSD$'         > ${srctmp}
+  echo ".\\\"	\$NetBSD\$"         > ${srctmp}
   echo '.\"'                     >> ${srctmp}
   rename_svn_id < ${srcdir}/${1} >> ${srctmp}
 
@@ -152,7 +152,7 @@ handle_manual_page() {
 # M4 files need a NetBSD RCS Id prepended, and any embedded
 # VCS IDs transformed.
 handle_m4_file() {
-  echo 'dnl 	$NetBSD$'  > ${srctmp}
+  echo "dnl 	\$NetBSD\$"  > ${srctmp}
   transform_placeholders   <  ${srcdir}/${1} | \
     rename_svn_id         >> ${srctmp}
 
