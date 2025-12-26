@@ -5,8 +5,10 @@
 #
 # Usage:
 #
-#   netbsd-base-system-import.sh [-D] -s SRCDIR -d DISTDIR -m MODULE \
+#   netbsd-base-system-import.sh [-D] [-s SRCDIR] [-d DISTDIR] -m MODULE \
 #     [-m MODULE]...
+
+elftoolchain_svn="https://svn.code.sf.net/p/elftoolchain/code/trunk"
 
 usage() {
   echo "Usage: $0 [options]"
@@ -21,6 +23,7 @@ usage() {
   echo "  -m MODULE     A subdirectory of the elftoolchain tree to be"
   echo "                imported, e.g. 'libelf', 'common', 'libdwarf', etc."
   echo "  -s SRCDIR     The 'trunk' directory of an elftoolchain checkout."
+  echo "                Defaults to a fresh checkout from upstream."
   echo "  -v            Be verbose."
 }
 
@@ -49,15 +52,24 @@ while getopts "$options" var; do
   shift $((OPTIND - 1))
 done
 
-[ -n "${srcdir}" ] || err "Option -s must be specified."
 [ -n "${modules}" ] || err "Option -m must be specified at least once."
 
 if [ -z "${dstdir}" ]; then 
   dstdir="./dist"
 fi
 
-[ -d ${srcdir} ] || err "Missing source directory '$srcdir'."
 [ -d ${dstdir} ] || err "Missing destination directory '$dstdir'."
+
+if [ -z "${srcdir}" ]; then
+  # Attempt to retrieve the source afresh.
+  svncheckout=$(mktemp -d -p ${TMPDIR:-/tmp} -t import-et.XXXXXX)
+  [ "$verbose" = YES ] && echo SVN checkout into \"${svncheckout}\".
+  (cd ${svncheckout} && svn -q checkout ${elftoolchain_svn} trunk) || \
+    err "SVN checkout failed."
+  srcdir=${svncheckout}/trunk
+fi
+
+[ -d ${srcdir} ] || err "Missing source directory '$srcdir'."
 
 # Verify that the source modules exist.
 for m in ${modules}; do
@@ -173,7 +185,7 @@ srctmp=`get_temporary_file`
 srccmptmp=`get_temporary_file`
 dstcmptmp=`get_temporary_file`
 
-trap "rm ${srctmp} ${srcmptmp} ${dstcmptmp};" 0 1 2 3 15
+trap "rm ${srctmp} ${srcmptmp} ${dstcmptmp}; rm -rf ${svncheckout};" 0 1 2 3 15
 
 # For each module:
 #  - Create new directories in the destination.
@@ -215,7 +227,7 @@ for m in ${modules}; do
         *.[ch])
  	  handle_c_source "${file}"
           ;;
-        * ) error "Unsupported file: ${file}."
+        * ) err "Unsupported file: ${file}."
           ;;
       esac
 
