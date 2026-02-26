@@ -1614,7 +1614,8 @@ Usage: %s [options] infile [outfile]\n\
 static void
 elfcopy_usage(int exit_code)
 {
-	(void) fprintf(stderr, ELFCOPY_USAGE_MESSAGE, ELFTC_GETPROGNAME());
+	(void) fprintf(stderr, ELFCOPY_USAGE_MESSAGE,
+	    elftc_get_program_name());
 	exit(exit_code);
 }
 
@@ -1633,7 +1634,7 @@ Usage: %s [options] file...\n\
 static void
 mcs_usage(int exit_code)
 {
-	(void) fprintf(stderr, MCS_USAGE_MESSAGE, ELFTC_GETPROGNAME());
+	(void) fprintf(stderr, MCS_USAGE_MESSAGE, elftc_get_program_name());
 	exit(exit_code);
 }
 
@@ -1662,14 +1663,14 @@ Usage: %s [options] file...\n\
 static void
 strip_usage(int exit_code)
 {
-	(void) fprintf(stderr, STRIP_USAGE_MESSAGE, ELFTC_GETPROGNAME());
+	(void) fprintf(stderr, STRIP_USAGE_MESSAGE, elftc_get_program_name());
 	exit(exit_code);
 }
 
 static void
 print_version(void)
 {
-	(void) printf("%s (%s)\n", ELFTC_GETPROGNAME(), elftc_version());
+	(void) printf("%s (%s)\n", elftc_get_program_name(), elftc_version());
 	exit(EXIT_SUCCESS);
 }
 
@@ -1718,8 +1719,7 @@ main(int argc, char **argv)
 	STAILQ_INIT(&ecp->v_arobj);
 	TAILQ_INIT(&ecp->v_sec);
 
-	if ((ecp->progname = ELFTC_GETPROGNAME()) == NULL)
-		ecp->progname = "elfcopy";
+	ecp->progname = elftc_get_program_name();
 
 	if (strrcmp(ecp->progname, "strip") == 0)
 		strip_main(ecp, argc, argv);
