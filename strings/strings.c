@@ -435,7 +435,7 @@ void
 usage(int exit_code)
 {
 
-	fprintf(stderr, USAGE_MESSAGE, ELFTC_GETPROGNAME());
+	fprintf(stderr, USAGE_MESSAGE, elftc_get_program_name());
 	exit(exit_code);
 }
 
@@ -443,6 +443,6 @@ void
 show_version(void)
 {
 
-        printf("%s (%s)\n", ELFTC_GETPROGNAME(), elftc_version());
+        printf("%s (%s)\n", elftc_get_program_name(), elftc_version());
         exit(EXIT_SUCCESS);
 }
