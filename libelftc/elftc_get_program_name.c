@@ -34,7 +34,9 @@ elftc_get_program_name(void)
 	/*
 	 * Use getprogname(3) on these systems.
 	 */
-	return getprogname();
+	const char *program_name = getprogname();
+
+	return (program_name != NULL ? program_name : "-unknown-");
 #elif defined(__GLIBC__) || defined(__linux__)
 	/*
 	 * GLIBC based systems have a global 'char *' pointer referencing
