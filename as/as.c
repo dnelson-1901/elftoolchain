@@ -131,7 +131,7 @@ as_option_usage(int exit_code, const char *format, ...)
 	}
 
 	(void) fprintf(exit_code != EX_OK ? stderr : stdout,
-	    AS_OPTION_USAGE_MESSAGE, ELFTC_GETPROGNAME());
+	    AS_OPTION_USAGE_MESSAGE, elftc_get_program_name());
 
 	exit(exit_code);
 }
@@ -161,7 +161,7 @@ main(int argc, char **argv)
 			 * Print a version identifier and exit.
 			 */
 			(void) printf("%s (%s)\n",
-			    ELFTC_GETPROGNAME(), elftc_version());
+			    elftc_get_program_name(), elftc_version());
 			exit(0);
 			break;
 
