@@ -109,9 +109,7 @@ main(int argc, char **argv)
 	exitcode = EXIT_SUCCESS;
 	arcmd = argv1_saved = NULL;
 	bsdar->output = stdout;
-
-	if ((bsdar->progname = ELFTC_GETPROGNAME()) == NULL)
-		bsdar->progname = "ar";
+	bsdar->progname = elftc_get_program_name();
 
 	if (elf_version(EV_CURRENT) == EV_NONE)
 		bsdar_errc(bsdar, 0, "ELF library initialization failed: %s",
@@ -421,7 +419,7 @@ Usage: %s <command> [options] archive file...\n\
 static void
 bsdar_usage(int exit_code)
 {
-	(void) fprintf(stderr, AR_USAGE_MESSAGE, ELFTC_GETPROGNAME());
+	(void) fprintf(stderr, AR_USAGE_MESSAGE, elftc_get_program_name());
 	exit(exit_code);
 }
 
@@ -437,14 +435,14 @@ Usage: %s [options] archive...\n\
 static void
 ranlib_usage(int exit_code)
 {
-	(void)fprintf(stderr, RANLIB_USAGE_MESSAGE, ELFTC_GETPROGNAME());
+	(void)fprintf(stderr, RANLIB_USAGE_MESSAGE, elftc_get_program_name());
 	exit(exit_code);
 }
 
 static void
 bsdar_version(void)
 {
-	(void)printf("%s (%s, %s)\n", ELFTC_GETPROGNAME(), archive_version_string(),
-	    elftc_version());
+	(void)printf("%s (%s, %s)\n", elftc_get_program_name(),
+	    archive_version_string(), elftc_version());
 	exit(EXIT_SUCCESS);
 }
