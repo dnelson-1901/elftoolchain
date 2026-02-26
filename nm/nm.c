@@ -747,7 +747,7 @@ global_init(void)
 	if (elf_version(EV_CURRENT) == EV_NONE)
 		errx(EXIT_FAILURE, "elf_version error");
 
-	nm_info.name = ELFTC_GETPROGNAME();
+	nm_info.name = elftc_get_program_name();
 	nm_info.def_filename = "a.out";
 	nm_opts.print_symbol = PRINT_SYM_SYM;
 	nm_opts.print_name = PRINT_NAME_NONE;
