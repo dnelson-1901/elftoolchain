@@ -104,7 +104,7 @@ Usage: %s [options] hexaddress...\n\
 static void
 usage(int exit_code)
 {
-	(void) fprintf(stderr, USAGE_MESSAGE, ELFTC_GETPROGNAME());
+	(void) fprintf(stderr, USAGE_MESSAGE, elftc_get_program_name());
 	exit(exit_code);
 }
 
@@ -112,7 +112,8 @@ static void
 version(void)
 {
 
-	fprintf(stderr, "%s (%s)\n", ELFTC_GETPROGNAME(), elftc_version());
+	fprintf(stderr, "%s (%s)\n", elftc_get_program_name(),
+	    elftc_version());
 	exit(0);
 }
 
