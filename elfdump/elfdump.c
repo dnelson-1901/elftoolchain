@@ -678,7 +678,7 @@ main(int ac, char **av)
 			ed->options |= ED_SYMVER;
 			break;
 		case 'V':
-			(void) printf("%s (%s)\n", ELFTC_GETPROGNAME(),
+			(void) printf("%s (%s)\n", elftc_get_program_name(),
 			    elftc_version());
 			exit(EXIT_SUCCESS);
 			break;
@@ -2676,6 +2676,6 @@ Usage: %s [options] file...\n\
 static void
 usage(int exit_code)
 {
-	fprintf(stderr, USAGE_MESSAGE, ELFTC_GETPROGNAME());
+	fprintf(stderr, USAGE_MESSAGE, elftc_get_program_name());
 	exit(exit_code);
 }
