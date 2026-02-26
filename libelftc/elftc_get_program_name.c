@@ -26,6 +26,10 @@
 
 #include <stdlib.h>
 
+#include "_elftc.h"
+
+ELFTC_VCSID("$Id$");
+
 const char *
 elftc_get_program_name(void)
 {
