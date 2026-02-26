@@ -150,7 +150,7 @@ isa_usage(int exit_code, const char *message, ...)
 		va_end(ap);
 	}
 
-	(void) fprintf(channel, isa_usage_message, ELFTC_GETPROGNAME());
+	(void) fprintf(channel, isa_usage_message, elftc_get_program_name());
 	exit(exit_code);
 }
 
@@ -203,7 +203,7 @@ main(int argc, char **argv)
 			isa_usage(EX_OK, NULL);
 			break;
 		case 'V':
-			(void) printf("%s (%s)\n", ELFTC_GETPROGNAME(),
+			(void) printf("%s (%s)\n", elftc_get_program_name(),
 			    elftc_version());
 			exit(0);
 			break;
