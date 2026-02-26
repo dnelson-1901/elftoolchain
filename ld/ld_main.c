@@ -46,8 +46,7 @@ static void
 _init(void)
 {
 
-	if ((ld->ld_progname = ELFTC_GETPROGNAME()) == NULL)
-		ld->ld_progname = "ld";
+	ld->ld_progname = elftc_get_program_name();
 
 	/* Initialise libelf. */
 	if (elf_version(EV_CURRENT) == EV_NONE)

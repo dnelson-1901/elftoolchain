@@ -468,7 +468,7 @@ static void
 _print_version(struct ld *ld)
 {
 
-	(void) printf("%s (%s)\n", ELFTC_GETPROGNAME(), elftc_version());
+	(void) printf("%s (%s)\n", elftc_get_program_name(), elftc_version());
 	ld->ld_print_version = 1;
 }
 
