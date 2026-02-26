@@ -326,47 +326,6 @@ struct name {							\
 /*@ELFTC-DECLARE-DOWNSTREAM-VCSID@*/
 
 /*
- * Provide an equivalent for getprogname(3).
- */
-
-#ifndef	ELFTC_GETPROGNAME
-
-#if defined(__APPLE__) || defined(__DragonFly__) || defined(__FreeBSD__) || \
-    defined(__minix) || defined(__NetBSD__)
-
-#include <stdlib.h>
-
-#define	ELFTC_GETPROGNAME()	getprogname()
-
-#endif	/* __APPLE__ || __DragonFly__ || __FreeBSD__ || __minix || __NetBSD__ */
-
-
-#if defined(__GLIBC__) || defined(__linux__)
-#ifndef _GNU_SOURCE
-/*
- * GLIBC based systems have a global 'char *' pointer referencing
- * the executable's name.
- */
-extern const char *program_invocation_short_name;
-#endif	/* !_GNU_SOURCE */
-
-#define	ELFTC_GETPROGNAME()	program_invocation_short_name
-
-#endif	/* __GLIBC__ || __linux__ */
-
-
-#if defined(__OpenBSD__)
-
-extern const char *__progname;
-
-#define	ELFTC_GETPROGNAME()	__progname
-
-#endif	/* __OpenBSD__ */
-
-#endif	/* ELFTC_GETPROGNAME */
-
-
-/*
  * Per-OS configuration.
  *
  * The following symbols are supported by this configuration fragment,
