@@ -7669,8 +7669,7 @@ _decode_uleb128(uint8_t **dp, uint8_t *dpe)
 static void
 readelf_version(void)
 {
-	(void) printf("%s (%s)\n", ELFTC_GETPROGNAME(),
-	    elftc_version());
+	(void) printf("%s (%s)\n", elftc_get_program_name(), elftc_version());
 	exit(EXIT_SUCCESS);
 }
 
@@ -7714,7 +7713,7 @@ Usage: %s [options] file...\n\
 static void
 readelf_usage(int exit_code)
 {
-	fprintf(stderr, USAGE_MESSAGE, ELFTC_GETPROGNAME());
+	fprintf(stderr, USAGE_MESSAGE, elftc_get_program_name());
 	exit(exit_code);
 }
 
