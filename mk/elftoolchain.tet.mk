@@ -43,6 +43,9 @@ run-test:	.PHONY ${PROG}
 	TET_ROOT=${TET_ROOT} ${.OBJDIR}/${PROG}
 	${TOP}/tests/tet/tet/bin/check-tet-journal -j ${.OBJDIR}/tet_xres
 
+debug-test:	.PHONY ${PROG}
+	TET_ROOT=${TET_ROOT} ${DEBUGGER:Ugdb} ${.OBJDIR}/${PROG}
+
 .if defined(GENERATE_TEST_SCAFFOLDING)
 _TC_SRC=	${.OBJDIR}/tc.c				# Test driver.
 _TC_SCN=	tet_scen				# Scenario file.
