@@ -1,0 +1,276 @@
+.\" Copyright (c) 2026 Joseph Koshy.  All rights reserved.
+.\"
+.\" Redistribution and use in source and binary forms, with or without
+.\" modification, are permitted provided that the following conditions
+.\" are met:
+.\" 1. Redistributions of source code must retain the above copyright
+.\"    notice, this list of conditions and the following disclaimer.
+.\" 2. Redistributions in binary form must reproduce the above copyright
+.\"    notice, this list of conditions and the following disclaimer in the
+.\"    documentation and/or other materials provided with the distribution.
+.\"
+.\" THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+.\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+.\" IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+.\" ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+.\" FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+.\" DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+.\" OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+.\" HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+.\" LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+.\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+.\" SUCH DAMAGE.
+.\"
+.\" $Id$
+.\"
+.Dd February 28, 2026
+.Dt ELFTC_VECTOR 3
+.Os
+.Sh NAME
+.Nm elftc_vector
+.Nd a dynamically-sized, sequenced container
+.Sh LIBRARY
+.Lb libelftc
+.Sh SYNOPSIS
+.In elftc_vector.h
+.Ft elftc_vector_t
+.Fn elftc_vector_new "size_t hint"
+.Ft void
+.Fn elftc_vector_delete "elftc_vector_t *v"
+.Ft size_t
+.Fn elftc_vector_size "elftc_vector_t v"
+.Ft size_t
+.Fn elftc_vector_capacity "elftc_vector_t v"
+.Ft bool
+.Fn elftc_vector_push "elftc_vector_t *v" "uintptr_t value"
+.Ft bool
+.Fn elftc_vector_pop "elftc_vector_t v" "uintptr_t *value"
+.Ft void
+.Fn elftc_vector_clear "elftc_vector_t v"
+.Ft bool
+.Fo elftc_vector_iterate
+.Fa "elftc_vector_t v"
+.Fa "void *context"
+.Fa "elftc_vector_iteration_control_t (*cb)(void *ctx, uintptr_t val)"
+.Fc
+.Ft elftc_vector_iterator_t
+.Fn elftc_vector_iterator_new "elftc_vector_t v"
+.Ft void
+.Fn elftc_vector_iterator_delete "elftc_vector_iterator_t *it"
+.Ft bool
+.Fn elftc_vector_iterator_next "elftc_vector_iterator_t it" "uintptr_t *value"
+.Ft void
+.Fn elftc_vector_free_elements "elftc_vector_t v"
+.Sh DESCRIPTION
+The
+.Nm
+API set implements a dynamically sized sequenced container.
+The elements of the container can be integral quantities or pointers.
+.Pp
+The
+.Nm
+API supports the following operations:
+.Bl -tag -width indent
+.It Fn elftc_vector_new "size_hint"
+Returns a newly allocated vector.
+Argument
+.Ar size_hint
+may be used to indicate the expected size of the vector.
+If argument
+.Ar size_hint
+is zero, an implementation-specific default will be used
+for the vector's initial size.
+.It Fn elftc_vector_delete "v"
+Frees the memory used by a vector.
+Argument
+.Ar v
+should point to an
+.Vt elftc_vector_t
+value that had been allocated by a prior call to
+.Fn elftc_vector_new .
+.Pp
+It is an error to pass a non-empty vector to this function.
+If necessary, clear the vector using
+.Fn elftc_vector_clear
+before using this function.
+.Pp
+The location pointed to by argument
+.Ar v
+will be set to
+.Dv NULL
+by this function.
+.It Fn elftc_vector_size "v"
+Returns the number of items present in vector
+.Ar v .
+.It Fn elftc_vector_capacity "v"
+Returns the current capacity of vector
+.Ar v .
+The vector will be resized automatically as elements are added to it.
+.It Fn elftc_vector_push "v" "value"
+Adds the value in argument
+.Ar value
+to the end of the vector in argument
+.Ar v ,
+resizing the vector if necessary.
+This function may change the value of the opaque pointer in
+argument
+.Ar v .
+The function returns
+.Dv true
+if it is successful, or
+.Dv false
+otherwise.
+.It Fn elftc_vector_pop "v" "value"
+If the vector in argument
+.Ar v
+is non-empty, this function will write the last element of vector
+.Ar v
+into the location pointed by argument
+.Ar value
+and reduce the size of the vector by one.
+The function will return
+.Dv true
+in this case.
+.Pp
+If the vector
+.Ar v
+is empty, the function will return
+.Dv false
+and will leave the location pointed to be argument
+.Ar value
+untouched.
+.It Fn elftc_vector_clear "v"
+Sets the size of the vector in argument
+.Ar v
+to zero.
+.It Fn elftc_vector_iterate "v" "context" "cb"
+Invokes the callback function specified in argument
+.Ar cb
+on each element in the vector in order.
+The callback is passed the value in argument
+.Ar context
+as its first argument, and the value of the element in its
+second argument.
+.Pp
+The return value of the callback function determines if iteration
+is to proceed to the next element of the vector.
+The return value from the callback
+.Ar cb
+should be one of:
+.Bl -tag -width indent -compact
+.It Dv EVIC_CONTINUE
+Indicates that the iteration should continue to the next element in
+the vector.
+.It Dv EVIC_ABORT
+Indicates that the iteration should not continue to the next element
+in the vector.
+.El
+.Pp
+The function
+.Fn elftc_vector_iterate
+returns
+.Dv true
+if the callback had returned
+.Dv EVIC_CONTINUE
+for all of the elements in the vector.
+It returns
+.Dv false
+if the callback had returned
+.Dv EVIC_ABORT
+for an element of the vector.
+.It Fn elftc_vector_iterator_new "v"
+Returns an iterator instance for iterating over the vector in argument
+.Ar v .
+The vector
+.Ar v
+should not be changed or destroyed while this iterator is in use.
+.It Fn elftc_vector_iterator_delete it
+Frees up the resources used by the iterator pointed to by argument
+.Ar it .
+The iterator being pointed to by argument
+.Ar it
+should have been allocated by a previous call to
+.Fn elftc_vector_iterator_new .
+.It Fn elftc_vector_iterator_next "it" "value"
+If iteration over the vector associated with the iterator
+.Ar it
+is not yet complete, write the next value from the vector to the
+location pointed to by argument
+.Ar value
+and return
+.Dv true .
+If all elements in the associated vector have been iterated over,
+return
+.Dv false ,
+leaving the location pointed to by argument
+.Ar value
+untouched.
+.It Fn elftc_vector_free_elements "v"
+This is a convenience function for use when the vector in argument
+.Ar v
+holds pointers allocated by previous calls to
+.Xr malloc 3 .
+The function will iterate through the current set of elements in
+the vector
+.Ar v ,
+invoking
+.Xr free 3
+on each element.
+The size of the vector
+.Ar v
+will be zero on return from this function.
+.El
+.Sh RETURN VALUES
+Function
+.Fn elftc_vector_new
+returns a pointer to an opaque type if successful, or
+.Dv NULL
+in the event of an error.
+.Pp
+Function
+.Fn elftc_vector_size
+returns the current size of its argument.
+.Pp
+Function
+.Fn elftc_vector_capacity
+returns the current capacity of its argument.
+.Pp
+Functions
+.Fn elftc_vector_push
+and
+.Fn elftc_vector_pop
+return
+.Dv true
+on success or
+.Dv false
+in case of an error.
+.Pp
+Function
+.Fn elftc_vector_iterator
+returns
+.Dv true
+if the iteration completed without being aborted by the callback, or
+.Dv false
+otherwise.
+.Pp
+Function
+.Fn elftc_vector_iterator_new
+returns a pointer to an opaque value if successful, or
+.Dv NULL
+in case of an error.
+.Pp
+Function
+.Fn elftc_vector_iterator_next
+returns
+.Dv true
+if it retrieved the next value from its associated vector, or
+.Dv false
+to signal that there are no more values to examine.
+.Sh ERRORS
+These functions may fail with the following errors:
+.Bl -tag -width indent
+.It Bq Er ENOMEM
+An internal memory allocation request failed.
+.El
+.Sh SEE ALSO
+.Xr elftc 3
