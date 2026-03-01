@@ -981,7 +981,7 @@ static const struct relocation_type_range relocation_type_ranges_LOONGARCH[] = {
 	},
 	{
 		105, /* R_LARCH_ADD6 */
-		126  /* R_LARCH_TLS_DESC_PCREL20_S2 */
+		139  /* R_LARCH_TLS_DESC_PCREL20_S2 */
 	}
 };
 static const struct relocation_type_and_name relocation_types_LOONGARCH[] = {
@@ -1100,6 +1100,19 @@ static const struct relocation_type_and_name relocation_types_LOONGARCH[] = {
 	{ 124, "R_LARCH_TLS_LD_PCREL20_S2" },
 	{ 125, "R_LARCH_TLS_GD_PCREL20_S2" },
 	{ 126, "R_LARCH_TLS_DESC_PCREL20_S2" },
+	{ 127, "R_LARCH_CALL30" },
+	{ 128, "R_LARCH_PCADD_HI20" },
+	{ 129, "R_LARCH_PCADD_LO12" },
+	{ 130, "R_LARCH_GOT_PCADD_HI20" },
+	{ 131, "R_LARCH_GOT_PCADD_LO12" },
+	{ 132, "R_LARCH_TLS_IE_PCADD_HI20" },
+	{ 133, "R_LARCH_TLS_IE_PCADD_LO12" },
+	{ 134, "R_LARCH_TLS_LD_PCADD_HI20" },
+	{ 135, "R_LARCH_TLS_LD_PCADD_LO12" },
+	{ 136, "R_LARCH_TLS_GD_PCADD_HI20" },
+	{ 137, "R_LARCH_TLS_GD_PCADD_LO12" },
+	{ 138, "R_LARCH_TLS_DESC_PCADD_HI20" },
+	{ 139, "R_LARCH_TLS_DESC_PCADD_LO12" },	
 };
 
 /*
