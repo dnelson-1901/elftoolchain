@@ -57,7 +57,7 @@ tcNewVectorProperties(void)
 	if (cap == 0)
 		TP_FAIL("Zero capacity vector.");
 
-	elftc_vector_delete(&v);
+	elftc_vector_delete(v);
 
 done:
 	tet_result(result);	/* Prior TET_FAILs override. */
@@ -86,7 +86,7 @@ tcNewVectorPropertiesWithSizeHint(void)
 		TP_FAIL("Unexpected capacity expected %zu, got %zu.",
 		    size_hint, cap);
 
-	elftc_vector_delete(&v);
+	elftc_vector_delete(v);
 
 done:
 	tet_result(result);
@@ -125,7 +125,7 @@ tcVectorPushPop(void)
 		TP_FAIL("elftc_vector_pop(): expected 0x%zx, got 0x%zx.",
 		    reference_value, value);
 
-	elftc_vector_delete(&v);
+	elftc_vector_delete(v);
 
 done:
 	tet_result(result);
@@ -171,7 +171,7 @@ tcVectorIterationOrder(void)
 		TP_FAIL("unexpected iteration failure.");
 
 	elftc_vector_clear(v);
-	elftc_vector_delete(&v);
+	elftc_vector_delete(v);
 
 done:
 	tet_result(result);
@@ -210,7 +210,7 @@ tcVectorIterationEmpty(void)
 		TP_FAIL("unexpected iteration failure.");
 
 	elftc_vector_clear(v);
-	elftc_vector_delete(&v);
+	elftc_vector_delete(v);
 
 done:
 	tet_result(result);
@@ -264,7 +264,7 @@ tcVectorIterationAbort(void)
 		TP_FAIL("unexpected success of iteration.");
 
 	elftc_vector_clear(v);
-	elftc_vector_delete(&v);
+	elftc_vector_delete(v);
 
 done:
 	tet_result(result);
@@ -298,7 +298,7 @@ tcVectorResizeBeyondCapacity(void)
 			elftc_vector_size(v));
 
 	elftc_vector_clear(v);
-	elftc_vector_delete(&v);
+	elftc_vector_delete(v);
 
 done:
 	tet_result(result);
@@ -349,11 +349,11 @@ tcVectorIterationAPI(void)
 
 	result = TET_PASS;
 
-	elftc_vector_iterator_delete(&it);
+	elftc_vector_iterator_delete(it);
 
 done:
 	elftc_vector_clear(v);
-	elftc_vector_delete(&v);
+	elftc_vector_delete(v);
 
 unresolved:
 	tet_result(result);

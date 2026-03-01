@@ -36,7 +36,7 @@
 .Ft elftc_vector_t
 .Fn elftc_vector_new "size_t hint"
 .Ft void
-.Fn elftc_vector_delete "elftc_vector_t *v"
+.Fn elftc_vector_delete "elftc_vector_t v"
 .Ft size_t
 .Fn elftc_vector_size "elftc_vector_t v"
 .Ft size_t
@@ -56,7 +56,7 @@
 .Ft elftc_vector_iterator_t
 .Fn elftc_vector_iterator_new "elftc_vector_t v"
 .Ft void
-.Fn elftc_vector_iterator_delete "elftc_vector_iterator_t *it"
+.Fn elftc_vector_iterator_delete "elftc_vector_iterator_t it"
 .Ft bool
 .Fn elftc_vector_iterator_next "elftc_vector_iterator_t it" "uintptr_t *value"
 .Ft void
@@ -81,24 +81,17 @@ If argument
 is zero, an implementation-specific default will be used
 for the vector's initial size.
 .It Fn elftc_vector_delete "v"
-Frees the memory used by a vector.
-Argument
+Free the resources used by the vector in argument
+.Ar v .
+The value in argument
 .Ar v
-should point to an
-.Vt elftc_vector_t
-value that had been allocated by a prior call to
+should have been allocated by a prior call to
 .Fn elftc_vector_new .
 .Pp
 It is an error to pass a non-empty vector to this function.
 If necessary, clear the vector using
 .Fn elftc_vector_clear
 before using this function.
-.Pp
-The location pointed to by argument
-.Ar v
-will be set to
-.Dv NULL
-by this function.
 .It Fn elftc_vector_size "v"
 Returns the number of items present in vector
 .Ar v .
@@ -185,11 +178,11 @@ The vector
 .Ar v
 should not be changed or destroyed while this iterator is in use.
 .It Fn elftc_vector_iterator_delete it
-Frees up the resources used by the iterator pointed to by argument
+Free the resources used by the iterator in argument
 .Ar it .
-The iterator being pointed to by argument
+The value in argument
 .Ar it
-should have been allocated by a previous call to
+should have been allocated by a prior call to
 .Fn elftc_vector_iterator_new .
 .It Fn elftc_vector_iterator_next "it" "value"
 If iteration over the vector associated with the iterator

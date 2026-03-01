@@ -49,7 +49,7 @@ typedef enum elftc_vector_iteration_control {
 } elftc_vector_iteration_control_t;
 
 elftc_vector_t	elftc_vector_new(size_t _size_hint);
-void	elftc_vector_delete(elftc_vector_t *_v);
+void	elftc_vector_delete(elftc_vector_t _v);
 
 size_t	elftc_vector_size(const elftc_vector_t v);
 size_t	elftc_vector_capacity(const elftc_vector_t v);
@@ -66,7 +66,7 @@ bool	elftc_vector_iterate(elftc_vector_t v, void *_ctx,
     elftc_vector_iteration_control_t (*_cb)(void *_ctx, uintptr_t _val));
 
 elftc_vector_iterator_t elftc_vector_iterator_new(elftc_vector_t _v);
-void	elftc_vector_iterator_delete(elftc_vector_iterator_t *_it);
+void	elftc_vector_iterator_delete(elftc_vector_iterator_t _it);
 bool	elftc_vector_iterator_next(elftc_vector_iterator_t _it,
 	    uintptr_t *_val);
 

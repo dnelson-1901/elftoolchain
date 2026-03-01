@@ -134,13 +134,11 @@ elftc_vector_size(const elftc_vector_t v)
 }
 
 void
-elftc_vector_delete(elftc_vector_t *v)
+elftc_vector_delete(elftc_vector_t v)
 {
-	assert((*v)->ev_head.evh_size == 0);
+	assert(v->ev_head.evh_size == 0);
 	
-	free(*v);
-
-	*v = NULL;		/* Prevent pointer re-use. */
+	free(v);
 }
 
 /*
@@ -188,12 +186,11 @@ elftc_vector_iterator_new(elftc_vector_t v)
 }
 
 void
-elftc_vector_iterator_delete(elftc_vector_iterator_t *it)
+elftc_vector_iterator_delete(elftc_vector_iterator_t it)
 {
-	assert(*it != NULL);
+	assert(it != NULL);
 	
-	free(*it);
-	*it = NULL;
+	free(it);
 }
 
 bool
