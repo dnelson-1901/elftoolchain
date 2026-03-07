@@ -73,7 +73,7 @@ define(`TP_SET_VERSION',`do {
 		if (elf_version(EV_CURRENT) != EV_CURRENT) {
 			TP_UNRESOLVED("elf_version() failed: \"%s\".",
 			    elf_errmsg(-1));
-			goto done;
+			return;
 		}
 	} while (0)')
 

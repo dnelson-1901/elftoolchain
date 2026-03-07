@@ -106,7 +106,6 @@ tcCmdInvalid(void)
 		}
 	}
 
- done:
 	tet_result(result);
 }
 
@@ -123,7 +122,6 @@ tcCmdNull(void)
 	result = (e = elf_begin(-1, ELF_C_NULL, NULL)) != NULL ? TET_FAIL :
 	    TET_PASS;
 
- done:
 	tet_result(result);
 }
 
