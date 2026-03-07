@@ -39,13 +39,13 @@ struct dwarf_tp {
 	if (((FD) = open(_cur_file, O_RDONLY)) < 0) {			\
 		tet_printf("open %s failed; %s", _cur_file,		\
 		    strerror(errno));					\
-		result = TET_FAIL;					\
+		tet_result(TET_FAIL);					\
 		goto done;						\
 	}								\
 	if (dwarf_init((FD), DW_DLC_READ, NULL, NULL, &(D), &(DE)) !=	\
 	    DW_DLV_OK) {						\
 		tet_printf("dwarf_init failed: %s", dwarf_errmsg((DE)));\
-		result = TET_FAIL;					\
+		tet_result(TET_FAIL);					\
 		goto done;						\
 	}								\
 	} while (0)
@@ -54,7 +54,7 @@ struct dwarf_tp {
 	if (dwarf_finish((D), &(DE)) != DW_DLV_OK) {			\
 		tet_printf("dwarf_finish failed: %s",			\
 		    dwarf_errmsg((DE)));				\
-		result = TET_FAIL;					\
+		tet_result(TET_FAIL);					\
 	}								\
 	} while (0)
 
@@ -103,7 +103,7 @@ struct dwarf_tp {
 		tet_printf("assertion %s(%jd) == %jd failed",		\
 		    _cur_vc->var, (intmax_t) (X),			\
 		    (intmax_t) _cur_vc->v.i64);				\
-		result = TET_FAIL;					\
+		tet_result(TET_FAIL);					\
 	}								\
 	_cur_vc = STAILQ_NEXT(_cur_vc, next);				\
 	} while (0)
@@ -115,7 +115,7 @@ struct dwarf_tp {
 		tet_printf("assertion %s(%ju) == %ju failed",		\
 		    _cur_vc->var, (uintmax_t) (X),			\
 		    (uintmax_t) _cur_vc->v.u64);			\
-		result = TET_FAIL;					\
+		tet_result(TET_FAIL);					\
 	}								\
 	_cur_vc = STAILQ_NEXT(_cur_vc, next);				\
 	} while (0)
@@ -126,7 +126,7 @@ struct dwarf_tp {
 	if (strcmp(X, _cur_vc->v.str)) {				\
 		tet_printf("assertion %s('%s') == '%s' failed",		\
 		    _cur_vc->var, (X), _cur_vc->v.str);			\
-		result = TET_FAIL;					\
+		tet_result(TET_FAIL);					\
 	}								\
 	_cur_vc = STAILQ_NEXT(_cur_vc, next);				\
 	} while (0)
@@ -137,7 +137,7 @@ struct dwarf_tp {
 	if ((S) != _cur_vc->v.b.len ||					\
 	    memcmp((B), _cur_vc->v.b.data, _cur_vc->v.b.len)) {		\
 		tet_printf("assertion block %s failed\n", _cur_vc->var);\
-		result = TET_FAIL;					\
+		tet_result(TET_FAIL);					\
 	}								\
 	_cur_vc = STAILQ_NEXT(_cur_vc, next);				\
 	} while (0)

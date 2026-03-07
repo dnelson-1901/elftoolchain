@@ -48,7 +48,6 @@ static struct dwarf_tp dwarf_tp_array[] = {
 	{"tp_dwarf_lineno_sanity", tp_dwarf_lineno_sanity},
 	{NULL, NULL},
 };
-static int result = TET_UNRESOLVED;
 #include "driver.c"
 #include "die_traverse.c"
 
@@ -68,7 +67,7 @@ _dwarf_lineno(Dwarf_Die die)
 
 	if (dwarf_tag(die, &tag, &de) != DW_DLV_OK) {
 		tet_printf("dwarf_tag failed: %s\n", dwarf_errmsg(de));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		return;
 	}
 
@@ -92,7 +91,7 @@ _dwarf_lineno(Dwarf_Die die)
 		     &de) != DW_DLV_OK) {
 			tet_printf("dwarf_linebeginstatement failed: %s",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 		TS_CHECK_INT(linebeginstatement);
 
@@ -100,7 +99,7 @@ _dwarf_lineno(Dwarf_Die die)
 		     &de) != DW_DLV_OK) {
 			tet_printf("dwarf_linebeginstatement failed: %s",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 		TS_CHECK_INT(linebeginstatement);
 
@@ -108,49 +107,49 @@ _dwarf_lineno(Dwarf_Die die)
 		     &de) != DW_DLV_OK) {
 			tet_printf("dwarf_lineendsequence failed: %s",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 		TS_CHECK_INT(lineendsequence);
 
 		if (dwarf_lineno(ln, &lineno, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_lineno failed: %s",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 		TS_CHECK_UINT(lineno);
 
 		if (dwarf_line_srcfileno(ln, &srcfileno, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_line_srcfileno failed: %s",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 		TS_CHECK_UINT(srcfileno);
 
 		if (dwarf_lineaddr(ln, &lineaddr, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_lineaddr failed: %s",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 		TS_CHECK_UINT(lineaddr);
 
 		if (dwarf_lineoff(ln, &lineoff, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_lineoff failed: %s",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 		TS_CHECK_INT(lineoff);
 
 		if (dwarf_linesrc(ln, &linesrc, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_linesrc failed: %s",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 		TS_CHECK_STRING(linesrc);
 
 		if (dwarf_lineblock(ln, &lineblock, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_lineblock failed: %s",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 		TS_CHECK_INT(lineblock);
 	}
@@ -163,18 +162,13 @@ tp_dwarf_lineno(void)
 	Dwarf_Error de;
 	int fd;
 
-	result = TET_UNRESOLVED;
-
 	TS_DWARF_INIT(dbg, fd, de);
 
 	TS_DWARF_DIE_TRAVERSE(dbg, _dwarf_lineno);
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }
 
 static void
@@ -188,7 +182,7 @@ _dwarf_srcfiles(Dwarf_Die die)
 
 	if (dwarf_tag(die, &tag, &de) != DW_DLV_OK) {
 		tet_printf("dwarf_tag failed: %s\n", dwarf_errmsg(de));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		return;
 	}
 
@@ -206,7 +200,7 @@ _dwarf_srcfiles(Dwarf_Die die)
 
 	if (dwarf_srcfiles(die, &srcfiles, &srccount, &de) != DW_DLV_OK) {
 		tet_printf("dwarf_srcfiles failed: %s\n", dwarf_errmsg(de));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		return;
 	}
 
@@ -215,7 +209,7 @@ _dwarf_srcfiles(Dwarf_Die die)
 		if (srcfiles[i] == NULL) {
 			tet_printf("dwarf_srcfiles returned NULL pointer"
 			    " srcfiles[%d]\n", i);
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		} else
 			TS_CHECK_STRING(srcfiles[i]);
 	}
@@ -227,18 +221,14 @@ tp_dwarf_srcfiles(void)
 	Dwarf_Debug dbg;
 	Dwarf_Error de;
 	int fd;
-	result = TET_UNRESOLVED;
 
 	TS_DWARF_INIT(dbg, fd, de);
 
 	TS_DWARF_DIE_TRAVERSE(dbg, _dwarf_srcfiles);
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }
 
 static void
@@ -252,27 +242,23 @@ tp_dwarf_lineno_sanity(void)
 	char **srcfiles;
 	int fd;
 
-	result = TET_UNRESOLVED;
-
 	TS_DWARF_INIT(dbg, fd, de);
 
 	if (dwarf_srclines(NULL, &linebuf, &linecount, &de) !=
 	    DW_DLV_ERROR) {
 		tet_infoline("dwarf_srclines didn't return DW_DLV_ERROR"
 		    " when called with NULL arguments");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 	}
 
 	if (dwarf_srcfiles(NULL, &srcfiles, &srccount, &de) !=
 	    DW_DLV_ERROR) {
 		tet_infoline("dwarf_srcfiles didn't return DW_DLV_ERROR"
 		    " when called with NULL arguments");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 	}
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }

@@ -44,7 +44,6 @@ static struct dwarf_tp dwarf_tp_array[] = {
 	{"tp_dwarf_pubnames", tp_dwarf_pubnames},
 	{NULL, NULL},
 };
-static int result = TET_UNRESOLVED;
 #include "driver.c"
 
 static void
@@ -58,15 +57,13 @@ tp_dwarf_pubnames(void)
 	char *glob_name;
 	int fd, r_globals, i;
 
-	result = TET_UNRESOLVED;
-
 	TS_DWARF_INIT(dbg, fd, de);
 
 	r_globals = dwarf_get_globals(dbg, &globals, &global_cnt, &de);
 	TS_CHECK_INT(r_globals);
 	if (r_globals == DW_DLV_ERROR) {
 		tet_printf("dwarf_get_globals failed: %s\n", dwarf_errmsg(de));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 	TS_CHECK_INT(global_cnt);
@@ -76,28 +73,28 @@ tp_dwarf_pubnames(void)
 			    DW_DLV_OK) {
 				tet_printf("dwarf_globname failed: %s\n",
 				    dwarf_errmsg(de));
-				result = TET_FAIL;
+				tet_result(TET_FAIL);
 			}
 			TS_CHECK_STRING(glob_name);
 			if (dwarf_global_die_offset(globals[i], &die_off,
 			    &de) != DW_DLV_OK) {
 				tet_printf("dwarf_global_die_offset failed: "
 				    "%s\n", dwarf_errmsg(de));
-				result = TET_FAIL;
+				tet_result(TET_FAIL);
 			}
 			TS_CHECK_INT(die_off);
 			if (dwarf_global_cu_offset(globals[i], &cu_off,
 			    &de) != DW_DLV_OK) {
 				tet_printf("dwarf_global_cu_offset failed: "
 				    "%s\n", dwarf_errmsg(de));
-				result = TET_FAIL;
+				tet_result(TET_FAIL);
 			}
 			TS_CHECK_INT(cu_off);
 			if (dwarf_global_name_offsets(globals[i], &glob_name,
 			    &die_off, &cu_off, &de) != DW_DLV_OK) {
 				tet_printf("dwarf_global_name_offsets failed: ",
 				    "%s\n", dwarf_errmsg(de));
-				result = TET_FAIL;
+				tet_result(TET_FAIL);
 			}
 			TS_CHECK_STRING(glob_name);
 			TS_CHECK_INT(die_off);
@@ -105,10 +102,7 @@ tp_dwarf_pubnames(void)
 		}
 	}
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }

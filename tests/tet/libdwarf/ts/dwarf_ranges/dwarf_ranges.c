@@ -44,7 +44,6 @@ static struct dwarf_tp dwarf_tp_array[] = {
 	{"tp_dwarf_ranges", tp_dwarf_ranges},
 	{NULL, NULL},
 };
-static int result = TET_UNRESOLVED;
 #include "driver.c"
 
 static void
@@ -57,8 +56,6 @@ tp_dwarf_ranges(void)
 	Dwarf_Off off;
 	Dwarf_Error de;
 	int fd, r_ranges, i;
-
-	result = TET_UNRESOLVED;
 
 	TS_DWARF_INIT(dbg, fd, de);
 
@@ -93,10 +90,7 @@ tp_dwarf_ranges(void)
 	}
 #endif
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }

@@ -52,9 +52,7 @@ tp_dwarf_child_first(void)
 	Dwarf_Error de;
 	Dwarf_Die die, die0;
 	Dwarf_Unsigned cu_next_offset;
-	int r, fd, result, die_cnt;
-
-	result = TET_UNRESOLVED;
+	int r, fd, die_cnt;
 
 	TS_DWARF_INIT(dbg, fd, de);
 
@@ -71,7 +69,7 @@ tp_dwarf_child_first(void)
 					    "dwarf_siblingof return "
 					    "DW_DLV_OK while argument die0 "
 					    "is not filled in");
-					result = TET_FAIL;
+					tet_result(TET_FAIL);
 					goto done;
 				}
 				die_cnt++;
@@ -82,19 +80,16 @@ tp_dwarf_child_first(void)
 		if (r == DW_DLV_ERROR) {
 			tet_printf("dwarf_siblingof or dwarf_child failed:"
 			    " %s\n", dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 	}
 
 	TS_CHECK_INT(die_cnt);
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }
 
 static void
@@ -104,9 +99,7 @@ tp_dwarf_child_sanity(void)
 	Dwarf_Error de;
 	Dwarf_Die die;
 	Dwarf_Unsigned cu_next_offset;
-	int fd, result;
-
-	result = TET_UNRESOLVED;
+	int fd;
 
 	TS_DWARF_INIT(dbg, fd, de);
 
@@ -114,7 +107,7 @@ tp_dwarf_child_sanity(void)
 	    dwarf_child(NULL, NULL, &de) != DW_DLV_ERROR) {
 		tet_infoline("dwarf_child didn't return DW_DLV_ERROR when"
 		    " called with NULL arguments");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 
 	}
@@ -124,15 +117,12 @@ tp_dwarf_child_sanity(void)
 		    dwarf_child(NULL, NULL, &de) != DW_DLV_ERROR) {
 			tet_infoline("dwarf_child didn't return DW_DLV_ERROR"
 			    " when called with NULL arguments");
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 	}
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }

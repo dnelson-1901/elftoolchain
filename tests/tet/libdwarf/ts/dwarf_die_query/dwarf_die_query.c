@@ -50,7 +50,6 @@ static struct dwarf_tp dwarf_tp_array[] = {
 	{"tp_dwarf_die_query_sanity", tp_dwarf_die_query_sanity},
 	{NULL, NULL},
 };
-static int result = TET_UNRESOLVED;
 #include "driver.c"
 #include "die_traverse.c"
 #include "die_traverse2.c"
@@ -70,7 +69,7 @@ _dwarf_die_query(Dwarf_Die die)
 	/* Check DIE tag. */
 	if (dwarf_tag(die, &tag, &de) != DW_DLV_OK) {
 		tet_printf("dwarf_tag failed: %s\n", dwarf_errmsg(de));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 	}
 	TS_CHECK_UINT(tag);
 
@@ -79,7 +78,7 @@ _dwarf_die_query(Dwarf_Die die)
 	TS_CHECK_INT(dwarf_diename_ret);
 	if (dwarf_diename_ret == DW_DLV_ERROR) {
 		tet_printf("dwarf_diename failed: %s\n", dwarf_errmsg(de));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 	} else if (dwarf_diename_ret == DW_DLV_OK)
 		TS_CHECK_STRING(die_name);
 }
@@ -91,18 +90,13 @@ tp_dwarf_die_query(void)
 	Dwarf_Error de;
 	int fd;
 
-	result = TET_UNRESOLVED;
-
 	TS_DWARF_INIT(dbg, fd, de);
 
 	TS_DWARF_DIE_TRAVERSE(dbg, _dwarf_die_query);
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }
 
 static void
@@ -112,18 +106,13 @@ tp_dwarf_die_query_types(void)
 	Dwarf_Error de;
 	int fd;
 
-	result = TET_UNRESOLVED;
-
 	TS_DWARF_INIT(dbg, fd, de);
 
 	TS_DWARF_DIE_TRAVERSE2(dbg, 0, _dwarf_die_query);
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }
 
 static void
@@ -137,26 +126,24 @@ tp_dwarf_die_query_sanity(void)
 	char *die_name;
 	int fd;
 
-	result = TET_UNRESOLVED;
-
 	TS_DWARF_INIT(dbg, fd, de);
 
 	TS_DWARF_CU_FOREACH(dbg, cu_next_offset, de) {
 		if (dwarf_siblingof(dbg, NULL, &die, &de) == DW_DLV_ERROR) {
 			tet_printf("dwarf_siblingof failed: %s\n",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 		if (dwarf_tag(NULL, &tag, &de) != DW_DLV_ERROR) {
 			tet_infoline("dwarf_tag didn't return DW_DLV_ERROR"
 			    " when called with NULL arguments");
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 		if (dwarf_tag(die, &tag, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_tag failed: %s", dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 		TS_CHECK_UINT(tag);
@@ -164,15 +151,12 @@ tp_dwarf_die_query_sanity(void)
 		if (dwarf_diename(NULL, &die_name, &de) != DW_DLV_ERROR) {
 			tet_infoline("dwarf_diename didn't return DW_DLV_ERROR"
 			    " when called with NULL arguments");
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 	}
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }

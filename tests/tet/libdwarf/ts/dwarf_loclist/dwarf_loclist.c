@@ -46,7 +46,6 @@ static struct dwarf_tp dwarf_tp_array[] = {
 	{"tp_dwarf_loclist_sanity", tp_dwarf_loclist_sanity},
 	{NULL, NULL},
 };
-static int result = TET_UNRESOLVED;
 #include "driver.c"
 #include "die_traverse.c"
 
@@ -67,7 +66,7 @@ _dwarf_loclist(Dwarf_Die die)
 	r = dwarf_attrlist(die, &attrlist, &attrcount, &de);
 	if (r == DW_DLV_ERROR) {
 		tet_printf("dwarf_attrlist failed: %s\n", dwarf_errmsg(de));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		return;
 	} else if (r == DW_DLV_NO_ENTRY)
 		return;
@@ -77,7 +76,7 @@ _dwarf_loclist(Dwarf_Die die)
 		if (dwarf_whatattr(at, &attr, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_whatattr failed: %s\n",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			continue;
 		}
 		TS_CHECK_UINT(attr);
@@ -99,7 +98,7 @@ _dwarf_loclist(Dwarf_Die die)
 		atname = NULL;
 		if (dwarf_get_AT_name(attr, &atname) != DW_DLV_OK) {
 			tet_printf("dwarf_get_AT_name failed\n");
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 		tet_printf("process attribute %s\n", atname);
 
@@ -150,7 +149,7 @@ _dwarf_loclist(Dwarf_Die die)
 			if (listlen != 1) {
 				tet_printf("listlen(%d) returned by"
 				    " dwarf_loclist must be 1", listlen);
-				result = TET_FAIL;
+				tet_result(TET_FAIL);
 			}
 			tet_printf("process the only loclist\n");
 			TS_CHECK_UINT(llbuf0->ld_lopc);
@@ -185,18 +184,13 @@ tp_dwarf_loclist(void)
 	Dwarf_Error de;
 	int fd;
 
-	result = TET_UNRESOLVED;
-
 	TS_DWARF_INIT(dbg, fd, de);
 
 	TS_DWARF_DIE_TRAVERSE(dbg, _dwarf_loclist);
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }
 
 static void
@@ -208,27 +202,23 @@ tp_dwarf_loclist_sanity(void)
 	Dwarf_Signed listlen;
 	int fd;
 
-	result = TET_UNRESOLVED;
-
 	TS_DWARF_INIT(dbg, fd, de);
 
 	if (dwarf_loclist_n(NULL, &llbuf, &listlen, &de) != DW_DLV_ERROR) {
 		tet_infoline("dwarf_loclist_n didn't return DW_DLV_ERROR"
 		    " when called with NULL arguments");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 
 	if (dwarf_loclist(NULL, &llbuf0, &listlen, &de) != DW_DLV_ERROR) {
 		tet_infoline("dwarf_loclist didn't return DW_DLV_ERROR"
 		    " when called with NULL arguments");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }

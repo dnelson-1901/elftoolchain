@@ -46,7 +46,6 @@ static struct dwarf_tp dwarf_tp_array[] = {
 	{"tp_dwarf_frame3",tp_dwarf_frame3},
 	{NULL, NULL},
 };
-static int result = TET_UNRESOLVED;
 #include "driver.c"
 
 #define	_MAX_REG_NUM	10
@@ -69,7 +68,7 @@ _frame2_test(Dwarf_Debug dbg, Dwarf_Fde fde, Dwarf_Addr pc,
 		tet_infoline("dwarf_get_fde_info_for_reg didn't return"
 		    " DW_DLV_ERROR when called with invalid table_column"
 		    " value");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		return;
 	}
 
@@ -89,7 +88,7 @@ _frame2_test(Dwarf_Debug dbg, Dwarf_Fde fde, Dwarf_Addr pc,
 		    &row_pc, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_get_fde_info_for_reg(cfa) failed: %s",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			return;
 		}
 		TS_CHECK_INT(offset_relevant);
@@ -103,7 +102,7 @@ _frame2_test(Dwarf_Debug dbg, Dwarf_Fde fde, Dwarf_Addr pc,
 			    &row_pc, &de) != DW_DLV_OK) {
 				tet_printf("dwarf_get_fde_info_for_reg(%d)"
 				    " failed: %s", i, dwarf_errmsg(de));
-				result = TET_FAIL;
+				tet_result(TET_FAIL);
 				goto next;
 			}
 			TS_CHECK_INT(offset_relevant);
@@ -116,7 +115,7 @@ _frame2_test(Dwarf_Debug dbg, Dwarf_Fde fde, Dwarf_Addr pc,
 		    &row_pc, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_get_fde_info_for_all_regs failed: %s",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto next;
 		}
 		TS_CHECK_UINT(row_pc);
@@ -151,7 +150,7 @@ _frame3_test(Dwarf_Debug dbg, Dwarf_Fde fde, Dwarf_Addr pc,
 	    sizeof(Dwarf_Regtable_Entry3));
 	if (reg_table3.rt3_rules == NULL) {
 		tet_infoline("calloc failed when initialising reg_table3");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		return;
 	}
 
@@ -162,7 +161,7 @@ _frame3_test(Dwarf_Debug dbg, Dwarf_Fde fde, Dwarf_Addr pc,
 		tet_infoline("dwarf_get_fde_info_for_reg3 didn't return"
 		    " DW_DLV_ERROR when called with invalid table_column"
 		    " value");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		return;
 	}
 
@@ -175,7 +174,7 @@ _frame3_test(Dwarf_Debug dbg, Dwarf_Fde fde, Dwarf_Addr pc,
 		    &block_ptr, &row_pc, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_get_fde_info_for_reg3(cfa) failed: %s",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			return;
 		}
 		TS_CHECK_INT(value_type);
@@ -194,7 +193,7 @@ _frame3_test(Dwarf_Debug dbg, Dwarf_Fde fde, Dwarf_Addr pc,
 			    &row_pc, &de) != DW_DLV_OK) {
 				tet_printf("dwarf_get_fde_info_for_reg3(%d)"
 				    " failed: %s", i, dwarf_errmsg(de));
-				result = TET_FAIL;
+				tet_result(TET_FAIL);
 				goto next;
 			}
 			TS_CHECK_INT(value_type);
@@ -211,7 +210,7 @@ _frame3_test(Dwarf_Debug dbg, Dwarf_Fde fde, Dwarf_Addr pc,
 		    &row_pc, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_get_fde_info_for_all_regs failed: %s",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto next;
 		}
 		TS_CHECK_UINT(row_pc);
@@ -272,7 +271,7 @@ _dwarf_cie_fde_test(Dwarf_Debug dbg, int eh, void (*_frame_test)(Dwarf_Debug,
 		    &fdecnt, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_get_fde_list_eh failed: %s\n",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 	} else {
@@ -280,7 +279,7 @@ _dwarf_cie_fde_test(Dwarf_Debug dbg, int eh, void (*_frame_test)(Dwarf_Debug,
 		    &fdecnt, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_get_fde_list failed: %s\n",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 	}
@@ -353,7 +352,7 @@ _dwarf_cie_fde_test(Dwarf_Debug dbg, int eh, void (*_frame_test)(Dwarf_Debug,
 		if (dwarf_get_fde_n(fdelist, i, &fde, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_get_fde_n(%d) failed: %s\n", i,
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			continue;
 		}
 		if (dwarf_get_fde_range(fde, &low_pc, &func_len, &fde_bytes,
@@ -361,7 +360,7 @@ _dwarf_cie_fde_test(Dwarf_Debug dbg, int eh, void (*_frame_test)(Dwarf_Debug,
 		    &de) == DW_DLV_ERROR) {
 			tet_printf("dwarf_get_fde_range(%d) failed: %s\n", i,
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			continue;
 		}
 		TS_CHECK_UINT(low_pc);
@@ -375,13 +374,13 @@ _dwarf_cie_fde_test(Dwarf_Debug dbg, int eh, void (*_frame_test)(Dwarf_Debug,
 		if (dwarf_get_cie_of_fde(fde, &cie, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_get_cie_of_fde(%d) failed: %s\n", i,
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			continue;
 		}
 		if (dwarf_get_cie_index(cie, &cie_index, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_get_cie_index(%d) failed: %s\n", i,
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			continue;
 		}
 		TS_CHECK_INT(cie_index);
@@ -390,7 +389,7 @@ _dwarf_cie_fde_test(Dwarf_Debug dbg, int eh, void (*_frame_test)(Dwarf_Debug,
 		    &cie_inst_len, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_get_cie_info(%d) failed: %s\n", i,
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			continue;
 		}
 		TS_CHECK_UINT(bytes_in_cie);
@@ -406,7 +405,7 @@ _dwarf_cie_fde_test(Dwarf_Debug dbg, int eh, void (*_frame_test)(Dwarf_Debug,
 		    &de) != DW_DLV_OK) {
 			tet_printf("dwarf_get_fde_instr_bytes(%d) failed: %s\n",
 			    i, dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			continue;
 		}
 		TS_CHECK_UINT(fde_inst_len);
@@ -416,7 +415,7 @@ _dwarf_cie_fde_test(Dwarf_Debug dbg, int eh, void (*_frame_test)(Dwarf_Debug,
 			    fde_inst_len, &oplist, &opcnt, &de) != DW_DLV_OK) {
 				tet_printf("dwarf_expand_frame_instructions(%d)"
 				    " failed: %s\n", i, dwarf_errmsg(de));
-				result = TET_FAIL;
+				tet_result(TET_FAIL);
 				continue;
 			}
 			TS_CHECK_INT(opcnt);
@@ -462,18 +461,14 @@ tp_dwarf_frame2(void)
 	Dwarf_Error de;
 	int fd;
 
-	result = TET_UNRESOLVED;
-
 	TS_DWARF_INIT(dbg, fd, de);
 
 	_dwarf_cie_fde_test(dbg, 0, _frame2_test);
 	_dwarf_cie_fde_test(dbg, 1, _frame2_test);
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }
 
 static void
@@ -483,16 +478,12 @@ tp_dwarf_frame3(void)
 	Dwarf_Error de;
 	int fd;
 
-	result = TET_UNRESOLVED;
-
 	TS_DWARF_INIT(dbg, fd, de);
 
 	_dwarf_cie_fde_test(dbg, 0, _frame3_test);
 	_dwarf_cie_fde_test(dbg, 1, _frame3_test);
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }

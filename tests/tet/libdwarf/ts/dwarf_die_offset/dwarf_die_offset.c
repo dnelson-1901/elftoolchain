@@ -51,7 +51,6 @@ static struct dwarf_tp dwarf_tp_array[] = {
 	{"tp_dwarf_die_offset_sanity", tp_dwarf_die_offset_sanity},
 	{NULL, NULL},
 };
-static int result = TET_UNRESOLVED;
 #include "driver.c"
 #include "die_traverse.c"
 
@@ -64,7 +63,7 @@ _dwarf_die_offset(Dwarf_Die die)
 	if (dwarf_die_CU_offset(die, &rel_off, &de) != DW_DLV_OK) {
 		tet_printf("dwarf_die_CU_offset failed: %s\n",
 		    dwarf_errmsg(de));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 	}
 	TS_CHECK_INT(rel_off);
 
@@ -72,14 +71,14 @@ _dwarf_die_offset(Dwarf_Die die)
 	    DW_DLV_OK) {
 		tet_printf("dwarf_die_CU_offset_range failed: %s\n",
 		    dwarf_errmsg(de));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 	}
 	TS_CHECK_INT(cu_off);
 	TS_CHECK_INT(cu_len);
 
 	if (dwarf_dieoffset(die, &die_off, &de) != DW_DLV_OK) {
 		tet_printf("dwarf_dieoffset failed: %s\n", dwarf_errmsg(de));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 	}
 	TS_CHECK_INT(die_off);
 }
@@ -91,18 +90,13 @@ tp_dwarf_die_offset(void)
 	Dwarf_Error de;
 	int fd;
 
-	result = TET_UNRESOLVED;
-
 	TS_DWARF_INIT(dbg, fd, de);
 
 	TS_DWARF_DIE_TRAVERSE(dbg, _dwarf_die_offset);
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }
 
 static void
@@ -114,8 +108,6 @@ tp_dwarf_die_offset_given_cu(void)
 	Dwarf_Unsigned cu_next_offset;
 	int fd;
 	
-	result = TET_UNRESOLVED;
-
 	TS_DWARF_INIT(dbg, fd, de);
 
 	cu_offset = 0;
@@ -124,19 +116,16 @@ tp_dwarf_die_offset_given_cu(void)
 		    cu_offset, &cu_dieoff, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_get_cu_die_offset_given_cu_header"
 			    "_offset failed: %s", dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 		TS_CHECK_INT(cu_dieoff);
 		cu_offset = cu_next_offset;
 	}
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }
 
 static void
@@ -149,42 +138,37 @@ tp_dwarf_die_offset_sanity(void)
 	Dwarf_Unsigned cu_next_offset;
 	int fd;
 
-	result = TET_UNRESOLVED;
-
 	TS_DWARF_INIT(dbg, fd, de);
 
 	TS_DWARF_CU_FOREACH(dbg, cu_next_offset, de) {
 		if (dwarf_siblingof(dbg, NULL, &die, &de) == DW_DLV_ERROR) {
 			tet_printf("dwarf_siblingof failed: %s\n",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 		if (dwarf_die_CU_offset(NULL, &rel_off, &de) != DW_DLV_ERROR) {
 			tet_infoline("dwarf_die_CU_offset didn't return"
 			    " DW_DLV_ERROR when called with NULL arguments");
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 		if (dwarf_die_CU_offset_range(NULL, &cu_off, &cu_len, &de) !=
 		    DW_DLV_ERROR) {
 			tet_infoline("dwarf_die_CU_offset_range didn't return"
 			    " DW_DLV_ERROR when called with NULL arguments");
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 		if (dwarf_dieoffset(NULL, &die_off, &de) != DW_DLV_ERROR) {
 			tet_infoline("dwarf_dieoffset didn't return DW_DLV_ERROR"
 			    " when called with NULL arguments");
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 	}
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }

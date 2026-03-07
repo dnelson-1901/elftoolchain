@@ -49,14 +49,13 @@ tp_dwarf_get_address_size(void)
 	Dwarf_Debug dbg;
 	Dwarf_Error de;
 	Dwarf_Half addr_size;
-	int fd, result;
+	int fd;
 
 	dbg = NULL;
-	result = TET_UNRESOLVED;
 
 	if (dwarf_get_address_size(NULL, &addr_size, &de) != DW_DLV_ERROR) {
 		tet_infoline("dwarf_get_adderss_size NULL 'dbg' test failed");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 
@@ -65,23 +64,20 @@ tp_dwarf_get_address_size(void)
 	if (dwarf_get_address_size(dbg, NULL, &de) != DW_DLV_ERROR) {
 		tet_infoline("dwarf_get_adderss_size NULL 'addr_size' test "
 		    "failed");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 
 	if (dwarf_get_address_size(dbg, &addr_size, &de) != DW_DLV_OK) {
 		tet_printf("dwarf_get_address_size failed: %s",
 		    dwarf_errmsg(de));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 
 	TS_CHECK_UINT(addr_size);
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }

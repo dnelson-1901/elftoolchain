@@ -46,7 +46,6 @@ static struct dwarf_tp dwarf_tp_array[] = {
 	{"tp_dwarf_form_sanity", tp_dwarf_form_sanity},
 	{NULL, NULL},
 };
-static int result = TET_UNRESOLVED;
 #include "driver.c"
 #include "die_traverse2.c"
 
@@ -74,7 +73,7 @@ _dwarf_form(Dwarf_Die die)
 	r = dwarf_attrlist(die, &attrlist, &attrcount, &de);
 	if (r == DW_DLV_ERROR) {
 		tet_printf("dwarf_attrlist failed: %s\n", dwarf_errmsg(de));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		return;
 	} else if (r == DW_DLV_NO_ENTRY)
 		return;
@@ -84,24 +83,24 @@ _dwarf_form(Dwarf_Die die)
 		if (dwarf_whatform(at, &form, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_whatform failed: %s\n",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			continue;
 		}
 		TS_CHECK_UINT(form);
 		if (dwarf_hasform(at, form, &hasform, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_hasform failed: %s\n",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 		if (!hasform) {
 			tet_infoline("dwarf_hasform contradicts with"
 			    " dwarf_whatform");
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 		if (dwarf_whatform_direct(at, &direct_form, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_whatform_direct failed: %s\n",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 		TS_CHECK_UINT(direct_form);
 
@@ -164,19 +163,14 @@ tp_dwarf_form(void)
 	Dwarf_Error de;
 	int fd;
 
-	result = TET_UNRESOLVED;
-
 	TS_DWARF_INIT(dbg, fd, de);
 
 	TS_DWARF_DIE_TRAVERSE2(dbg, 1, _dwarf_form);
 	TS_DWARF_DIE_TRAVERSE2(dbg, 0, _dwarf_form);
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }
 
 static void
@@ -194,21 +188,19 @@ tp_dwarf_form_sanity(void)
 	char *str;
 	int fd;
 
-	result = TET_UNRESOLVED;
-
 	TS_DWARF_INIT(dbg, fd, de);
 
 	if (dwarf_whatform(NULL, &form, &de) != DW_DLV_ERROR) {
 		tet_infoline("dwarf_whatform didn't return DW_DLV_ERROR"
 		    " when called with NULL arguments");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 
 	if (dwarf_whatform_direct(NULL, &direct_form, &de) != DW_DLV_ERROR) {
 		tet_infoline("dwarf_whatform_direct didn't return DW_DLV_ERROR"
 		    " when called with NULL arguments");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 
@@ -216,69 +208,67 @@ tp_dwarf_form_sanity(void)
 	    DW_DLV_ERROR) {
 		tet_infoline("dwarf_hasform didn't return DW_DLV_ERROR"
 		    " when called with NULL arguments");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 
 	if (dwarf_formref(NULL, &offset, &de) != DW_DLV_ERROR) {
 		tet_infoline("dwarf_formref didn't return DW_DLV_ERROR"
 		    " when called with NULL arguments");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 
 	if (dwarf_global_formref(NULL, &offset, &de) != DW_DLV_ERROR) {
 		tet_infoline("dwarf_global_formref didn't return DW_DLV_ERROR"
 		    " when called with NULL arguments");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 
 	if (dwarf_formaddr(NULL, &addr, &de) != DW_DLV_ERROR) {
 		tet_infoline("dwarf_formaddr didn't return DW_DLV_ERROR"
 		    " when called with NULL arguments");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 
 	if (dwarf_formflag(NULL, &flag, &de) != DW_DLV_ERROR) {
 		tet_infoline("dwarf_formflag didn't return DW_DLV_ERROR"
 		    " when called with NULL arguments");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 	
 	if (dwarf_formudata(NULL, &uvalue, &de) != DW_DLV_ERROR) {
 		tet_infoline("dwarf_formudata didn't return DW_DLV_ERROR"
 		    " when called with NULL arguments");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 
 	if (dwarf_formsdata(NULL, &svalue, &de) != DW_DLV_ERROR) {
 		tet_infoline("dwarf_formsdata didn't return DW_DLV_ERROR"
 		    " when called with NULL arguments");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 
 	if (dwarf_formblock(NULL, &block, &de) != DW_DLV_ERROR) {
 		tet_infoline("dwarf_formblock didn't return DW_DLV_ERROR"
 		    " when called with NULL arguments");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 
 	if (dwarf_formstring(NULL, &str, &de) != DW_DLV_ERROR) {
 		tet_infoline("dwarf_formstring didn't return DW_DLV_ERROR"
 		    " when called with NULL arguments");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }

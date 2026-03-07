@@ -46,7 +46,6 @@ static struct dwarf_tp dwarf_tp_array[] = {
 	{"tp_dwarf_attrlist_sanity", tp_dwarf_attrlist_sanity},
 	{NULL, NULL},
 };
-static int result = TET_UNRESOLVED;
 #include "driver.c"
 #include "die_traverse2.c"
 
@@ -63,7 +62,7 @@ _dwarf_attrlist(Dwarf_Die die)
 	TS_CHECK_INT(r);
 	if (r == DW_DLV_ERROR) {
 		tet_printf("dwarf_attrlist failed: %s\n", dwarf_errmsg(de));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		return;
 	} else if (r == DW_DLV_NO_ENTRY)
 		return;
@@ -73,7 +72,7 @@ _dwarf_attrlist(Dwarf_Die die)
 		if (dwarf_whatattr(attrlist[i], &attr, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_whatattr failed: %s\n",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 		TS_CHECK_UINT(attr);
 	}
@@ -86,19 +85,14 @@ tp_dwarf_attrlist(void)
 	Dwarf_Error de;
 	int fd;
 
-	result = TET_UNRESOLVED;
-
 	TS_DWARF_INIT(dbg, fd, de);
 
 	TS_DWARF_DIE_TRAVERSE2(dbg, 1, _dwarf_attrlist);
 	TS_DWARF_DIE_TRAVERSE2(dbg, 0, _dwarf_attrlist);
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }
 
 static void
@@ -110,21 +104,16 @@ tp_dwarf_attrlist_sanity(void)
 	Dwarf_Error de;
 	int fd;
 
-	result = TET_UNRESOLVED;
-
 	TS_DWARF_INIT(dbg, fd, de);
 
 	if (dwarf_attrlist(NULL, &attrlist, &attrcount, &de) != DW_DLV_ERROR) {
 		tet_infoline("dwarf_attrlist didn't return DW_DLV_ERROR"
 		    " when called with NULL arguments");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }

@@ -53,17 +53,17 @@ _die_traverse_recursive(Dwarf_Debug dbg, Dwarf_Die die,
 
 	if (dwarf_tag(die, &tag, &de) != DW_DLV_OK) {
 		tet_printf("dwarf_tag failed: %s\n", dwarf_errmsg(de));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 	}
 	tagname = NULL;
 	if (dwarf_get_TAG_name(tag, &tagname) != DW_DLV_OK) {
 		tet_infoline("dwarf_get_TAG_name failed");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 	}
 	offset = 0;
 	if (dwarf_dieoffset(die, &offset, &de) != DW_DLV_OK) {
 		tet_printf("dwarf_dieoffset failed: %s\n", dwarf_errmsg(de));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 	}
 	tet_printf("DIE #%d (%s) [%#x]\n", die_cnt++, tagname, offset);
 

@@ -48,35 +48,30 @@ tp_dwarf_init(void)
 {
 	Dwarf_Debug dbg;
 	Dwarf_Error de;
-	int fd, result;
-
-	result = TET_UNRESOLVED;
+	int fd;
 
 	assert(_cur_file != NULL);
 	dbg = NULL;
 	if ((fd = open(_cur_file, O_RDONLY)) < 0) {
 		tet_printf("open %s failed: %s", _cur_file, strerror(errno));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 
 	if (dwarf_init(fd, DW_DLC_READ, NULL, NULL, &dbg, &de) != DW_DLV_OK) {
 		tet_printf("dwarf_init failed: %s", dwarf_errmsg(de));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 
 	if (dwarf_init(-1, DW_DLC_READ, NULL, NULL, &dbg, &de) != DW_DLV_ERROR) {
 		tet_infoline("dwarf_init didn't return DW_DLV_ERROR when"
 		    " called with fd(-1)");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }

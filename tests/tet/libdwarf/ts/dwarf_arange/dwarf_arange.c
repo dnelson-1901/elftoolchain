@@ -44,7 +44,6 @@ static struct dwarf_tp dwarf_tp_array[] = {
 	{"tp_dwarf_arange", tp_dwarf_arange},
 	{NULL, NULL},
 };
-static int result = TET_UNRESOLVED;
 #include "driver.c"
 
 static void
@@ -60,15 +59,13 @@ tp_dwarf_arange(void)
 	Dwarf_Error de;
 	int fd, i, r_aranges, r_arange;
 
-	result = TET_UNRESOLVED;
-
 	TS_DWARF_INIT(dbg, fd, de);
 
 	r_aranges = dwarf_get_aranges(dbg, &aranges, &arange_cnt, &de);
 	TS_CHECK_INT(r_aranges);
 	if (r_aranges == DW_DLV_ERROR) {
 		tet_printf("dwarf_get_aranges failed: %s\n", dwarf_errmsg(de));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 	if (r_aranges == DW_DLV_OK) {
@@ -77,7 +74,7 @@ tp_dwarf_arange(void)
 			    &de) != DW_DLV_OK) {
 				tet_printf("dwarf_get_cu_die_offset failed:"
 				    " %s\n", dwarf_errmsg(de));
-				result = TET_FAIL;
+				tet_result(TET_FAIL);
 				continue;
 			}
 			TS_CHECK_INT(cu_die_offset);
@@ -85,7 +82,7 @@ tp_dwarf_arange(void)
 			    &cu_header_offset, &de) != DW_DLV_OK) {
 				tet_printf("dwarf_get_arange_cu_header_offset"
 				    "failed: %s\n", dwarf_errmsg(de));
-				result = TET_FAIL;
+				tet_result(TET_FAIL);
 				continue;
 			}
 			TS_CHECK_INT(cu_header_offset);
@@ -93,7 +90,7 @@ tp_dwarf_arange(void)
 			    &cu_die_offset2, &de) != DW_DLV_OK) {
 				tet_printf("dwarf_get_arange_info failed:%s\n",
 				    dwarf_errmsg(de));
-				result = TET_FAIL;
+				tet_result(TET_FAIL);
 				continue;
 			}
 			TS_CHECK_UINT(start);
@@ -118,10 +115,7 @@ tp_dwarf_arange(void)
 	}
 
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }

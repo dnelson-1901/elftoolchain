@@ -44,7 +44,6 @@ static struct dwarf_tp dwarf_tp_array[] = {
 	{"tp_dwarf_macinfo", tp_dwarf_macinfo},
 	{NULL, NULL},
 };
-static int result = TET_UNRESOLVED;
 #include "driver.c"
 
 static void
@@ -83,7 +82,7 @@ _get_macinfo(Dwarf_Debug dbg, Dwarf_Off macro_offset, Dwarf_Unsigned max_count)
 		if (r_details == DW_DLV_ERROR) {
 			tet_printf("dwarf_get_macro_details failed: %s\n",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 		return;
 	}
@@ -128,10 +127,7 @@ tp_dwarf_macinfo(void)
 	/* Get all entries in all CUs. */
 	_get_all_macinfo(dbg);
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }

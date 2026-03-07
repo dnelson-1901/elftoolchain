@@ -46,7 +46,6 @@ static struct dwarf_tp dwarf_tp_array[] = {
 	{"tp_dwarf_attr_sanity", tp_dwarf_attr_sanity},
 	{NULL, NULL},
 };
-static int result = TET_UNRESOLVED;
 #include "driver.c"
 #include "die_traverse.c"
 
@@ -81,7 +80,7 @@ _dwarf_attr(Dwarf_Die die)
 		    DW_DLV_OK) {
 			tet_printf("dwarf_hasattr failed: %s\n",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 		TS_CHECK_INT(has_attr);
 
@@ -90,13 +89,13 @@ _dwarf_attr(Dwarf_Die die)
 			    DW_DLV_OK) {
 				tet_printf("dwarf_get_AT_name failed: %s\n",
 				    dwarf_errmsg(de));
-				result = TET_FAIL;
+				tet_result(TET_FAIL);
 				continue;
 			}
 			if (attr_name == NULL) {
 				tet_infoline("dwarf_get_AT_name returned "
 				    "DW_DLV_OK but didn't return string");
-				result = TET_FAIL;
+				tet_result(TET_FAIL);
 				continue;
 			}
 			TS_CHECK_STRING(attr_name);
@@ -108,25 +107,25 @@ _dwarf_attr(Dwarf_Die die)
 			if (r == DW_DLV_ERROR) {
 				tet_printf("dwarf_attr failed: %s",
 				    dwarf_errmsg(de));
-				result = TET_FAIL;
+				tet_result(TET_FAIL);
 				continue;
 			} else if (r == DW_DLV_NO_ENTRY) {
 				tet_infoline("dwarf_hasattr returned true for "
 				    "attribute '%s', while dwarf_attr returned"
 				    " DW_DLV_NO_ENTRY for the same attr");
-				result = TET_FAIL;
+				tet_result(TET_FAIL);
 				continue;
 			}
 			if (dwarf_whatattr(at, &attr, &de) != DW_DLV_OK) {
 				tet_printf("dwarf_whatattr failed: %s",
 				    dwarf_errmsg(de));
-				result = TET_FAIL;
+				tet_result(TET_FAIL);
 				continue;
 			}
 			if (attr != attr_array[i]) {
 				tet_infoline("attr returned by dwarf_whatattr"
 				    " != attr_array[i]");
-				result = TET_FAIL;
+				tet_result(TET_FAIL);
 				continue;
 			}
 		}
@@ -140,18 +139,13 @@ tp_dwarf_attr(void)
 	Dwarf_Error de;
 	int fd;
 
-	result = TET_UNRESOLVED;
-
 	TS_DWARF_INIT(dbg, fd, de);
 
 	TS_DWARF_DIE_TRAVERSE(dbg, _dwarf_attr);
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }
 
 static void
@@ -164,35 +158,30 @@ tp_dwarf_attr_sanity(void)
 	Dwarf_Attribute at;
 	int fd;
 
-	result = TET_UNRESOLVED;
-
 	TS_DWARF_INIT(dbg, fd, de);
 
 	if (dwarf_hasattr(NULL, DW_AT_name, &has_attr, &de) != DW_DLV_ERROR) {
 		tet_infoline("dwarf_hasattr didn't return DW_DLV_ERROR"
 		    " when called with NULL arguments");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 
 	if (dwarf_attr(NULL, DW_AT_name, &at, &de) != DW_DLV_ERROR) {
 		tet_infoline("dwarf_attr didn't return DW_DLV_ERROR"
 		    " when called with NULL arguments");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 
 	if (dwarf_whatattr(NULL, &attr, &de) != DW_DLV_ERROR) {
 		tet_infoline("dwarf_whatattr didn't return DW_DLV_ERROR"
 		    " when called with NULL arguments");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }

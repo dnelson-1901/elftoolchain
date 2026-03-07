@@ -59,9 +59,7 @@ tp_dwarf_next_cu_header(void)
 	Dwarf_Off cu_abbrev_offset;
 	Dwarf_Half cu_pointer_size;
 	Dwarf_Unsigned cu_next_offset;
-	int fd, result;
-
-	result = TET_UNRESOLVED;
+	int fd;
 
 	TS_DWARF_INIT(dbg, fd, de);
 
@@ -75,12 +73,9 @@ tp_dwarf_next_cu_header(void)
 		TS_CHECK_UINT(cu_next_offset);
 	}
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }
 
 static void
@@ -95,9 +90,7 @@ tp_dwarf_next_cu_header_b(void)
 	Dwarf_Half cu_offset_size;
 	Dwarf_Half cu_extension_size;
 	Dwarf_Unsigned cu_next_offset;
-	int fd, result;
-
-	result = TET_UNRESOLVED;
+	int fd;
 
 	TS_DWARF_INIT(dbg, fd, de);
 
@@ -113,12 +106,9 @@ tp_dwarf_next_cu_header_b(void)
 		TS_CHECK_UINT(cu_next_offset);
 	}
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }
 
 static void
@@ -135,9 +125,7 @@ tp_dwarf_next_cu_header_c(void)
 	Dwarf_Sig8 cu_type_sig;
 	Dwarf_Unsigned cu_type_offset;
 	Dwarf_Unsigned cu_next_offset;
-	int fd, result;
-
-	result = TET_UNRESOLVED;
+	int fd;
 
 	TS_DWARF_INIT(dbg, fd, de);
 
@@ -171,12 +159,9 @@ tp_dwarf_next_cu_header_c(void)
 		}
 	} while (dwarf_next_types_section(dbg, &de) == DW_DLV_OK);
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }
 
 #define	_LOOP_COUNT	50
@@ -186,10 +171,8 @@ tp_dwarf_next_cu_header_loop(void)
 {
 	Dwarf_Debug dbg;
 	Dwarf_Error de;
-	int i, r, fd, result;
+	int i, r, fd;
 	Dwarf_Unsigned cu_next_offset;
-
-	result = TET_UNRESOLVED;
 
 	TS_DWARF_INIT(dbg, fd, de);
 
@@ -200,10 +183,7 @@ tp_dwarf_next_cu_header_loop(void)
 		TS_CHECK_INT(r);
 	}
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }

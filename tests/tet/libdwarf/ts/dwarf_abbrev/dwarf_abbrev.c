@@ -44,7 +44,6 @@ static struct dwarf_tp dwarf_tp_array[] = {
 	{"tp_dwarf_abbrev", tp_dwarf_abbrev},
 	{NULL, NULL},
 };
-static int result = TET_UNRESOLVED;
 #include "driver.c"
 
 static void
@@ -58,8 +57,6 @@ tp_dwarf_abbrev(void)
 	Dwarf_Off attr_off;
 	Dwarf_Error de;
 	int fd, r_abbrev, r_abbrev_entry, i;
-
-	result = TET_UNRESOLVED;
 
 	TS_DWARF_INIT(dbg, fd, de);
 
@@ -77,20 +74,20 @@ tp_dwarf_abbrev(void)
 		if (dwarf_get_abbrev_tag(ab, &tag, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_get_abbrev_tag failed: %s\n",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 		TS_CHECK_UINT(tag);
 		if (dwarf_get_abbrev_code(ab, &code, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_get_abbrev_code failed: %s\n",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 		TS_CHECK_UINT(code);
 		if (dwarf_get_abbrev_children_flag(ab, &children_flag, &de) !=
 		    DW_DLV_OK) {
 			tet_printf("dwarf_get_abbrev_children_flag failed: "
 			    "%s\n", dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 		TS_CHECK_INT(children_flag);
 		for (i = 0; i < attr_count; i++) {
@@ -99,7 +96,7 @@ tp_dwarf_abbrev(void)
 			    &attr_off, &de) != DW_DLV_OK) {
 				tet_printf("dwarf_get_abbrev_entry failed: "
 				    "%s\n", dwarf_errmsg(de));
-				result = TET_FAIL;
+				tet_result(TET_FAIL);
 				continue;
 			}
 			TS_CHECK_UINT(attr_num);
@@ -113,13 +110,10 @@ tp_dwarf_abbrev(void)
 	}
 	if (r_abbrev == DW_DLV_ERROR) {
 		tet_printf("dwarf_get_abbrev failed: %s\n", dwarf_errmsg(de));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 	}
-
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
 
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }

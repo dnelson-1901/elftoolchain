@@ -52,9 +52,7 @@ tp_dwarf_siblingof_level1(void)
 	Dwarf_Error de;
 	Dwarf_Die die, die0;
 	Dwarf_Unsigned cu_next_offset;
-	int r, fd, result, die_cnt;
-
-	result = TET_UNRESOLVED;
+	int r, fd, die_cnt;
 
 	TS_DWARF_INIT(dbg, fd, de);
 
@@ -67,7 +65,7 @@ tp_dwarf_siblingof_level1(void)
 			if (die == NULL) {
 				tet_infoline("dwarf_siblingof return DW_DLV_OK"
 				    " while argument die is not filled in");
-				result = TET_FAIL;
+				tet_result(TET_FAIL);
 				goto done;
 			}
 			die_cnt++;
@@ -77,19 +75,16 @@ tp_dwarf_siblingof_level1(void)
 		if (r == DW_DLV_ERROR) {
 			tet_printf("dwarf_siblingof failed: %s\n",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 	}
 
 	TS_CHECK_INT(die_cnt);
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }
 
 static void
@@ -100,16 +95,14 @@ tp_dwarf_siblingof_sanity(void)
 	Dwarf_Die die, die0;
 	Dwarf_Half tag, tag0;
 	Dwarf_Unsigned cu_next_offset;
-	int fd, result;
-
-	result = TET_UNRESOLVED;
+	int fd;
 
 	TS_DWARF_INIT(dbg, fd, de);
 
 	if (dwarf_siblingof(dbg, NULL, &die, &de) != DW_DLV_ERROR) {
 		tet_infoline("dwarf_siblingof didn't return DW_DLV_ERROR when"
 		    " called without CU context");
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 		goto done;
 	}
 
@@ -118,43 +111,40 @@ tp_dwarf_siblingof_sanity(void)
 		if (dwarf_siblingof(dbg, NULL, &die, &de) == DW_DLV_ERROR) {
 			tet_printf("dwarf_siblingof failed: %s\n",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 		if (dwarf_tag(die, &tag, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_tag failed: %s\n", dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 		if (dwarf_siblingof(dbg, NULL, &die0, &de) == DW_DLV_ERROR) {
 			tet_printf("dwarf_siblingof failed: %s\n",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 		if (dwarf_tag(die0, &tag0, &de) != DW_DLV_OK) {
 			tet_printf("dwarf_tag failed: %s\n", dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 		if (tag != tag0) {
 			tet_infoline("DIEs returned by two identical "
 			    "dwarf_siblingof calls have different tags");
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 		if (dwarf_siblingof(NULL, die0, &die, &de) != DW_DLV_ERROR) {
 			tet_infoline("dwarf_siblingof didn't return "
 			    "DW_DLV_ERROR when called with NULL dbg");
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 	}
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }

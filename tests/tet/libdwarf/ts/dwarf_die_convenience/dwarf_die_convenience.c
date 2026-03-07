@@ -48,7 +48,6 @@ static struct dwarf_tp dwarf_tp_array[] = {
 	{"tp_dwarf_die_convenience_sanity", tp_dwarf_die_convenience_sanity},
 	{NULL, NULL},
 };
-static int result = TET_UNRESOLVED;
 #include "driver.c"
 #include "die_traverse.c"
 
@@ -66,7 +65,7 @@ _dwarf_die_convenience(Dwarf_Die die)
 	TS_CHECK_INT(r_arrayorder);
 	if (r_arrayorder == DW_DLV_ERROR) {
 		tet_printf("dwarf_arrayorder failed: %s\n", dwarf_errmsg(de));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 	} else if (r_arrayorder == DW_DLV_OK)
 		TS_CHECK_UINT(arrayorder);
 
@@ -74,7 +73,7 @@ _dwarf_die_convenience(Dwarf_Die die)
 	TS_CHECK_INT(r_bitoffset);
 	if (r_bitoffset == DW_DLV_ERROR) {
 		tet_printf("dwarf_bitoffset failed: %s\n", dwarf_errmsg(de));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 	} else if (r_bitoffset == DW_DLV_OK)
 		TS_CHECK_UINT(bitoffset);
 
@@ -82,7 +81,7 @@ _dwarf_die_convenience(Dwarf_Die die)
 	TS_CHECK_INT(r_bitsize);
 	if (r_bitsize == DW_DLV_ERROR) {
 		tet_printf("dwarf_bitsize failed: %s\n", dwarf_errmsg(de));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 	} else if (r_bitsize == DW_DLV_OK)
 		TS_CHECK_UINT(bitsize);
 
@@ -90,7 +89,7 @@ _dwarf_die_convenience(Dwarf_Die die)
 	TS_CHECK_INT(r_bytesize);
 	if (r_bytesize == DW_DLV_ERROR) {
 		tet_printf("dwarf_bytesize failed: %s\n", dwarf_errmsg(de));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 	} else if (r_bytesize == DW_DLV_OK)
 		TS_CHECK_UINT(bytesize);
 
@@ -98,7 +97,7 @@ _dwarf_die_convenience(Dwarf_Die die)
 	TS_CHECK_INT(r_highpc);
 	if (r_highpc == DW_DLV_ERROR) {
 		tet_printf("dwarf_highpc failed: %s\n", dwarf_errmsg(de));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 	} else if (r_highpc == DW_DLV_OK)
 		TS_CHECK_UINT(highpc);
 
@@ -106,7 +105,7 @@ _dwarf_die_convenience(Dwarf_Die die)
 	TS_CHECK_INT(r_lowpc);
 	if (r_lowpc == DW_DLV_ERROR) {
 		tet_printf("dwarf_lowpc failed: %s\n", dwarf_errmsg(de));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 	} else if (r_lowpc == DW_DLV_OK)
 		TS_CHECK_UINT(lowpc);
 
@@ -114,7 +113,7 @@ _dwarf_die_convenience(Dwarf_Die die)
 	TS_CHECK_INT(r_srclang);
 	if (r_srclang == DW_DLV_ERROR) {
 		tet_printf("dwarf_srclang failed: %s\n", dwarf_errmsg(de));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 	} else if (r_srclang == DW_DLV_OK)
 		TS_CHECK_UINT(srclang);
 }
@@ -126,18 +125,13 @@ tp_dwarf_die_convenience(void)
 	Dwarf_Error de;
 	int fd;
 
-	result = TET_UNRESOLVED;
-
 	TS_DWARF_INIT(dbg, fd, de);
 
 	TS_DWARF_DIE_TRAVERSE(dbg, _dwarf_die_convenience);
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }
 
 static void
@@ -151,53 +145,51 @@ tp_dwarf_die_convenience_sanity(void)
 	Dwarf_Unsigned srclang, cu_next_offset;
 	int r, fd;
 
-	result = TET_UNRESOLVED;
-
 	TS_DWARF_INIT(dbg, fd, de);
 
 	TS_DWARF_CU_FOREACH(dbg, cu_next_offset, de) {
 		if (dwarf_siblingof(dbg, NULL, &die, &de) == DW_DLV_ERROR) {
 			tet_printf("dwarf_siblingof failed: %s\n",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 		if (dwarf_arrayorder(NULL, &arrayorder, &de) != DW_DLV_ERROR) {
 			tet_infoline("dwarf_arrayorder didn't return"
 			    " DW_DLV_ERROR when called with NULL arguments");
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 		if (dwarf_bitoffset(NULL, &bitoffset, &de) != DW_DLV_ERROR) {
 			tet_infoline("dwarf_bitoffset didn't return"
 			    " DW_DLV_ERROR when called with NULL arguments");
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 		if (dwarf_bitsize(NULL, &bitsize, &de) != DW_DLV_ERROR) {
 			tet_infoline("dwarf_bitsize didn't return"
 			    " DW_DLV_ERROR when called with NULL arguments");
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 		if (dwarf_bytesize(NULL, &bytesize, &de) != DW_DLV_ERROR) {
 			tet_infoline("dwarf_bytesize didn't return"
 			    " DW_DLV_ERROR when called with NULL arguments");
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 
 		if (dwarf_highpc(NULL, &highpc, &de) != DW_DLV_ERROR) {
 			tet_infoline("dwarf_highpc didn't return"
 			    " DW_DLV_ERROR when called with NULL arguments");
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 		r = dwarf_highpc(die, &highpc, &de);
 		if (r == DW_DLV_ERROR) {
 			tet_printf("dwarf_highpc failed: %s\n",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		} else if (r == DW_DLV_OK)
 			TS_CHECK_UINT(highpc);
@@ -205,14 +197,14 @@ tp_dwarf_die_convenience_sanity(void)
 		if (dwarf_lowpc(NULL, &lowpc, &de) != DW_DLV_ERROR) {
 			tet_infoline("dwarf_lowpc didn't return"
 			    " DW_DLV_ERROR when called with NULL arguments");
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 		r = dwarf_lowpc(die, &lowpc, &de);
 		if (r == DW_DLV_ERROR) {
 			tet_printf("dwarf_lowpc failed: %s\n",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		} else if (r == DW_DLV_OK)
 			TS_CHECK_UINT(lowpc);
@@ -220,23 +212,20 @@ tp_dwarf_die_convenience_sanity(void)
 		if (dwarf_srclang(NULL, &srclang, &de) != DW_DLV_ERROR) {
 			tet_infoline("dwarf_srclang didn't return"
 			    " DW_DLV_ERROR when called with NULL arguments");
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 		r = dwarf_srclang(die, &srclang, &de);
 		if (r == DW_DLV_ERROR) {
 			tet_printf("dwarf_srclang failed: %s\n",
 			    dwarf_errmsg(de));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		} else if (r == DW_DLV_OK)
 			TS_CHECK_UINT(srclang);
 	}
 
-	if (result == TET_UNRESOLVED)
-		result = TET_PASS;
-
 done:
 	TS_DWARF_FINISH(dbg, de);
-	TS_RESULT(result);
+	TS_RESULT(TET_PASS);
 }
