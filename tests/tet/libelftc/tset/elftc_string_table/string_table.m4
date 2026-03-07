@@ -83,12 +83,9 @@ static char test_image[] = {
 void
 tcInsertReturnValues(void)
 {
-	int	result;
 	const char **s;
 	unsigned int expectedindex, hashindex;
 	Elftc_String_Table *table;
-
-	result = TET_UNRESOLVED;
 
 	TP_ANNOUNCE("Insertion returns the expected offsets.");
 
@@ -111,12 +108,11 @@ tcInsertReturnValues(void)
 		expectedindex += strlen(*s) + 1;
 	}
 
-	result = TET_PASS;
-
 done:
 	if (table)
 		(void) elftc_string_table_destroy(table);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }
 
 /*
@@ -127,12 +123,10 @@ done:
 void
 tcInsertDuplicate(void)
 {
+	int	n;
 	const char **s;
-	int	n, result;
 	Elftc_String_Table *table;
 	unsigned int hindex, *hashrecord;
-
-	result = TET_UNRESOLVED;
 
 	TP_ANNOUNCE("Multiple insertions return the same offset value.");
 
@@ -164,14 +158,12 @@ tcInsertDuplicate(void)
 		}
 	}
 
-	result = TET_PASS;
-
 done:
 	if (table)
 		(void) elftc_string_table_destroy(table);
 	free(hashrecord);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -182,12 +174,9 @@ done:
 void
 tcLookupReturn(void)
 {
-	int	result;
 	const char **s, *str;
 	unsigned int expectedindex, hashindex;
 	Elftc_String_Table *table;
-
-	result = TET_UNRESOLVED;
 
 	TP_ANNOUNCE("A lookup after an insertion returns the correct "
 	    "string.");
@@ -223,12 +212,11 @@ tcLookupReturn(void)
 		expectedindex += strlen(*s) + 1;
 	}
 
-	result = TET_PASS;
-
 done:
 	if (table)
 		(void) elftc_string_table_destroy(table);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }
 
 /*
@@ -239,12 +227,10 @@ done:
 void
 tcLookupDuplicate(void)
 {
-	int	n, result;
+	int	n;
 	const char **s, *str1, *str2;
 	unsigned int hindex1, hindex2, *hashrecord;
 	Elftc_String_Table *table;
-
-	result = TET_UNRESOLVED;
 
 	TP_ANNOUNCE("Multiple invocations of lookup on a valid string "
 	    "return the same value.");
@@ -287,14 +273,12 @@ tcLookupDuplicate(void)
 		}
 	}
 
-	result = TET_PASS;
-
 done:
 	if (table)
 		(void) elftc_string_table_destroy(table);
 	free(hashrecord);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -306,9 +290,7 @@ tcDeletionCheck(void)
 {
 	const char **s;
 	Elftc_String_Table *table;
-	int hindex, n, result, status;
-
-	result = TET_UNRESOLVED;
+	int hindex, n, status;
 
 	TP_ANNOUNCE("Lookup after deletion should fail.");
 
@@ -337,14 +319,11 @@ tcDeletionCheck(void)
 		}
 	}
 
-	result = TET_PASS;
-
 done:
 	if (table)
 		(void) elftc_string_table_destroy(table);
 
-	tet_result(result);
-
+	tet_result(TET_PASS);
 }
 
 /*
@@ -357,9 +336,7 @@ tcDeletionInsertion(void)
 	const char **s;
 	unsigned int *hashrecord, hindex;
 	Elftc_String_Table *table;
-	int n, result, status;
-
-	result = TET_UNRESOLVED;
+	int n, status;
 
 	TP_ANNOUNCE("Re-insertion of a string after deletion should "
 	    "return the prior offset.");
@@ -401,15 +378,13 @@ tcDeletionInsertion(void)
 		}
 	}
 
-	result = TET_PASS;
-
 done:
 	if (table)
 		(void) elftc_string_table_destroy(table);
 	if (hashrecord)
 		free(hashrecord);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 
 }
 
@@ -420,11 +395,9 @@ done:
 void
 tcDoubleDeletion(void)
 {
+	int n, status;
 	const char **s;
-	int n, result, status;
 	Elftc_String_Table *table;
-
-	result = TET_UNRESOLVED;
 
 	TP_ANNOUNCE("Double deletion of a string should fail.");
 
@@ -452,14 +425,11 @@ tcDoubleDeletion(void)
 		}
 	}
 
-	result = TET_PASS;
-
 done:
 	if (table)
 		(void) elftc_string_table_destroy(table);
 
-	tet_result(result);
-
+	tet_result(TET_PASS);
 }
 
 /*
@@ -469,11 +439,9 @@ done:
 void
 tcUnknownDeletion(void)
 {
+	int n, status;
 	const char **s;
-	int n, result, status;
 	Elftc_String_Table *table;
-
-	result = TET_UNRESOLVED;
 
 	TP_ANNOUNCE("Deletion of an unknown string should fail.");
 
@@ -493,14 +461,11 @@ tcUnknownDeletion(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
 done:
 	if (table)
 		(void) elftc_string_table_destroy(table);
 
-	tet_result(result);
-
+	tet_result(TET_PASS);
 }
 
 /*
@@ -514,14 +479,13 @@ done:
 void
 tcIndicesAfterRebase(void)
 {
-	int j, n, result;
+	int j, n;
 	const char *str1, *str2;
 	char buf[TC_STRING_SIZE];
 	Elftc_String_Table *table;
 	unsigned int offset1, offset2, expectedoffset;
 
 	n = 0;
-	result = TET_UNRESOLVED;
 
 	TP_ANNOUNCE("Indices are consistent after a pool resize.");
 
@@ -587,19 +551,16 @@ tcIndicesAfterRebase(void)
 		expectedoffset += TC_INSERT_SIZE;
 	}
 
-	result = TET_PASS;
-
 done:
 	if (table)
 		(void) elftc_string_table_destroy(table);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 void
 tcEmptyImage(void)
 {
-	int result;
 	size_t tblsz;
 	const char *image;
 	Elftc_String_Table *table;
@@ -625,21 +586,19 @@ tcEmptyImage(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
 done:
 	if (table)
 		(void) elftc_string_table_destroy(table);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 void
 tcImageDeleted(void)
 {
-	const char **s;
-	int n, result;
+	int n;
 	size_t tblsz;
+	const char **s;
 	const char *image;
 	Elftc_String_Table *table;
 
@@ -680,13 +639,11 @@ tcImageDeleted(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
 done:
 	if (table)
 		(void) elftc_string_table_destroy(table);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 static int
@@ -741,7 +698,6 @@ fail:
 void
 tcImageInsertOnly(void)
 {
-	int result;
 	const char **s;
 	const char *image;
 	Elftc_String_Table *table;
@@ -754,8 +710,6 @@ tcImageInsertOnly(void)
 		    strerror(errno));
 		goto done;
 	}
-
-	result = TET_PASS;
 
 	expectedsize = 1;
 	for (s = test_strings; *s != NULL; s++) {
@@ -783,18 +737,17 @@ tcImageInsertOnly(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
 done:
 	if (table)
 		(void) elftc_string_table_destroy(table);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }
 
 void
 tcImagePartiallyDeleted(void)
 {
-	int n, nstr, result;
+	int n, nstr;
 	Elftc_String_Table *table;
 	size_t expectedsize, imagesz;
 	const char *image, **s, **savedstr;
@@ -853,13 +806,12 @@ tcImagePartiallyDeleted(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
 done:
 	if (table)
 		(void) elftc_string_table_destroy(table);
 	free(savedstr);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }
 
 /*
@@ -870,9 +822,9 @@ void
 tcFromSection(void)
 {
 	Elf *e;
+	int fd;
 	Elf_Data *d;
 	Elf_Scn *scn;
-	int fd, result;
 	const char *image;
 	Elf32_Ehdr *eh;
 	Elf32_Shdr *shdr;
@@ -880,7 +832,6 @@ tcFromSection(void)
 	size_t imagesz, scnindex;
 
 	table = NULL;
-	result = TET_UNRESOLVED;
 
 	TP_ANNOUNCE("Loading a table form an ELF section works correctly.");
 
@@ -974,8 +925,6 @@ tcFromSection(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
 done:
 	if (table)
 		(void) elftc_string_table_destroy(table);
@@ -983,5 +932,6 @@ done:
 		elf_end(e);
 	if (fd != -1)
 		(void) close(fd);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }

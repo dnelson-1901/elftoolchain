@@ -108,15 +108,13 @@ tcKnownTargetNames(void)
 	TP_ANNOUNCE("elftc_bfd_find_target() succeeds for %zu known targets.",
 	    n_targets);
 
-	int result = TET_PASS;
-
 	for (size_t n = 0; n < n_targets; n++) {
 		const char *name = known_target_names[n];
 		if (elftc_bfd_find_target(name) == NULL)
 			TP_FAIL("elftc_bfd_find_target(%s) failed.", name);
 	}
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 void
@@ -124,12 +122,10 @@ tcUnknownTargetName(void)
 {
 	TP_ANNOUNCE("elftc_bfd_find_target() fails with an unknown target.");
 
-	int result = TET_PASS;
-
 	const char *name = "*unknown*";
 	if (elftc_bfd_find_target(name) != NULL)
 		TP_FAIL("elftc_bfd_find_target(%s) succeeded unexpectedly.",
 		    name);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }

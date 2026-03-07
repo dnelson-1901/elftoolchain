@@ -31,6 +31,7 @@
 #include <errno.h>
 #include <libelftc.h>
 #include <limits.h>
+#include <stdbool.h>
 #include <string.h>
 
 #include "tet_api.h"
@@ -54,8 +55,6 @@ tcUnknownMachine(void)
 	const char *machine_name = elftc_get_relocation_type_name(
 	    /*e_machine*/ ~0U, /*r_type*/ 0U);
 
- 	int result = TET_PASS;
-
 	/* The API should fail and should set errno. */
 	if (machine_name) {
 		TP_FAIL("elftc_get_relocation_type_name() returned \"%s\""
@@ -64,7 +63,7 @@ tcUnknownMachine(void)
 		TP_FAIL("elftc_get_relocation_type_name() failed with an "
 		    "unexpected error number: %d.", errno);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -2508,13 +2507,10 @@ static const struct relocation_type_and_name relocation_types_X86_64[] = {
  * In case of an error the function may return a partially constructed hash
  * table, which the caller would then need to clean up.
  */
-static int
+static bool
 populate_hash_table(
     const struct relocation_type_range relocation_type_ranges[],
-    size_t n_ranges,
-    struct relocation_type **hash_table) {
-	int result = TET_PASS;
-    
+    size_t n_ranges, struct relocation_type **hash_table) {
 	for (size_t n = 0; n < n_ranges; n++) {
 		const struct relocation_type_range *rtr =
 		    &relocation_type_ranges[n];
@@ -2545,8 +2541,10 @@ populate_hash_table(
 		}
 	}		   
 
+	return (true);
+
 done:
-	return (result);
+	return (false);
 }
 
 /*
@@ -2560,14 +2558,14 @@ done:
  * The set of relocation type values that are known to be valid are passed
  * in the argument "hash_table".
  */
-static int
+static bool
 check_relocations_list(
     const struct relocation_type_and_name expected_relocation_types[],
     size_t n_relocation_types,
     struct relocation_type *hash_table)
 {
-	int result = TET_PASS;
-	
+	bool is_list_ok = true;
+
 	for (size_t n = 0; n < n_relocation_types; n++) {
 		const struct relocation_type_and_name *rtn =
 		    &expected_relocation_types[n];
@@ -2578,13 +2576,16 @@ check_relocations_list(
 			TP_UNRESOLVED("Relocation type value %u (0x%x) \"%s\" "
 			    "is not in any valid range of relocation types.",
 			    rtn->r_value, rtn->r_value, rtn->r_name);
+			is_list_ok = false;
 			continue;
 		}
 		rt->r_count++;
-		if (rt->r_count > 1)
+		if (rt->r_count > 1) {
 			TP_UNRESOLVED("Relocation type value %u (0x%x) \"%s\" "
 			    "seen multiple times.", rtn->r_value, rtn->r_value,
 			    rtn->r_name);
+			is_list_ok = false;
+		}
 	}
 
 	/*
@@ -2593,12 +2594,14 @@ check_relocations_list(
 	 */
 	struct relocation_type *s = NULL, *tmp = NULL;
 	HASH_ITER(hh, hash_table, s, tmp) {
-		if (s->r_count == 0)
+		if (s->r_count == 0) {
 			TP_UNRESOLVED("Relocation type value %u (0x%x) is not "
 			    "being tested.", s->r_value, s->r_value);
+			is_list_ok = false;
+		}
 	}
-	
-	return (result);
+
+	return (is_list_ok);
 }
 
 /**
@@ -2618,7 +2621,6 @@ tcCheckRelocationTypeRangeValid_$1(void)
 	    "relocation types values known to be valid for the EM_$1 "
 	    "architecture.");
 
-	int result = TET_PASS;
 	const size_t n_ranges = sizeof(relocation_type_ranges_$1) /
 	    sizeof(relocation_type_ranges_$1[0]);
 
@@ -2633,7 +2635,7 @@ tcCheckRelocationTypeRangeValid_$1(void)
 				TP_FAIL("relocation %u (0x%x) failed.", r, r);
 	}
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -2646,8 +2648,6 @@ tcCheckRelocationTypeRangeBoundary_$1(void)
 	TP_ANNOUNCE("elftc_get_relocation_type_name() fails for relocation "
 	    "type values outside of the known ranges for the EM_$1 "
 	    "architecture.");
-
-	int result = TET_PASS;
 
 	const size_t n_ranges = sizeof(relocation_type_ranges_$1) /
 	    sizeof(relocation_type_ranges_$1[0]);
@@ -2679,7 +2679,7 @@ tcCheckRelocationTypeRangeBoundary_$1(void)
 		}
 	}
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -2692,8 +2692,6 @@ tcKnownRelocations_$1(void)
 	TP_ANNOUNCE("elftc_get_relocation_type_name(EM_$1) returns the "
 	    "expected symbols for each known relocation type value.");
 
-	int result = TET_PASS;
-
 	/*
 	 * Populate a hash table with all of the expected relocation type
 	 * values for the EM_$1 architecture.  The entries in this table
@@ -2701,11 +2699,10 @@ tcKnownRelocations_$1(void)
 	 * expected to be empty at the end of the test.
 	 */
 	struct relocation_type *hash_table = NULL;
-	result = populate_hash_table(
+	if (!populate_hash_table(
 	    relocation_type_ranges_$1,
 	    (sizeof(relocation_type_ranges_$1) /
-             sizeof(relocation_type_ranges_$1[0])), &hash_table);
-	if (result != TET_PASS)
+             sizeof(relocation_type_ranges_$1[0])), &hash_table))
 		goto done;
 
 	/*
@@ -2715,9 +2712,8 @@ tcKnownRelocations_$1(void)
 	const size_t n_relocations = sizeof(relocation_types_$1) /
 	    sizeof(relocation_types_$1[0]);
 
-	result = check_relocations_list(relocation_types_$1,
-	    n_relocations, hash_table);
-	if (result != TET_PASS)
+	if (!check_relocations_list(relocation_types_$1,
+	    n_relocations, hash_table))
 		goto done;
 		
 	/*
@@ -2769,7 +2765,7 @@ done:
 		free(s);
 	}
 		
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 ')
 

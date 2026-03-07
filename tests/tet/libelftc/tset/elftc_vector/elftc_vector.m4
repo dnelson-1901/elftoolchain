@@ -41,8 +41,6 @@ tcNewVectorProperties(void)
 {
 	TP_ANNOUNCE("Verify new vector properties.");
 
-	int result = TET_PASS;
-
 	elftc_vector_t v = elftc_vector_new(0);
 	if (v == NULL) {
 		TP_UNRESOLVED("vector-allocation failed.");
@@ -60,7 +58,7 @@ tcNewVectorProperties(void)
 	elftc_vector_delete(v);
 
 done:
-	tet_result(result);	/* Prior TET_FAILs override. */
+	tet_result(TET_PASS);	/* Prior TET_FAILs override. */
 }
 
 void
@@ -68,7 +66,6 @@ tcNewVectorPropertiesWithSizeHint(void)
 {
 	TP_ANNOUNCE("Verify properties of a vector created with a size hint.");
 
-	int result = TET_PASS;
 	const size_t size_hint = 42;
 
 	elftc_vector_t v = elftc_vector_new(size_hint);
@@ -89,7 +86,7 @@ tcNewVectorPropertiesWithSizeHint(void)
 	elftc_vector_delete(v);
 
 done:
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -99,8 +96,6 @@ void
 tcVectorPushPop(void)
 {
 	TP_ANNOUNCE("Verify push/pop on a single value.");
-
-	int result = TET_PASS;
 
 	elftc_vector_t v = elftc_vector_new(0);
 	if (v == NULL) {
@@ -128,7 +123,7 @@ tcVectorPushPop(void)
 	elftc_vector_delete(v);
 
 done:
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -153,7 +148,6 @@ tcVectorIterationOrder(void)
 {
 	TP_ANNOUNCE("Check iteration order.");
 
-	int result = TET_PASS;
 	elftc_vector_t v = elftc_vector_new(0);
 	if (v == NULL) {
 		TP_UNRESOLVED("vector-allocation failed.");
@@ -174,7 +168,7 @@ tcVectorIterationOrder(void)
 	elftc_vector_delete(v);
 
 done:
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -199,7 +193,6 @@ tcVectorIterationEmpty(void)
 {
 	TP_ANNOUNCE("Check iteration on the empty vector.");
 
-	int result = TET_PASS;
 	elftc_vector_t v = elftc_vector_new(0);
 	if (v == NULL) {
 		TP_UNRESOLVED("vector-allocation failed.");
@@ -213,7 +206,7 @@ tcVectorIterationEmpty(void)
 	elftc_vector_delete(v);
 
 done:
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -247,7 +240,6 @@ tcVectorIterationAbort(void)
 {
 	TP_ANNOUNCE("Verify that iterations are aborted successfully.");
 
-	int result = TET_PASS;
 	elftc_vector_t v = elftc_vector_new(0);
 	if (v == NULL) {
 		TP_UNRESOLVED("vector-allocation failed.");
@@ -267,7 +259,7 @@ tcVectorIterationAbort(void)
 	elftc_vector_delete(v);
 
 done:
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -278,7 +270,6 @@ tcVectorResizeBeyondCapacity(void)
 {
 	TP_ANNOUNCE("Verify resize beyond installed capacity.");
 
-	int result = TET_PASS;
 	elftc_vector_t v = elftc_vector_new(0);
 	if (v == NULL) {
 		TP_UNRESOLVED("vector-allocation failed.");
@@ -301,7 +292,7 @@ tcVectorResizeBeyondCapacity(void)
 	elftc_vector_delete(v);
 
 done:
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -312,8 +303,6 @@ void
 tcVectorIterationAPI(void)
 {
 	TP_ANNOUNCE("Verify operation of the iterator API.");
-
-	int result = TET_UNRESOLVED;
 
 	elftc_vector_t v = elftc_vector_new(0);
 	if (v == NULL) {
@@ -347,8 +336,6 @@ tcVectorIterationAPI(void)
 			    "got %zu", n, value);
 	}
 
-	result = TET_PASS;
-
 	elftc_vector_iterator_delete(it);
 
 done:
@@ -356,5 +343,5 @@ done:
 	elftc_vector_delete(v);
 
 unresolved:
-	tet_result(result);
+	tet_result(TET_PASS);
 }

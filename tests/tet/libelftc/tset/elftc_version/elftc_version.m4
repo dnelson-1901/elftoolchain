@@ -59,7 +59,6 @@ tcReturnValueIsNonNull(void)
 void
 tcReturnValueFormat(void)
 {
-	int result;
 	const char *version;
 	struct utsname unamebuf;
 	char *field, *versioncopy;
@@ -67,7 +66,6 @@ tcReturnValueFormat(void)
 	TP_ANNOUNCE("The returned string from elftc_version() has the "
 	    "correct form.");
 
-	result = TET_UNRESOLVED;
 	versioncopy = NULL;
 	
 	if ((version = elftc_version()) == NULL ||
@@ -134,9 +132,8 @@ tcReturnValueFormat(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
 done:
 	free(versioncopy);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }

@@ -45,8 +45,6 @@ tcUnknownMachine(void)
 	/* Ask for the machine name for an unknown EM_* value. */
 	const char *machine_name = elftc_get_machine_name(~0U);
 
- 	int result = TET_PASS;
-
 	/* The API should fail and should set errno. */
 	if (machine_name) {
 		TP_FAIL("elftc_get_machine() unexpectedly returned \"%s\".",
@@ -55,7 +53,7 @@ tcUnknownMachine(void)
 		TP_FAIL("elftc_get_machine() failed with an unexpected "
 		    "error number: %d.", errno);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -283,7 +281,6 @@ tcKnownMachines(void)
 
 	const size_t n_machines = sizeof(gABI_names)/sizeof(gABI_names[0]);
 
-	int result = TET_PASS;
 	int valid_name_count = 0;
 	
 	for (unsigned int n = 0; n < n_machines; n++) {
@@ -304,7 +301,7 @@ tcKnownMachines(void)
 	tet_printf("I: Checked %d non-reserved EM_* values.",
 	    valid_name_count);
 	
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -318,8 +315,6 @@ tcReservedValues(void)
 	    "values.");
 
 	int reserved_name_count = 0;
-	int result = TET_PASS;
-
 	const size_t n_machines = sizeof(gABI_names)/sizeof(gABI_names[0]);
 
 	for (unsigned int n = 0; n < n_machines; n++) {
@@ -337,7 +332,7 @@ tcReservedValues(void)
 
 	tet_printf("I: Checked %d reserved EM_* values.", reserved_name_count);
 	
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -361,7 +356,6 @@ void tcAliases(void)
 	TP_ANNOUNCE("elftc_get_machine_name() returns the expected name "
 	    "for aliased EM_* values.");
 
-	int result = TET_PASS;
 	const size_t n_aliases = sizeof(em_aliases) / sizeof(em_aliases[0]);
 
 	tet_printf("I: Checking %zu aliases.", n_aliases);
@@ -378,5 +372,5 @@ void tcAliases(void)
 			    em_aliases[n].em_expected_name);
 	}
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
