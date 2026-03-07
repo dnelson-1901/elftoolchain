@@ -93,7 +93,7 @@ tcNonResetWithNull(void)
 	TP_ANNOUNCE("a pending error number is not reset by "
 	    "elf_begin(ELF_C_NULL).");
 
-	TP_SET_VERSION();
+	TP_SET_VERSION_OR_FAIL();
 
 	/* Force an error. */
 	if ((fd = open(".", O_RDONLY)) < 0) {
@@ -151,7 +151,7 @@ tcExpectedErrorIsReturned(void)
 
 	TP_ANNOUNCE("A pending error number is correctly returned.");
 
-	TP_SET_VERSION();
+	TP_SET_VERSION_OR_FAIL();
 
 	/* Force an error. */
 	if ((fd = open(".", O_RDONLY)) < 0) {

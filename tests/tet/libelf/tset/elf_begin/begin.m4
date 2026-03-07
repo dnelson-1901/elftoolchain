@@ -91,7 +91,7 @@ tcCmdInvalid(void)
 
 	TP_ANNOUNCE("An invalid cmd value returns ELF_E_ARGUMENT.");
 
-	TP_SET_VERSION();
+	TP_SET_VERSION_OR_FAIL();
 
 	result = TET_PASS;
 	for (c = ELF_C_NULL-1; c <= ELF_C_NUM; c++) {
@@ -117,7 +117,7 @@ tcCmdNull(void)
 
 	TP_ANNOUNCE("cmd == ELF_C_NULL returns NULL.");
 
-	TP_SET_VERSION();
+	TP_SET_VERSION_OR_FAIL();
 
 	result = (e = elf_begin(-1, ELF_C_NULL, NULL)) != NULL ? TET_FAIL :
 	    TET_PASS;
@@ -143,7 +143,7 @@ tcNonRegular$1(void)
 
 	TP_ANNOUNCE("opening a $3 fails with ELF_E_ARGUMENT.");
 
-	TP_SET_VERSION();
+	TP_SET_VERSION_OR_FAIL();
 
 	if ((fd = open("$2", O_RDONLY)) < 0) {
 		TP_UNRESOLVED("open \"$2\" failed: %s", strerror(errno));
@@ -188,7 +188,7 @@ tcZero$1(void)
 	TP_ANNOUNCE("opening an zero-sized file in mode ELF_C_$1 fails "
 	            "with ELF_E_ARGUMENT.");
 
-	TP_SET_VERSION();
+	TP_SET_VERSION_OR_FAIL();
 
 	if ((fd = open(ZERO, O_RDONLY)) < 0) {
 		TP_UNRESOLVED("open \"$2\" failed: %s", strerror(errno));
@@ -263,7 +263,7 @@ tcCmdWriteFdRead_$1(void)
 	
 	TP_ANNOUNCE("($1): cmd == ELF_C_WRITE fails with a non-writable FD.");
 
-	TP_SET_VERSION();
+	TP_SET_VERSION_OR_FAIL();
 
 	if (setup_tempfile() == 0 ||
 	    (fd = open(filename, O_RDONLY, 0)) < 0) {
@@ -316,7 +316,7 @@ tcCmdWriteFdRdwr(void)
 	
 	TP_ANNOUNCE("cmd == ELF_C_WRITE on an 'rdwr' FD passes.");
 
-	TP_SET_VERSION();
+	TP_SET_VERSION_OR_FAIL();
 
 	if (setup_tempfile() == 0 ||
 	    (fd = open(filename, O_RDWR, 0)) < 0) {
@@ -353,7 +353,7 @@ tcCmdWriteFdWrite(void)
 	
 	TP_ANNOUNCE("cmd == ELF_C_WRITE on write-only FD passes.");
 
-	TP_SET_VERSION();
+	TP_SET_VERSION_OR_FAIL();
 
 	if (setup_tempfile() == 0 ||
 	    (fd = open(filename, O_WRONLY, 0)) < 0) {
@@ -390,7 +390,7 @@ tcCmdWriteParamIgnored(void)
 	
 	TP_ANNOUNCE("cmd == ELF_C_WRITE ignores the last parameter.");
 
-	TP_SET_VERSION();
+	TP_SET_VERSION_OR_FAIL();
 
 	if (setup_tempfile() == 0 ||
 	    (fd = open(filename, O_WRONLY, 0)) < 0 ||
@@ -445,7 +445,7 @@ tcElfOpen$1$2(void)
 
 	TP_ANNOUNCE("open(ELFCLASS$1,ELFDATA2`'TOUPPER($2)) succeeds.");
 
-	TP_SET_VERSION();
+	TP_SET_VERSION_OR_FAIL();
 
 	if ((fd = open ("check_elf.$2$1", O_RDONLY)) < 0) {
 		TP_UNRESOLVED("open() failed: %s.", strerror(errno));
@@ -496,7 +496,7 @@ tcFdMismatch(void)
 
 	TP_ANNOUNCE("an fd mismatch is detected.");
 
-	TP_SET_VERSION();
+	TP_SET_VERSION_OR_FAIL();
 
 	if ((fd = open("check_elf.msb32", O_RDONLY)) < 0 ||
 	    (e = elf_begin(fd, ELF_C_READ, NULL)) == NULL) {
@@ -542,7 +542,7 @@ tcArCmdMismatchRDWR_$1(void)
 
 	TP_ANNOUNCE("($1): a cmd mismatch is detected.");
 
-	TP_SET_VERSION();
+	TP_SET_VERSION_OR_FAIL();
 
 	/* Open the archive with ELF_C_READ. */
 	_TS_OPEN_FILE(e, TS_ARFILE_$1, ELF_C_READ, fd, goto done;);
@@ -584,7 +584,7 @@ tcArRetrieval_$1(void)
 
 	TP_ANNOUNCE("($1): an archive member is correctly retrieved.");
 
-	TP_SET_VERSION();
+	TP_SET_VERSION_OR_FAIL();
 
 	_TS_OPEN_FILE(e, TS_ARFILE_$1, ELF_C_READ, fd, goto done;);
 
@@ -629,7 +629,7 @@ tcArMemoryFdIgnored_$1(void)
 	TP_ANNOUNCE("($1): The fd value is ignored for archives opened "
 	    "with elf_memory().");
 
-	TP_SET_VERSION();
+	TP_SET_VERSION_OR_FAIL();
 
 	/*
 	 * First, populate a memory area with the contents of
@@ -716,7 +716,7 @@ tcArEntryTooLarge(void)
 	TP_ANNOUNCE("elf_begin() returns ELF_E_ARCHIVE for too-large archive "
 	    "entries.");
 
-	TP_SET_VERSION();
+	TP_SET_VERSION_OR_FAIL();
 
 	_TS_OPEN_FILE(ar_e, "entry-too-large.ar", ELF_C_READ, fd, goto done;);
 
