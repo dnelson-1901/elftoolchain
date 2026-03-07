@@ -61,7 +61,7 @@ IC_REQUIRES_VERSION_INIT();
 			tet_printf("fail: " #I " value 0x%x != "	\
 			    "expected 0x%x.", (E)->e_ident[EI_##I],	\
 			    (V));					\
-			result = TET_FAIL;				\
+			tet_result(TET_FAIL);				\
 		}							\
 	} while (0)
 
@@ -74,7 +74,7 @@ IC_REQUIRES_VERSION_INIT();
 			    "(%x %x %x %x).", (E)->e_ident[EI_MAG0],	\
 			    (E)->e_ident[EI_MAG1], (E)->e_ident[EI_MAG2],\
 			    (E)->e_ident[EI_MAG3]);			\
-			result = TET_FAIL;				\
+			tet_result(TET_FAIL);				\
 		}							\
 		CHECK_SIGFIELD(E,CLASS,		EC);			\
 		CHECK_SIGFIELD(E,DATA,		ED);			\
@@ -116,7 +116,7 @@ IC_REQUIRES_VERSION_INIT();
 		if (memcmp(H1.e_ident,H2.e_ident,EI_NIDENT) != 0) {	\
 			tet_printf("fail: \"%s\" e_ident mismatch.",	\
 			    FN);					\
-			result = TET_FAIL;				\
+			tet_result(TET_FAIL);				\
 		}							\
 	} while (0)
 #define	COMPARE_FIELD(FN,H1,H2,FIELD) do {				\
@@ -124,7 +124,7 @@ IC_REQUIRES_VERSION_INIT();
 			tet_printf("fail: \"%s\" (e_" #FIELD ") 0x%jx "	\
 			    "!= 0x%jx.", FN, (uintmax_t) H1.e_##FIELD,	\
 			    (uintmax_t) H2.e_##FIELD);			\
-			result = TET_FAIL;				\
+			tet_result(TET_FAIL);				\
 		}							\
 	} while (0)
 #define	COMPARE_EHDR(FN,H1,H2)	do {					\

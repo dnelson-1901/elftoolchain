@@ -62,9 +62,9 @@ define(`TP_FUNCTION',`tet_printf("N: %s", __func__)')
  * `result' variable.
  */
 define(`TP_UNRESOLVED',
-	`do { tet_printf("U: " $*); tet_result(TET_UNRESOLVED); result = TET_UNRESOLVED; } while (0)')
+	`do { tet_printf("U: " $*); tet_result(TET_UNRESOLVED); } while (0)')
 define(`TP_FAIL',
-	`do { tet_printf("F: " $*); tet_result(TET_FAIL); result = TET_FAIL; } while (0)')
+	`do { tet_printf("F: " $*); tet_result(TET_FAIL); } while (0)')
 
 /*
  * TP_SET_VERSION_OR_FAIL: set elf_version() or fail the test.

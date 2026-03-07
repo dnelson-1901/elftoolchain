@@ -50,20 +50,19 @@ void
 tcGelfGetNullElf$1(void)
 {
 	void *eh;
-	int error, result;
+	int error;
 
 	TP_CHECK_INITIALIZATION();
 
 	TP_ANNOUNCE("gelf_newehdr(NULL,ELFCLASS$2) fails with "
 	    "ELF_E_ARGUMENT.");
 
-	result = TET_PASS;
 	if ((eh = gelf_newehdr(NULL,ELFCLASS$1)) != NULL)
 		TP_FAIL("gelf_newehdr() succeeded unexpectedly.");
 	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
 		TP_FAIL("error=\"%s\".", elf_errmsg(error));
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }')
 
 FN(`NONE')
@@ -79,7 +78,7 @@ define(`FN',`
 void
 tcDataNonElfDesc$1(void)
 {
-	int error, result;
+	int error;
 	void *eh;
 	Elf *e;
 
@@ -90,7 +89,6 @@ tcDataNonElfDesc$1(void)
 
 	TS_OPEN_MEMORY(e, data);
 
-	result = TET_PASS;
 	if ((eh = gelf_newehdr(e, ELFCLASS$1)) != NULL)
 		TP_FAIL("gelf_newehdr() succeeded unexpectedly.");
 	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
@@ -98,7 +96,8 @@ tcDataNonElfDesc$1(void)
 		    error, elf_errmsg(error));
 
 	(void) elf_end(e);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }')
 
 FN(`NONE')
@@ -114,7 +113,7 @@ define(`FN',`
 void
 tcBadElfVersion$1$2(void)
 {
-	int err, result;
+	int err;
 	Elf *e;
 	void *eh;
 	char badelf[sizeof(badelftemplate)];
@@ -132,14 +131,14 @@ tcBadElfVersion$1$2(void)
 
 	TS_OPEN_MEMORY(e, badelf);
 
-	result = TET_PASS;
 	if ((eh = gelf_newehdr(e, ELFCLASS$2)) != NULL)
 		TP_FAIL("gelf_newehdr() succeeded unexpectedly.");
 	else if ((err = elf_errno()) != ELF_E_VERSION)
 		TP_FAIL("error=\"%s\".", elf_errmsg(err));
 
 	(void) elf_end(e);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }')
 
 FN(`LSB',`32')
@@ -155,7 +154,7 @@ define(`FN',`
 void
 tcMalformedElf$1$2(void)
 {
-	int err, result;
+	int err;
 	Elf *e;
 	void *eh;
 	char badelf[sizeof(badelftemplate)];
@@ -172,14 +171,14 @@ tcMalformedElf$1$2(void)
 
 	TS_OPEN_MEMORY(e, badelf);
 
-	result = TET_PASS;
 	if ((eh = gelf_newehdr(e, ELFCLASS$1)) != NULL)
 		TP_FAIL("gelf_newehdr() succeeded unexpectedly.");
 	else if ((err = elf_errno()) != ELF_E_HEADER)
 		TP_FAIL("error=\"%s\".", elf_errmsg(err));
 
 	(void) elf_end(e);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }')
 
 FN(`32',`LSB')
@@ -196,7 +195,7 @@ define(`FN',`
 void
 tcWrongElfClass$1$2(void)
 {
-	int error, fd, result;
+	int error, fd;
 	Elf$2_Ehdr *eh;
 	Elf *e;
 
@@ -207,11 +206,9 @@ tcWrongElfClass$1$2(void)
 
 	TS_OPEN_FILE(e, "ehdr.$1$3", ELF_C_READ, fd);
 
-	result = TET_PASS;
 	error = 0;
 	eh = NULL;
 
-	result = TET_PASS;
 	if ((eh = (Elf$2_Ehdr *) gelf_newehdr(e, ELFCLASS$2)) != NULL)
 		TP_FAIL("gelf_newehdr() succeeded unexpectedly.");
 	else if ((error = elf_errno()) != ELF_E_CLASS)
@@ -220,7 +217,7 @@ tcWrongElfClass$1$2(void)
 	(void) elf_end(e);
 	(void) close(fd);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }')
 
 FN(`lsb',`32',`64')
@@ -237,7 +234,7 @@ define(`FN',`
 void
 tcElfValidClass$1$2(void)
 {
-	int fd, result;
+	int fd;
 	Elf$2_Ehdr *eh;
 	Elf *e;
 
@@ -248,9 +245,6 @@ tcElfValidClass$1$2(void)
 
 	TS_OPEN_FILE(e, "ehdr.$1$2", ELF_C_READ, fd);
 
-	result = TET_PASS;
-
-	result = TET_PASS;
 	if ((eh = (Elf$2_Ehdr *) gelf_newehdr(e, ELFCLASS$2)) == NULL) {
 		TP_FAIL("gelf_newehdr(ehdr.$1$2) failed: %s.", elf_errmsg(-1));
 		goto done;
@@ -262,7 +256,7 @@ tcElfValidClass$1$2(void)
 	(void) elf_end(e);
 	(void) close(fd);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }')
 
 FN(`lsb',`32')
@@ -297,7 +291,7 @@ define(`FN',`
 void
 tcNewElfExpected$1(void)
 {
-	int fd, result;
+	int fd;
 	Elf$1_Ehdr *eh;
 	Elf *e;
 
@@ -308,7 +302,6 @@ tcNewElfExpected$1(void)
 
 	TS_OPEN_FILE(e, TS_NEWELF, ELF_C_WRITE, fd);
 
-	result = TET_PASS;
 	if ((eh = (Elf$1_Ehdr *) gelf_newehdr(e, ELFCLASS$1)) == NULL) {
 		TP_FAIL("gelf_newehdr("TS_NEWELF",ELFCLASS$1) failed: %s",
 		    elf_errmsg(-1));
@@ -321,7 +314,8 @@ tcNewElfExpected$1(void)
 	(void) elf_end(e);
 	(void) close(fd);
 	(void) unlink(TS_NEWELF);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }')
 
 FN(`32')
@@ -338,7 +332,7 @@ tcNewElfFlagDirty$1(void)
 {
 	Elf *e;
 	Elf$1_Ehdr *eh;
-	int fd, flags, result;
+	int fd, flags;
 
 	TP_CHECK_INITIALIZATION();
 
@@ -355,14 +349,12 @@ tcNewElfFlagDirty$1(void)
 
 	flags = elf_flagehdr(e, ELF_C_CLR, 0);
 
-	result = (flags & ELF_F_DIRTY) == 0 ? TET_FAIL : TET_PASS;
+	tet_result((flags & ELF_F_DIRTY) == 0 ? TET_FAIL : TET_PASS);
 
  done:
 	(void) elf_end(e);
 	(void) close(fd);
 	(void) unlink(TS_NEWELF);
-
-	tet_result(result);
 }')
 
 FN(`32')
@@ -381,7 +373,7 @@ tcUpdateElf$1$2(void)
 {
 	Elf$2_Ehdr *eh;
 	Elf *e;
-	int fd, reffd, result;
+	int fd, reffd;
 	off_t offset;
 	size_t fsz;
 	ssize_t rsz;
@@ -396,8 +388,6 @@ tcUpdateElf$1$2(void)
 	fd = reffd = -1;
 
 	TS_OPEN_FILE(e, TS_NEWELF, ELF_C_WRITE, fd);
-
-	result = TET_UNRESOLVED;
 
 	if ((eh = (Elf$2_Ehdr *) gelf_newehdr(e, ELFCLASS$2)) == NULL) {
 		TP_UNRESOLVED("gelf_newehdr(ELFCLASS$2) failed: %s",
@@ -449,7 +439,6 @@ tcUpdateElf$1$2(void)
 		goto done;
 	}
 
-	result = TET_PASS;
 	if (memcmp(t, tref, fsz) != 0)
 		TP_FAIL("memcmp("TS_NEWELF","TS_REFELF"$1$2) failed.");
 
@@ -465,7 +454,8 @@ tcUpdateElf$1$2(void)
 		free(t);
 	if (tref)
 		free(tref);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }')
 
 FN(`lsb',`32')

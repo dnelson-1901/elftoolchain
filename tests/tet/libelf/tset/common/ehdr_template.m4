@@ -170,7 +170,7 @@ static char badelftemplate[EI_NIDENT+1] = {
 void
 tcBadElfVersion(void)
 {
-	int err, result;
+	int err;
 	Elf *e;
 	TS_EHDR *eh;
 	char badelf[sizeof(badelftemplate)];
@@ -187,8 +187,6 @@ tcBadElfVersion(void)
 
 	TS_OPEN_MEMORY(e, badelf);
 
-	result = TET_PASS;
-
 	if ((eh = TS_ICFUNC`'(e)) != NULL)
 		TP_FAIL("TS_ICFUNC`'() succeeded unexpectedly.");
 	else if ((err = elf_errno()) != ELF_E_VERSION)
@@ -196,13 +194,13 @@ tcBadElfVersion(void)
 
 	(void) elf_end(e);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 void
 tcBadElf(void)
 {
-	int err, result;
+	int err;
 	Elf *e;
 	TS_EHDR *eh;
 	char badelf[sizeof(badelftemplate)];
@@ -218,7 +216,6 @@ tcBadElf(void)
 
 	TS_OPEN_MEMORY(e, badelf);
 
-	result = TET_PASS;
 	if ((eh = TS_ICFUNC`'(e)) != NULL)
 		TP_FAIL("TS_ICFUNC`'() succeeded unexpectedly.");
 	else if ((err = elf_errno()) != ELF_E_HEADER)
@@ -226,7 +223,7 @@ tcBadElf(void)
 
 	(void) elf_end(e);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -268,7 +265,7 @@ define(`FN',`
 void
 tcValidElf$1(void)
 {
-	int fd, result;
+	int fd;
 	Elf *e;
 	TS_EHDR *eh;
 
@@ -283,15 +280,13 @@ tcValidElf$1(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
 	CHECK_EHDR(eh, ELFDATA2$1, TS_ELFCLASS);
 
 done:
 	(void) elf_end(e);
 	(void) close(fd);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 
 }')
 
@@ -307,7 +302,7 @@ define(`FN',`
 void
 tcElfDup$1(void)
 {
-	int fd, result;
+	int fd;
 	Elf *e;
 	TS_EHDR *eh1, *eh2;
 
@@ -321,7 +316,6 @@ tcElfDup$1(void)
 	if ((eh1 = TS_ICFUNC`'(e)) == NULL ||
 	    (eh2 = TS_ICFUNC`'(e)) == NULL) {
 		TP_UNRESOLVED("TS_ICNAME`'() failed.");
-		tet_result(result);
 		return;
 	}
 
@@ -343,7 +337,7 @@ define(`FN',`
 void
 tcElfWrongSize$1(void)
 {
-	int error, fd, result;
+	int error, fd;
 	Elf *e;
 	char *fn;
 	TS_EHDR *eh;
@@ -351,8 +345,6 @@ tcElfWrongSize$1(void)
 	TP_CHECK_INITIALIZATION();
 
 	TP_ANNOUNCE("TS_ICNAME`'($1.TS_OTHERSIZE) fails with ELF_E_CLASS.");
-
-	result = TET_PASS;
 
 	fn = "ehdr.TOLOWER($1)`'TS_OTHERSIZE";
 	TS_OPEN_FILE(e,fn,ELF_C_READ,fd);
@@ -364,7 +356,7 @@ tcElfWrongSize$1(void)
 	(void) elf_end(e);
 	(void) close(fd);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 	
 }')
 
@@ -380,7 +372,7 @@ define(`FN',`
 void
 tcMalformed1$1(void)
 {
-	int error, fd, result;
+	int error, fd;
 	Elf *e;
 	char *fn;
 	TS_EHDR *eh;
@@ -393,27 +385,22 @@ tcMalformed1$1(void)
 	e = NULL;
 	fd = -1;
 	fn = "ehdr-malformed-1.TOLOWER($1)`'TS_EHDRSZ";
-	result = TET_UNRESOLVED;
 
 	_TS_OPEN_FILE(e, fn, ELF_C_READ, fd, goto done;);
 
 	error = 0;
-	if ((eh = TS_ICFUNC`'(e)) != NULL) {
+	if ((eh = TS_ICFUNC`'(e)) != NULL)
 		TP_FAIL("\"%s\" TS_ICNAME`'() succeeded.", fn);
-		goto done;
-	} else if ((error = elf_errno()) != ELF_E_HEADER) {
+	else if ((error = elf_errno()) != ELF_E_HEADER)
 		TP_FAIL("\"%s\" incorrect error (%d).", fn, error);
-		goto done;
-	}
-
-	result = TET_PASS;
 
 done:
 	if (e)
 		(void) elf_end(e);
 	if (fd != -1)
 		(void) close(fd);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }')
 
 FN(`LSB')

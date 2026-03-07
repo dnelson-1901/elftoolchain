@@ -59,23 +59,19 @@ void
 tcSequenceUninitialized$1(void)
 {
 	Elf *e;
-	int error, result;
+	int error;
 
 	TP_ANNOUNCE("elf_version() needs to be set before "
 	    "using the elf_begin($1) API.");
 
-	result = TET_PASS;
 	if ((e = elf_begin(-1, ELF_C_$1, NULL)) != NULL) {
 		TP_FAIL("ELF_C_$1: e=%p elf_begin() succeeded unexpectedly.",
 		    (void *) e);
-		goto done;
-	}
-
-	if ((error = elf_errno()) != ELF_E_SEQUENCE)
+	} else if ((error = elf_errno()) != ELF_E_SEQUENCE)
 		TP_FAIL("ELF_C_$1: e=%p error=%d \"%s\".", (void *) e, error,
 		    elf_errmsg(error));
- done:
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }')
 
 FN(`NULL')
@@ -87,13 +83,12 @@ void
 tcCmdInvalid(void)
 {
 	Elf *e;
-	int c, error, result;
+	int c, error;
 
 	TP_ANNOUNCE("An invalid cmd value returns ELF_E_ARGUMENT.");
 
 	TP_SET_VERSION_OR_FAIL();
 
-	result = TET_PASS;
 	for (c = ELF_C_NULL-1; c <= ELF_C_NUM; c++) {
 		if (c == ELF_C_READ || c == ELF_C_WRITE || c == ELF_C_RDWR ||
 		    c == ELF_C_NULL)
@@ -106,23 +101,20 @@ tcCmdInvalid(void)
 		}
 	}
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 void
 tcCmdNull(void)
 {
 	Elf *e;
-	int result;
 
 	TP_ANNOUNCE("cmd == ELF_C_NULL returns NULL.");
 
 	TP_SET_VERSION_OR_FAIL();
 
-	result = (e = elf_begin(-1, ELF_C_NULL, NULL)) != NULL ? TET_FAIL :
-	    TET_PASS;
-
-	tet_result(result);
+	tet_result((e = elf_begin(-1, ELF_C_NULL, NULL)) != NULL ?
+	    TET_FAIL : TET_PASS);
 }
 
 
@@ -135,11 +127,10 @@ void
 tcNonRegular$1(void)
 {
 	Elf *e;
-	int error, fd, result;
+	int error, fd;
 
 	e = NULL;
 	fd = -1;
-	result = TET_FAIL;
 
 	TP_ANNOUNCE("opening a $3 fails with ELF_E_ARGUMENT.");
 
@@ -152,8 +143,10 @@ tcNonRegular$1(void)
 
 	e = elf_begin(fd, ELF_C_READ, NULL);
 
-	if (e == NULL && (error = elf_errno()) == ELF_E_ARGUMENT)
-		result = TET_PASS;	/* Verify the error. */
+	if (e != NULL)
+		TP_FAIL("Unexpected success opening \"$2\".");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT) /* Verify error. */
+		TP_FAIL("Unexpected error code: %d", error);
 
  done:
 	if (e)
@@ -161,7 +154,7 @@ tcNonRegular$1(void)
 	if (fd != -1)
 		(void) close(fd);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }')
 
 FN(`DeviceFile', `/dev/null', `device file')
@@ -179,11 +172,10 @@ void
 tcZero$1(void)
 {
 	Elf *e;
-	int error, fd, result;
+	int error, fd;
 
 	e = NULL;
 	fd = -1;
-	result = TET_FAIL;
 
 	TP_ANNOUNCE("opening an zero-sized file in mode ELF_C_$1 fails "
 	            "with ELF_E_ARGUMENT.");
@@ -197,8 +189,10 @@ tcZero$1(void)
 
 	e = elf_begin(fd, ELF_C_$1, NULL);
 
-	if (e == NULL && (error = elf_errno()) == ELF_E_ARGUMENT)
-		result = TET_PASS;	/* Verify the error. */
+	if (e != NULL)
+		TP_FAIL("Unexpected success opening \"$2\"");
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT) /* Verify error. */
+		TP_FAIL("Unexpected error %d.", error);
 
  done:
 	if (e)
@@ -206,7 +200,7 @@ tcZero$1(void)
 	if (fd != -1)
 		(void) close(fd);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }')
 
 FN(`READ')
@@ -254,10 +248,9 @@ tcCmdWriteFdRead_$1(void)
 {
 	Elf *e;
 	Elf$1_Ehdr *eh;
-	int error, fd, result;
+	int error, fd;
 
 	e = NULL;
-	result = TET_PASS;
 	error = -1;
 	fd = -1;
 	
@@ -299,7 +292,7 @@ tcCmdWriteFdRead_$1(void)
 		(void) close(fd);
 
 	cleanup_tempfile();
-	tet_result(result);
+	tet_result(TET_PASS);
 }')
 
 FN(32)
@@ -309,7 +302,7 @@ void
 tcCmdWriteFdRdwr(void)
 {
 	Elf *e;
-	int error, fd, result;
+	int error, fd;
 
 	e = NULL;
 	fd = -1;
@@ -324,7 +317,6 @@ tcCmdWriteFdRdwr(void)
 		goto done;
 	}
 
-	result = TET_PASS;
 	error = -1;
 	if ((e = elf_begin(fd, ELF_C_WRITE, NULL)) == NULL) {
 		error = elf_errno();
@@ -339,14 +331,14 @@ tcCmdWriteFdRdwr(void)
 		(void) close(fd);
 		
 	cleanup_tempfile();
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 void
 tcCmdWriteFdWrite(void)
 {
 	Elf *e;
-	int error, fd, result;
+	int error, fd;
 
 	e = NULL;
 	fd = -1;
@@ -361,7 +353,6 @@ tcCmdWriteFdWrite(void)
 		goto done;
 	}
 
-	result = TET_PASS;
 	error = -1;
 	if ((e = elf_begin(fd, ELF_C_WRITE, NULL)) == NULL) {
 		error = elf_errno();
@@ -376,14 +367,14 @@ tcCmdWriteFdWrite(void)
 		(void) close(fd);
 		
 	cleanup_tempfile();
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 void
 tcCmdWriteParamIgnored(void)
 {
 	Elf *e, *t;
-	int fd, fd1, result;
+	int fd, fd1;
 
 	e = t = NULL;
 	fd = fd1 = -1;
@@ -405,10 +396,8 @@ tcCmdWriteParamIgnored(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-	if ((e = elf_begin(fd, ELF_C_WRITE, t)) == NULL) {
+	if ((e = elf_begin(fd, ELF_C_WRITE, t)) == NULL)
 		TP_FAIL("elf_begin() failed: \"%s\".", elf_errmsg(-1));
-	}
 
  done:
 	if (t)
@@ -422,7 +411,7 @@ tcCmdWriteParamIgnored(void)
 		(void) close(fd1);
 		
 	cleanup_tempfile();
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 
@@ -436,12 +425,11 @@ void
 tcElfOpen$1$2(void)
 {
 	Elf *e;
-	int fd, result;
+	int fd;
 	char *p;
 
 	fd = -1;
 	e = NULL;
-	result = TET_UNRESOLVED;
 
 	TP_ANNOUNCE("open(ELFCLASS$1,ELFDATA2`'TOUPPER($2)) succeeds.");
 
@@ -466,15 +454,14 @@ tcElfOpen$1$2(void)
 	    p[EI_DATA] != ELFDATA2`'TOUPPER($2))
 		TP_FAIL("class %d expected %d, data %d expected %d.",
 		    p[EI_CLASS], ELFCLASS$1, p[EI_DATA], ELFDATA2`'TOUPPER($2));
-	else
-		result = TET_PASS;
 
  done:
 	if (e)
 		(void) elf_end(e);
 	if (fd != -1)
 		(void) close(fd);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }')
 
 FN(32,`lsb')
@@ -489,7 +476,7 @@ void
 tcFdMismatch(void)
 {
 	Elf *e, *e2;
-	int error, fd, result;
+	int error, fd;
 
 	e = e2 = NULL;
 	fd = -1;
@@ -501,28 +488,21 @@ tcFdMismatch(void)
 	if ((fd = open("check_elf.msb32", O_RDONLY)) < 0 ||
 	    (e = elf_begin(fd, ELF_C_READ, NULL)) == NULL) {
 		TP_UNRESOLVED("open(check_elf) failed: fd=%d.", fd);
-		goto done;
-	}
-
-	result = TET_PASS;
-
-	if ((e2 = elf_begin(fd+1, ELF_C_READ, e)) != NULL) {
+	} else if ((e2 = elf_begin(fd+1, ELF_C_READ, e)) != NULL) {
 		TP_FAIL("e2=%p elf_begin(%d+1) succeeded unexpectedly.",
 		    (void *) e2, fd);
-		goto done;
-	}
-	if ((error = elf_errno()) != ELF_E_ARGUMENT)
+	} else if ((error = elf_errno()) != ELF_E_ARGUMENT)
 		TP_FAIL("elf_begin(%d+1) -> %p, error=%d \"%s\".", fd,
 		    (void *) e2, error, elf_errmsg(error));
 
- done:
 	if (e)
 		(void) elf_end(e);
 	if (e2)
 		(void) elf_end(e2);
 	if (fd >= 0)
 		(void) close(fd);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }
 
 undefine(`ARFN')
@@ -534,9 +514,8 @@ void
 tcArCmdMismatchRDWR_$1(void)
 {
 	Elf *e, *e2;
-	int error, fd, result;
+	int error, fd;
 
-	result = TET_UNRESOLVED;
 	e = e2 = NULL;
 	fd = -1;
 
@@ -548,24 +527,22 @@ tcArCmdMismatchRDWR_$1(void)
 	_TS_OPEN_FILE(e, TS_ARFILE_$1, ELF_C_READ, fd, goto done;);
 
 	/* Attempt to iterate through it with ELF_C_RDWR. */
-	result = TET_PASS;
-	if ((e2 = elf_begin(fd, ELF_C_RDWR, e)) != NULL) {
+	if ((e2 = elf_begin(fd, ELF_C_RDWR, e)) != NULL)
 		TP_FAIL("e2=%p elf_begin() succeeded unexpectedly.",
 		    (void *) e2);
-		goto done;
-	}
-	if ((error = elf_errno()) != ELF_E_ARGUMENT)
+	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
 		TP_FAIL("e2=%p error=%d \"%s\".", (void *) e2,
 		    error, elf_errmsg(error));
 
- done:
+done:
 	if (e)
 		(void) elf_end(e);
 	if (e2)
 		(void) elf_end(e2);
 	if (fd >= 0)
 		(void) close(fd);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }
 
 /*
@@ -575,12 +552,11 @@ void
 tcArRetrieval_$1(void)
 {
 	Elf *e, *e1;
-	int fd, result;
+	int fd;
 	Elf_Kind k;
 
 	e = e1 = NULL;
 	fd = -1;
-	result = TET_UNRESOLVED;
 
 	TP_ANNOUNCE("($1): an archive member is correctly retrieved.");
 
@@ -588,23 +564,20 @@ tcArRetrieval_$1(void)
 
 	_TS_OPEN_FILE(e, TS_ARFILE_$1, ELF_C_READ, fd, goto done;);
 
-	result = TET_PASS;
-	if ((e1 = elf_begin(fd, ELF_C_READ, e)) == NULL) {
+	if ((e1 = elf_begin(fd, ELF_C_READ, e)) == NULL)
 		TP_FAIL("elf_begin() failed: \"%s\".", elf_errmsg(-1));
-		goto done;
-	}
-
-	if ((k = elf_kind(e1)) != ELF_K_ELF)
+	else if ((k = elf_kind(e1)) != ELF_K_ELF)
 		TP_FAIL("kind %d, expected %d.", k, ELF_K_ELF);
 
- done:
+done:
 	if (e1)
 		(void) elf_end(e1);
 	if (e)
 		(void) elf_end(e);
 	if (fd != -1)
 		(void) close(fd);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }
 
 /*
@@ -615,16 +588,15 @@ void
 tcArMemoryFdIgnored_$1(void)
 {
 	Elf *e, *e1;
-	int fd, result;
 	Elf_Kind k;
 	struct stat sb;
 	ssize_t rsz;
 	char *b;
+	int fd;
 
 	e = e1 = NULL;
 	b = NULL;
 	fd = -1;
-	result = TET_UNRESOLVED;
 
 	TP_ANNOUNCE("($1): The fd value is ignored for archives opened "
 	    "with elf_memory().");
@@ -682,8 +654,6 @@ tcArMemoryFdIgnored_$1(void)
 		goto done;
 	}
 	
-	result = TET_PASS;
-
  done:
 	if (b)
 		free(b);
@@ -693,7 +663,8 @@ tcArMemoryFdIgnored_$1(void)
 		(void) elf_end(e);
 	if (fd != -1)
 		(void) close(fd);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }
 ')
 
@@ -707,9 +678,8 @@ void
 tcArEntryTooLarge(void)
 {
 	Elf *ar_e, *e;
-	int error, fd, result;
+	int error, fd;
 
-	result = TET_UNRESOLVED;
 	ar_e = NULL;
 	e = NULL;
 
@@ -726,17 +696,14 @@ tcArEntryTooLarge(void)
 	}
 
 	error = elf_errno();
-	if (error != ELF_E_ARCHIVE) {
+	if (error != ELF_E_ARCHIVE)
 		TP_FAIL("unexpected error %d", error);
-		goto done;
-	}
-
-	result = TET_PASS;
 
 done:
 	if (e)
 		(void) elf_end(e);
 	if (ar_e)
 		(void) elf_end(ar_e);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }

@@ -61,7 +61,7 @@ tcAllocateCheckDefaults(void)
 {
 	TS_EHDR	*eh;
 	Elf	*e;
-	int fd, result;
+	int fd;
 
 	TP_CHECK_INITIALIZATION();
 
@@ -69,8 +69,6 @@ tcAllocateCheckDefaults(void)
 	    "documented defaults.");
 
 	TS_OPEN_FILE(e, TS_NEWELF, ELF_C_WRITE, fd);
-
-	result = TET_PASS;
 
 	if ((eh = TS_ICFUNC`'(e)) == NULL) {
 		TP_FAIL("TS_ICNAME`'() failed: %s.", elf_errmsg(-1));
@@ -84,7 +82,7 @@ tcAllocateCheckDefaults(void)
 	(void) close(fd);
 	(void) unlink(TS_NEWELF);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -97,7 +95,7 @@ tcAllocateFlagDirty(void)
 {
 	TS_EHDR *eh;
 	Elf *e;
-	int fd, flags, result;
+	int fd, flags;
 
 	TP_CHECK_INITIALIZATION();
 
@@ -112,14 +110,12 @@ tcAllocateFlagDirty(void)
 
 	flags = elf_flagehdr(e, ELF_C_CLR, 0); /* Our extension */
 
-	result = (flags & ELF_F_DIRTY) == 0 ? TET_FAIL : TET_PASS;
+	tet_result((flags & ELF_F_DIRTY) == 0 ? TET_FAIL : TET_PASS);
 
  done:
 	(void) unlink(TS_NEWELF);
 	(void) elf_end(e);
 	(void) close(fd);
-
-	tet_result(result);
 }
 
 /* Declare fixed sizes associated with an ELF header. */
@@ -145,7 +141,7 @@ tcUpdate$1`'TS_EHDRSZ`'(void)
 {
 	TS_EHDR *eh;
 	Elf *e;
-	int fd, reffd, result;
+	int fd, reffd;
 	off_t offset;
 	size_t fsz;
 	ssize_t rsz;
@@ -160,8 +156,6 @@ tcUpdate$1`'TS_EHDRSZ`'(void)
 	fd = reffd = -1;
 
 	TS_OPEN_FILE(e, TS_NEWELF, ELF_C_WRITE, fd);
-
-	result = TET_UNRESOLVED;
 
 	if ((eh = TS_ICFUNC`'(e)) == NULL) {
 		TP_UNRESOLVED("TS_ICNAME`'() failed: %s.", elf_errmsg(-1));
@@ -223,7 +217,6 @@ tcUpdate$1`'TS_EHDRSZ`'(void)
 	}
 
 	/* Read it back in */
-	result = TET_PASS;
 	if (memcmp(t, tref, fsz) != 0)
 		TP_FAIL("memcmp(" TS_NEWELF ",%s) failed.", ref);
 
@@ -239,7 +232,8 @@ tcUpdate$1`'TS_EHDRSZ`'(void)
 		(void) close(fd);
 	if (reffd != -1)
 		(void) close(reffd);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }')
 
 FN(`LSB')
