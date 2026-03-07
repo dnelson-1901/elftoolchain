@@ -603,7 +603,7 @@ define(`XlatePrelude',`
 	Elf_Data dst, src, *r;
 	struct testdata *td;
 	size_t expected_size, fsz, msz;
-	int i, offset, result;
+	int i, offset;
 	char *srcbuf, *dstbuf, *t;
 	TO_M_OR_F(`ifdef(`ELF_TYPE_E'__SZ__`_$1',`
 	Elf`'__SZ__`'_$3 *dt, *ref;')',`')
@@ -617,8 +617,6 @@ define(`XlatePrelude',`
 
 	fsz = elf`'__SZ__`'_fsize(td->tsd_type, 1, EV_CURRENT);
 	msz = td->tsd_msz;
-
-	result = TET_PASS;
 
 	assert(msz > 0);
 	assert(fsz == td->tsd_fsz);	/* Sanity check. */
@@ -738,8 +736,6 @@ tcXlate_tp$1_$3`'__SZ__ (void)
 {
 	XlatePrelude($1,$3,$2)
 
-	result = TET_PASS;
-
 	for (offset = 0; offset < NOFFSET; offset++) {
 		XlateCopySrcData($1,$3)
 		XlateConvertAndCheck($1,$3,$2)
@@ -750,7 +746,8 @@ tcXlate_tp$1_$3`'__SZ__ (void)
 		free(srcbuf);
 	if (dstbuf)
 		free(dstbuf);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }')
 
 /*
@@ -763,7 +760,7 @@ void
 tcXlate_tpByte`'__SZ__ (void)
 {
 	Elf_Data dst, src, *r;
-	int i, offset, result;
+	int i, offset;
 	size_t expected_size, fsz, msz;
 	struct testdata *td;
 	char srcbuf[NCOPIES*sizeof(ELFTYPEDEFINITION(WORD,__SZ__,LSB)) + NOFFSET];
@@ -779,7 +776,6 @@ tcXlate_tpByte`'__SZ__ (void)
 
 	fsz = msz = sizeof(ELFTYPEDEFINITION(WORD,__SZ__,LSB));
 	expected_size = NCOPIES * msz;
-	result = TET_PASS;
 
 	for (offset = 0; offset < NOFFSET; offset++) {
 
@@ -789,7 +785,7 @@ tcXlate_tpByte`'__SZ__ (void)
 	}
 
  done:
-	tet_result(result);
+	tet_result(TET_PASS);
 }')
 
 define(`Xlate_TestConversions_Note')
@@ -817,7 +813,7 @@ void
 tcXlate_tpByteShared`'__SZ__ (void)
 {
 	Elf_Data dst, src, *r;
-	int i, offset, result;
+	int i, offset;
 	size_t expected_size, fsz, msz;
 	struct testdata *td;
 	char srcbuf[NCOPIES*sizeof(ELFTYPEDEFINITION(WORD,__SZ__,LSB))];
@@ -833,7 +829,6 @@ tcXlate_tpByteShared`'__SZ__ (void)
 
 	fsz = msz = sizeof(ELFTYPEDEFINITION(WORD,__SZ__,LSB));
 	expected_size = NCOPIES * msz;
-	result = TET_PASS;
 	dstbuf = srcbuf;
 	offset = 0;
 
@@ -842,7 +837,7 @@ tcXlate_tpByteShared`'__SZ__ (void)
 	XlateConvertAndCheck(BYTE,MSB,Word);
 
  done:
-	tet_result(result);
+	tet_result(TET_PASS);
 }')
 
 define(`Xlate_TestSharedConversions_Note')
@@ -854,7 +849,7 @@ tcXlate_tpShared$1_$3`'__SZ__ (void)
 	Elf_Data dst, src, *r;
 	struct testdata *td;
 	size_t expected_size, fsz, msz;
-	int i, result;
+	int i;
 	char *srcbuf, *t;
 	TO_M_OR_F(`ifdef(`ELF_TYPE_E'__SZ__`_$1',`
 	Elf`'__SZ__`'_$2 *dt, *ref;')',`')
@@ -868,8 +863,6 @@ tcXlate_tpShared$1_$3`'__SZ__ (void)
 
 	fsz = elf`'__SZ__`'_fsize(td->tsd_type, 1, EV_CURRENT);
 	msz = td->tsd_msz;
-
-	result = TET_PASS;
 
 	assert(msz > 0);
 	assert(fsz == td->tsd_fsz);	/* Sanity check. */
@@ -896,14 +889,13 @@ tcXlate_tpShared$1_$3`'__SZ__ (void)
 		t += msz;')
 	}
 
-	result = TET_PASS;
-
 	XlateConvertAndCheck($1,$3,$2)
 
  done:
 	if (srcbuf)
 		free(srcbuf);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }')
 
 define(`Xlate_TestConversionsSharedBuffer',`
@@ -923,14 +915,12 @@ void
 tcArgs_tpNullArgs(void)
 {
 	Elf_Data ed, *r;
-	int error, result;
+	int error;
 
 	TP_ANNOUNCE("TPFNNAME () with NULL arguments fails with "
 	    "ELF_E_ARGUMENT");
 
 	memset(&ed, 0, sizeof(ed));
-
-	result = TET_PASS;
 
 	if ((r = CallXlator(NULL, &ed, ELFDATA2LSB)) != NULL)
 		TP_FAIL("TPFNNAME(NULL,*,LSB) succeeded unexpectedly.");
@@ -953,21 +943,18 @@ tcArgs_tpNullArgs(void)
 		TP_FAIL("TPFNNAME(*,NULL,MSB) failed: error=\"%s\".",
 		    elf_errmsg(error));
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 void
 tcArgs_tpBadType(void)
 {
-
+	int error;
 	Elf_Data ed, es, *r;
-	int error, result;
 	char buf[1024];
 
 	TP_ANNOUNCE("TPFNNAME () with an out of range type fails with "
 	    "ELF_E_DATA.");
-
-	result = TET_PASS;
 
 	(void) memset(&es, 0, sizeof(es));
 	(void) memset(&ed, 0, sizeof(ed));
@@ -989,9 +976,6 @@ tcArgs_tpBadType(void)
 		TP_FAIL("TPFNNAME""(*,*,MSB) (%d): error=\"%s\".",
 		    es.d_type, elf_errmsg(error));
 
-	if (result != TET_PASS)
-		goto done;
-
 	es.d_type = ELF_T_NUM;
 
 	if ((r = CallXlator(&ed, &es, ELFDATA2LSB)) != NULL)
@@ -1006,22 +990,20 @@ tcArgs_tpBadType(void)
 		    es.d_type, (void *) r, elf_errmsg(error));
 
  done:
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 void
 tcArgs_tpBadEncoding(void)
 {
 	Elf_Data ed, es, *r;
-	int error, result;
+	int error;
 
 	TP_ANNOUNCE("TPFNNAME (*,*,BADENCODING) fails with "
 	    "ELF_E_ARGUMENT.");
 
 	(void) memset(&ed, 0, sizeof(ed));
 	(void) memset(&es, 0, sizeof(es));
-
-	result = TET_PASS;
 
 	if ((r = CallXlator(&ed, &es, ELFDATANONE-1)) != NULL)
 		TP_FAIL("TPFNNAME""(*,*,%d) succeeded unexpectedly.",
@@ -1036,14 +1018,14 @@ tcArgs_tpBadEncoding(void)
 		TP_FAIL("TPFNNAME""(*,*,%d): error=\"%s\".",
 		    ELFDATA2MSB+1, elf_errmsg(error));
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 void
 tcArgs_tpDstVersion(void)
 {
+	int error;
 	Elf_Data ed, es, *r;
-	int error, result;
 	char buf[sizeof(int)];
 
 	TP_ANNOUNCE("TPFNNAME (*,*,*) with an illegal dst version "
@@ -1058,8 +1040,6 @@ tcArgs_tpDstVersion(void)
 	es.d_version = EV_CURRENT;
 	ed.d_version = EV_NONE;
 
-	result = TET_PASS;
-
 	if ((r = CallXlator(&ed, &es, ELFDATA2LSB)) != NULL)
 		TP_FAIL("TPFNNAME""(*,*,LSB) succeeded unexpectedly.");
 	else if ((error = elf_errno()) != ELF_E_UNIMPL)
@@ -1071,14 +1051,14 @@ tcArgs_tpDstVersion(void)
 		TP_FAIL("TPFNNAME""(*,*,MSB) ver=%d error=\"%s\".",
 		    ed.d_version, elf_errmsg(error));
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 void
 tcArgs_tpSrcVersion(void)
 {
+	int error;
 	Elf_Data ed, es, *r;
-	int error, result;
 	char buf[sizeof(int)];
 
 	TP_ANNOUNCE("TPFNNAME (*,*,*) with an illegal src version fails "
@@ -1093,8 +1073,6 @@ tcArgs_tpSrcVersion(void)
 	es.d_version = EV_CURRENT+1;
 	ed.d_version = EV_CURRENT;
 
-	result = TET_PASS;
-
 	if ((r = CallXlator(&ed, &es, ELFDATA2LSB)) != NULL)
 		TP_FAIL("TPFNNAME""(*,*,LSB) succeeded unexpectedly.");
 	else if ((error = elf_errno()) != ELF_E_UNIMPL)
@@ -1106,7 +1084,7 @@ tcArgs_tpSrcVersion(void)
 		TP_FAIL("TPFNNAME""(*,*,MSB) ver=%d error=\"%s\".",
 		    es.d_version, elf_errmsg(error));
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -1115,8 +1093,8 @@ tcArgs_tpSrcVersion(void)
 void
 tcArgs_tpUnimplemented(void)
 {
+	int error, i;
 	Elf_Data ed, es, *r;
-	int error, i, result;
 	char sbuf[TPBUFSIZE]; /* large enough for any ELF type */
 	char dbuf[TPBUFSIZE];
 
@@ -1129,8 +1107,6 @@ tcArgs_tpUnimplemented(void)
 	ed.d_buf = dbuf; ed.d_size = sizeof(dbuf);
 	es.d_buf = sbuf; es.d_size = sizeof(sbuf);
 	es.d_version = ed.d_version = EV_CURRENT;
-
-	result = TET_PASS;
 
 	for (i = 0; i < ELF_T_NUM; i++) {
 		/* Skip over supported types. */
@@ -1163,7 +1139,7 @@ tcArgs_tpUnimplemented(void)
 	}
 
   done:
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 ')
 
@@ -1177,16 +1153,14 @@ define(`MKMISALIGNEDTP',`
 void
 tcBuffer_tpMisaligned_$1_`'__SZ__`'(void)
 {
-	Elf_Data ed, es, *r;
-	int count, error, result;
 	size_t fsz, msz;
+	int count, error;
+	Elf_Data ed, es, *r;
 	char sb[TPBUFSIZE], db[TPBUFSIZE];
 	struct testdata *td;
 
 	TP_ANNOUNCE("TPFNNAME""($1) misaligned buffers with "
 	    "ELF_E_DATA.");
-
-	result = TET_PASS;
 
 	td = &tests`'__SZ__[ELF_T_$1];
 	fsz = td->tsd_fsz;
@@ -1225,7 +1199,7 @@ tcBuffer_tpMisaligned_$1_`'__SZ__`'(void)
 	else if ((error = elf_errno()) != ELF_E_DATA)
 		TP_FAIL("TPFNNAME""(MSB) error=\"%s\".", elf_errmsg(error));
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }')
 
 define(`MKNONINTEGRALSRC',`
@@ -1233,15 +1207,13 @@ void
 tcBuffer_tpSrcExtra_$1_`'__SZ__`'(void)
 {
 	Elf_Data ed, es, *r;
-	int count, error, result;
+	int count, error;
 	size_t fsz, msz;
 	char sb[TPBUFSIZE], db[TPBUFSIZE];
 	struct testdata *td;
 
 	TP_ANNOUNCE("TPFNNAME""($1) mis-sized source buffer is rejected with "
 	    "ELF_E_DATA.");
-
-	result = TET_PASS;
 
 	td = &tests`'__SZ__[ELF_T_$1];
 	fsz = td->tsd_fsz;
@@ -1272,7 +1244,7 @@ tcBuffer_tpSrcExtra_$1_`'__SZ__`'(void)
 	else if ((error = elf_errno()) != ELF_E_DATA)
 		TP_FAIL("TPFNNAME""(LSB) error=\"%s\".", elf_errmsg(error));
 
-	tet_result(result);
+	tet_result(TET_PASS);
 
 }')
 
@@ -1280,16 +1252,14 @@ define(`MKDSTTOOSMALL',`
 void
 tcBuffer_tpDstTooSmall_$1_`'__SZ__`'(void)
 {
+ 	int error;
  	Elf_Data ed, es, *r;
- 	int error, result;
  	struct testdata *td;
  	char sb[TPBUFSIZE], db[TPBUFSIZE];
 	TO_M_OR_F(`size_t fsz', `size_t msz');
 
 	TP_ANNOUNCE("TPFNNAME""($1) small destination buffers are rejected "
 	    "with ELF_E_DATA.");
-
- 	result = TET_PASS;
 
 	td = &tests`'__SZ__[ELF_T_$1];
 	TO_M_OR_F(`fsz = td->tsd_fsz', `msz = td->tsd_msz');
@@ -1314,15 +1284,15 @@ tcBuffer_tpDstTooSmall_$1_`'__SZ__`'(void)
 	else if ((error = elf_errno()) != ELF_E_DATA)
 		TP_FAIL("TPFNNAME""(MSB) error=\"%s\".", elf_errmsg(error));
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }')
 
 define(`Xlate_TestBadBuffers',`
 void
 tcBuffer_tpNullDataPtr(void)
 {
+	int error;
 	Elf_Data ed, es, *r;
-	int error, result;
 	char buf[sizeof(int)];
 
 	TP_ANNOUNCE("TPFNNAME" "(...) with null d_buf pointers fails with "
@@ -1330,8 +1300,6 @@ tcBuffer_tpNullDataPtr(void)
 
 	(void) memset(&ed, 0, sizeof(ed));
 	(void) memset(&es, 0, sizeof(es));
-
-	result = TET_PASS;
 
 	es.d_type    = ELF_T_BYTE;
 	es.d_size    = ed.d_size = sizeof(buf);
@@ -1358,7 +1326,7 @@ tcBuffer_tpNullDataPtr(void)
 		    elf_errmsg(error));
 
  done:
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -1374,8 +1342,8 @@ ifdef(`ISELF64',`DO(64,`DOELFTYPES(`MKMISALIGNEDTP')')')
 void
 tcBuffer_tpOverlap(void)
 {
+	int error;
 	Elf_Data ed, es, *r;
-	int error, result;
 	char buf[sizeof(int)];
 
 	TP_ANNOUNCE("TPFNNAME""(...) overlapping buffers are rejected with "
@@ -1386,14 +1354,12 @@ tcBuffer_tpOverlap(void)
 	es.d_size = ed.d_size = sizeof(buf);
 	es.d_type = ELF_T_BYTE;
 
-	result = TET_PASS;
-
 	if ((r = CallXlator(&ed, &es, ELFDATANONE)) != NULL)
 		TP_FAIL("TPFNNAME""(...) succeeded unexpectedly.");
 	else if ((error = elf_errno()) != ELF_E_DATA)
 		TP_FAIL("error=\"%s\".", elf_errmsg(error));
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
