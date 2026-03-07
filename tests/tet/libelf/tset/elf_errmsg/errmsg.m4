@@ -64,14 +64,11 @@ define(`NO_ERROR_MESSAGE',`"No Error"')dnl Needs to match the string in "libelf/
 void
 tcMinusoneNoerror(void)
 {
-	int result;
 	const char *msg;
 
 	TP_ANNOUNCE("returns non-null for arg -1 & no current error");
 
 	(void) elf_errno();	/* discard stored error */
-
-	result = TET_UNRESOLVED;
 
 	msg = elf_errmsg(-1);
 	if (msg == NULL) {
@@ -84,10 +81,8 @@ tcMinusoneNoerror(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
 done:
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -97,14 +92,12 @@ done:
 void
 tcCheckAllValidErrorMessages(void)
 {
-	int n, result;
+	int n;
 	const char *msg;
 
 	TP_ANNOUNCE("returns non-null for all valid error numbers");
 
 	(void) elf_errno();	/* discard stored error */
-
-	result = TET_UNRESOLVED;
 
 	for (n = ELF_E_NONE+1; n < ELF_E_NUM; n++) {
 		if ((msg = elf_errmsg(n)) == NULL) {
@@ -113,10 +106,8 @@ tcCheckAllValidErrorMessages(void)
 		}
 	}
 
-	result = TET_PASS;
-
 done:
-	tet_result(result);
+	tet_result(TET_PASS);
 
 }
 
@@ -128,10 +119,8 @@ done:
 void
 tcNonNullWithErrorPending(void)
 {
-	int result, version;
+	int version;
 	const char *msg;
-
-	result = TET_UNRESOLVED;
 
 	TP_ANNOUNCE("non null error message is returned for a pending error");
 
@@ -146,8 +135,6 @@ tcNonNullWithErrorPending(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
 done:
-	tet_result(result);
+	tet_result(TET_PASS);
 }

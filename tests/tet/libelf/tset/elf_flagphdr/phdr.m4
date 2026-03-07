@@ -61,7 +61,6 @@ define(`_TP_DECLARATIONS',`
 	Elf32_Ehdr *eh;
 	Elf32_Phdr *ph;')
 define(`_TP_PROLOGUE',`
-	result = TET_UNRESOLVED;
 	fd = -1;
 	e = NULL;
 
@@ -101,13 +100,11 @@ _TP_FLAG_FN(`tcArgsSequence',`
 
 	TP_ANNOUNCE("Out of sequence use is detected.");
 
-	result = TET_UNRESOLVED;
 	fd = -1;
 	e = NULL;
 
 	TS_OPEN_FILE(e, "phdr.lsb32", ELF_C_READ, fd);
 
-	result = TET_PASS;
 	if ((f = elf_flagphdr(e, ELF_C_SET, ELF_F_DIRTY)) != 0)
 		TP_FAIL("flag=0x%x.", f);
 	else if ((error = elf_errno()) != ELF_E_SEQUENCE)

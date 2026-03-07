@@ -43,7 +43,6 @@ pushdef(`TYPE',ifelse($1,32,Elf32_Byte,Elf64_Byte))dnl
 void
 tcElf$1_ST_macros(void)
 {
-	int result = TET_PASS;
 	TYPE t;
 	
 	TP_ANNOUNCE("Test ELF$1_ST_* macros.");
@@ -97,7 +96,7 @@ tcElf$1_ST_macros(void)
 		    t);
         }
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 popdef(`TYPE')dnl
 ')

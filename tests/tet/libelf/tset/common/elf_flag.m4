@@ -36,11 +36,10 @@ define(`_TP_FLAG_FN',`
 void
 $1(void)
 {
-	int result;
 $2
 $3
 $4
-	tet_result(result);
+	tet_result(TET_PASS);
 }')
 
 define(`TP_FLAG_NULL',`_TP_FLAG_FN(`tcArgsNull',`
@@ -49,7 +48,6 @@ define(`TP_FLAG_NULL',`_TP_FLAG_FN(`tcArgsNull',`
 	TP_CHECK_INITIALIZATION();
 
 	TP_ANNOUNCE("A NULL first parameter returns zero.");',`
-	result = TET_PASS;
 	if ((ret = $1(NULL, ELF_C_SET, ELF_F_DIRTY)) != 0) {
 		TP_FAIL("$1() failed: ret=%d, error \"%s\".", ret,
 		    elf_errmsg(-1));
@@ -70,7 +68,6 @@ define(`TP_FLAG_ILLEGAL_CMD',`_TP_FLAG_FN(`tcArgsIllegalCmd',`
 	TP_ANNOUNCE("Illegal CMD values are rejected.");
 
 	_TP_PROLOGUE',`
-	result = TET_PASS;
 	for (cmd = ELF_C_NULL; cmd <= ELF_C_NUM; cmd++) {
 		if (cmd == ELF_C_CLR || cmd == ELF_C_SET)
 			continue;
@@ -101,7 +98,6 @@ define(`TP_FLAG_SET',`_TP_FLAG_FN(`tcArgsSet',`
 	TP_ANNOUNCE("ELF_C_SET works correctly.");
 
 	_TP_PROLOGUE',`
-	result = TET_PASS;
 
 	if ((flag = $1($2, ELF_C_SET, ELF_F_DIRTY)) != ELF_F_DIRTY) {
 		error = elf_errno();
@@ -127,7 +123,6 @@ define(`TP_FLAG_CLR',`_TP_FLAG_FN(`tcArgsClr',`
 	TP_ANNOUNCE("ELF_C_CLR works correctly.");
 
 	_TP_PROLOGUE',`
-	result = TET_PASS;
 
 	(void) $1($2, ELF_C_SET, ELF_F_DIRTY);
 	if ((flag = $1($2, ELF_C_CLR, ELF_F_DIRTY)) != 0) {
@@ -157,7 +152,6 @@ define(`TP_FLAG_ILLEGAL_FLAG',`_TP_FLAG_FN(`tcArgsIllegalFlags',`
 	TP_ANNOUNCE("Illegal flag values are rejected.");
 
 	_TP_PROLOGUE',`
-	result = TET_PASS;
 	for (flags = 0x1; flags; flags <<= 1) {
 		if (flags & ($3))
 			continue;
@@ -193,7 +187,6 @@ _TP_FLAG_FN(`tcArgsNonElf',`
 	TP_ANNOUNCE("Non-ELF files are rejected.");
 
 	TS_OPEN_MEMORY(e, rawdata);',`
-	result = TET_PASS;
 	if ((ret = $1(e, ELF_C_SET, ELF_F_DIRTY)) != 0) {
 		TP_FAIL("$1 ret=%d.", ret);
 	} else if ((error = elf_errno()) != ELF_E_ARGUMENT) {

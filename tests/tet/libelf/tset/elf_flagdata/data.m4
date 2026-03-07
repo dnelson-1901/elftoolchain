@@ -64,7 +64,6 @@ define(`_TP_DECLARATIONS',`
 	Elf_Scn *scn;
 	Elf_Data *d;')
 define(`_TP_PROLOGUE',`
-	result = TET_UNRESOLVED;
 	fd = -1;
 	e = NULL;
 

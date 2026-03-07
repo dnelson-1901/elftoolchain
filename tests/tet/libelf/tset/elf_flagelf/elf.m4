@@ -58,7 +58,6 @@ define(`_TP_DECLARATIONS',`
 	int fd;
 	Elf *e;')
 define(`_TP_PROLOGUE',`
-	result = TET_UNRESOLVED;
 	fd = -1;
 	e = NULL;
 
@@ -89,18 +88,16 @@ define(`_FN',`
 void
 $1(void)
 {
-	int error, fd, result, ret;
+	int error, fd, ret;
 	Elf *e;
 
 	TP_ANNOUNCE($2);
 
-	result = TET_UNRESOLVED;
 	fd = -1;
 	e = NULL;
 
 	TS_OPEN_FILE(e, $3, $4, fd);
 
-	result = TET_PASS;
 	if ((ret = elf_flagelf(e, ELF_C_SET, $5)) != 0)
 		TP_FAIL("elf_flagelf() ret=%d.", ret);
 	else if ((error = elf_errno()) != ELF_E_ARGUMENT)
@@ -108,7 +105,7 @@ $1(void)
 
 	_TP_EPILOGUE()
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }')
 
 /*

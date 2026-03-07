@@ -989,7 +989,6 @@ tcArgs_tpBadType(void)
 		TP_FAIL("TPFNNAME""(*,*,MSB) (%d): r=%p error=\"%s\".",
 		    es.d_type, (void *) r, elf_errmsg(error));
 
- done:
 	tet_result(TET_PASS);
 }
 

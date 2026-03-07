@@ -58,7 +58,6 @@ define(`_TP_DECLARATIONS',`
 	Elf32_Ehdr *eh;
 	Elf_Scn *scn;')
 define(`_TP_PROLOGUE',`
-	result = TET_UNRESOLVED;
 	fd = -1;
 	e = NULL;
 

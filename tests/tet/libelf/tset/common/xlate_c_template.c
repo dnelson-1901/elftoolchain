@@ -1369,45 +1369,39 @@ void
 __XCONCAT(tcArgs_tpNullArgs,TS_XLATESZ)(void)
 {
 	Elf_Data ed;
-	int result;
 
 	tet_infoline("assertion: "__XSTRING(TS_XLATETOF) "/"
 	    __XSTRING(TS_XLATETOM) " with NULL arguments fail "
 	    "with ELF_E_ARGUMENT.");
 
-	result = TET_PASS;
-
 	if (TS_XLATETOF(NULL,&ed,ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_ARGUMENT)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
 	if (TS_XLATETOF(&ed,NULL,ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_ARGUMENT)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
 	if (TS_XLATETOM(NULL,&ed,ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_ARGUMENT)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
 	if (TS_XLATETOM(&ed,NULL,ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_ARGUMENT)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 void
 __XCONCAT(tcArgs_tpBadType,TS_XLATESZ)(void)
 {
 	Elf_Data ed, es;
-	int result;
 	char buf[1024];
 
 	tet_infoline("assertion: "__XSTRING(TS_XLATETOF) "/"
 	    __XSTRING(TS_XLATETOM) " with an out of range type "
 	    "fails with ELF_E_DATA.");
-
-	result = TET_PASS;
 
 	es.d_version = ed.d_version = EV_CURRENT;
 	es.d_buf     = ed.d_buf = buf;
@@ -1417,59 +1411,55 @@ __XCONCAT(tcArgs_tpBadType,TS_XLATESZ)(void)
 
 	if (TS_XLATETOF(&ed,&es,ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_DATA)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
 	if (TS_XLATETOM(&ed,&es,ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_DATA)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
 	es.d_type = ELF_T_NUM;
 
 	if (TS_XLATETOF(&ed,&es,ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_DATA)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
 	if (TS_XLATETOM(&ed,&es,ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_DATA)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 void
 __XCONCAT(tcArgs_tpBadEncoding,TS_XLATESZ)(void)
 {
 	Elf_Data ed, es;
-	int result;
 
 	tet_infoline("assertion: "__XSTRING(TS_XLATETOF) "/"
 	    __XSTRING(TS_XLATETOM) " (*,*,BADENCODING) "
 	    "fails with ELF_E_ARGUMENT.");
 
-	result = TET_PASS;
-
 	if (TS_XLATETOF(&ed,&es,ELFDATANONE-1) != NULL ||
 	    elf_errno() != ELF_E_ARGUMENT)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 	else if (TS_XLATETOF(&ed,&es,ELFDATA2MSB+1) != NULL ||
 	    elf_errno() != ELF_E_ARGUMENT)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
 	if (TS_XLATETOM(&ed,&es,ELFDATANONE-1) != NULL ||
 	    elf_errno() != ELF_E_ARGUMENT)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 	else if (TS_XLATETOM(&ed,&es,ELFDATA2MSB+1) != NULL ||
 	    elf_errno() != ELF_E_ARGUMENT)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 void
 __XCONCAT(tcArg_tpDstSrcVersionToF,TS_XLATESZ)(void)
 {
 	Elf_Data ed, es;
-	int result;
 	char buf[sizeof(int)];
 
 	tet_infoline("assertion: "__XSTRING(TS_XLATETOF)"() / "
@@ -1482,17 +1472,15 @@ __XCONCAT(tcArg_tpDstSrcVersionToF,TS_XLATESZ)(void)
 	es.d_version = EV_CURRENT;
 	ed.d_version = EV_NONE;
 
-	result = TET_PASS;
-
 	if (TS_XLATETOF(&ed, &es, ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_UNIMPL)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
 	if (TS_XLATETOM(&ed, &es, ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_UNIMPL)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -1502,8 +1490,8 @@ void
 __XCONCAT(tcArg_tpUnimplemented,TS_XLATESZ)(void)
 {
 	Elf_Data ed, es;
-	int i, result;
 	char *buf;
+	int i;
 
 	tet_infoline("assertion: "__XSTRING(TS_XLATETOF)"() on "
 	    "unimplemented types will with ELF_E_UNIMPL.");
@@ -1522,8 +1510,6 @@ __XCONCAT(tcArg_tpUnimplemented,TS_XLATESZ)(void)
 	ed.d_size = es.d_size = 1024;
 	ed.d_version = es.d_version = EV_CURRENT;
 
-	result = TET_PASS;
-
 	for (i = 0; i < ELF_T_NUM; i++) {
 		switch (i) {
 		case ELF_T_MOVEP:
@@ -1541,29 +1527,29 @@ __XCONCAT(tcArg_tpUnimplemented,TS_XLATESZ)(void)
 		if (TS_XLATETOF(&ed,&es,ELFDATA2LSB) != NULL ||
 		    elf_errno() != ELF_E_UNIMPL) {
 			tet_printf("fail: TOF/LSB/type=%d.", i);
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 
 		if (TS_XLATETOF(&ed,&es,ELFDATA2MSB) != NULL ||
 		    elf_errno() != ELF_E_UNIMPL) {
 			tet_printf("fail: TOF/MSB/type=%d.", i);
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 
 		if (TS_XLATETOM(&ed,&es,ELFDATA2LSB) != NULL ||
 		    elf_errno() != ELF_E_UNIMPL) {
 			tet_printf("fail: TOM/LSB/type=%d.", i);
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 
 		if (TS_XLATETOM(&ed,&es,ELFDATA2MSB) != NULL ||
 		    elf_errno() != ELF_E_UNIMPL) {
 			tet_printf("fail: TOM/MSB/type=%d.", i);
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 	}
 
-	tet_result(result);
+	tet_result(TET_PASS);
 	free(buf);
 }
 
@@ -1574,14 +1560,11 @@ void
 __XCONCAT(tcBuffer_tpNullDataPtr,TS_XLATESZ)(void)
 {
 	Elf_Data ed, es;
-	int result;
 	char buf[sizeof(int)];
 
 	tet_infoline("assertion: "__XSTRING(TS_XLATETOF)"() / "
 	    __XSTRING(TS_XLATETOM) "() with a null "
 	    "src,dst buffer pointer fails with ELF_E_DATA.");
-
-	result = TET_PASS;
 
 	es.d_type    = ELF_T_BYTE;
 	es.d_size    = ed.d_size = sizeof(buf);
@@ -1592,23 +1575,23 @@ __XCONCAT(tcBuffer_tpNullDataPtr,TS_XLATESZ)(void)
 	ed.d_buf     = buf;
 	if (TS_XLATETOF(&ed, &es, ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_DATA)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
 	if (TS_XLATETOM(&ed, &es, ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_DATA)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
 	es.d_buf     = buf;
 	ed.d_buf     = NULL;
 	if (TS_XLATETOF(&ed, &es, ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_DATA)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
 	if (TS_XLATETOM(&ed, &es, ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_DATA)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -1619,7 +1602,6 @@ void
 __XCONCAT(tcBuffer_tpMisaligned,TS_XLATESZ)(void)
 {
 	Elf_Data ed, es;
-	int result;
 	size_t fsz, msz;
 	char *sb, *db;
 	struct testdata *td;
@@ -1636,8 +1618,6 @@ __XCONCAT(tcBuffer_tpMisaligned,TS_XLATESZ)(void)
 			free(sb);
 		return;
 	}
-
-	result = TET_PASS;
 
 	for (td = TESTDATASET; td->tsd_name; td++) {
 		fsz = td->tsd_fsz;
@@ -1658,7 +1638,7 @@ __XCONCAT(tcBuffer_tpMisaligned,TS_XLATESZ)(void)
 		    elf_errno() != ELF_E_DATA) {
 			tet_printf("fail: \"%s\" TOM alignment.",
 			    td->tsd_name);
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 
 		/* Misalign the source for to-file xfers */
@@ -1670,11 +1650,11 @@ __XCONCAT(tcBuffer_tpMisaligned,TS_XLATESZ)(void)
 		    elf_errno() != ELF_E_DATA) {
 			tet_printf("fail: \"%s\" TOF alignment.",
 			    td->tsd_name);
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 	}
 
-	tet_result(result);
+	tet_result(TET_PASS);
 	free(sb);
 	free(db);
 }
@@ -1687,7 +1667,6 @@ void
 __XCONCAT(tcBuffer_tpOverlap,TS_XLATESZ)(void)
 {
 	Elf_Data ed, es;
-	int result;
 	char buf[sizeof(int)];
 
 	tet_infoline("assertion: overlapping buffers are rejected with "
@@ -1698,21 +1677,19 @@ __XCONCAT(tcBuffer_tpOverlap,TS_XLATESZ)(void)
 	es.d_size = ed.d_size = sizeof(buf);
 	es.d_type = ELF_T_BYTE;
 
-	result = TET_PASS;
-
 	if (TS_XLATETOF(&ed, &es, ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_DATA) {
 		tet_infoline("fail: "__XSTRING(TS_XLATETOF));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 	}
 
 	if (TS_XLATETOM(&ed, &es, ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_DATA) {
 		tet_infoline("fail: "__XSTRING(TS_XLATETOM));
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 	}
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -1722,7 +1699,6 @@ void
 __XCONCAT(tcBuffer_tpSrcExtra,TS_XLATESZ)(void)
 {
 	Elf_Data ed, es;
-	int result;
 	size_t fsz, msz;
 	char *sb, *db;
 	struct testdata *td;
@@ -1739,8 +1715,6 @@ __XCONCAT(tcBuffer_tpSrcExtra,TS_XLATESZ)(void)
 			free(sb);
 		return;
 	}
-
-	result = TET_PASS;
 
 	for (td = TESTDATASET; td->tsd_name; td++) {
 		fsz = td->tsd_fsz;
@@ -1760,7 +1734,7 @@ __XCONCAT(tcBuffer_tpSrcExtra,TS_XLATESZ)(void)
 		    elf_errno() != ELF_E_DATA) {
 			tet_printf("fail: \"%s\" TOM buffer size.",
 			    td->tsd_name);
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 
 		es.d_size = msz+1;
@@ -1768,11 +1742,12 @@ __XCONCAT(tcBuffer_tpSrcExtra,TS_XLATESZ)(void)
 		    elf_errno() != ELF_E_DATA) {
 			tet_printf("fail: \"%s\" TOF buffer size.",
 			    td->tsd_name);
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 	}
 
-	tet_result(result);
+	tet_result(TET_PASS);
+
 	free(sb);
 	free(db);
 }
@@ -1781,12 +1756,9 @@ void
 __XCONCAT(tcBuffer_tpDstTooSmall,TS_XLATESZ)(void)
 {
 	Elf_Data ed, es;
-	int result;
 	struct testdata *td;
 	size_t fsz, msz;
 	char buf[1024];
-
-	result = TET_PASS;
 
 	tet_infoline("assertion: too small destination buffers are rejected "
 	    "with ELF_E_DATA.");
@@ -1806,7 +1778,7 @@ __XCONCAT(tcBuffer_tpDstTooSmall,TS_XLATESZ)(void)
 		    elf_errno() != ELF_E_DATA) {
 			tet_printf("fail: \"%s\" TOF dst size.",
 			    td->tsd_name);
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 
 		es.d_size = (sizeof(buf) / fsz) * fsz;
@@ -1814,11 +1786,11 @@ __XCONCAT(tcBuffer_tpDstTooSmall,TS_XLATESZ)(void)
 		    elf_errno() != ELF_E_DATA) {
 			tet_printf("fail: \"%s\" TOF dst size.",
 			    td->tsd_name);
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 	}
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 #endif	/* NO_TESTCASE_FUNCTIONS */

@@ -62,7 +62,6 @@ define(`_TP_DECLARATIONS',`
 	Elf *e;
 	Elf32_Ehdr *eh;')
 define(`_TP_PROLOGUE',`
-	result = TET_UNRESOLVED;
 	fd = -1;
 	e = NULL;
 
@@ -99,13 +98,11 @@ _TP_FLAG_FN(`tcArgsSequence',`
 
 	TP_ANNOUNCE("Out of sequence use is detected.");
 
-	result = TET_UNRESOLVED;
 	fd = -1;
 	e = NULL;
 
 	TS_OPEN_FILE(e, "ehdr.lsb32", ELF_C_READ, fd);
 
-	result = TET_PASS;
 	if ((f = elf_flagehdr(e, ELF_C_SET, ELF_F_DIRTY)) != 0) {
 		TP_FAIL("elf_flagehdr() flag=0x%x", f);
 		goto done;

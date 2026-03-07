@@ -40,24 +40,21 @@ IC_REQUIRES_VERSION_INIT();
 void
 tcNullNull(void)
 {
-	int result;
-
 	TP_CHECK_INITIALIZATION();
 
 	TP_ANNOUNCE("elf_getident(NULL,...) fails with error ELF_E_ARGUMENT.");
 
-	result = TET_PASS;
 	if (elf_getident(NULL, NULL) != NULL ||
 	    elf_errno() != ELF_E_ARGUMENT)
-		result = TET_FAIL;
-	tet_result(result);
+		tet_result(TET_FAIL);
+
+	tet_result(TET_PASS);
 }
 
 void
 tcNullSize(void)
 {
 	size_t dummy;
-	int result;
 
 	TP_CHECK_INITIALIZATION();
 
@@ -66,13 +63,12 @@ tcNullSize(void)
 
 	dummy = (size_t) 0xdeadc0de;
 
-	result = TET_PASS;
 	if (elf_getident(NULL, &dummy) != NULL ||
 	    elf_errno() != ELF_E_ARGUMENT ||
 	    dummy != 0)
-		result = TET_FAIL;
-	tet_result(result);
+		tet_result(TET_FAIL);
 
+	tet_result(TET_PASS);
 }
 
 changequote({,})
@@ -87,7 +83,6 @@ tcMainArIdent(void)
 	Elf *e;
 	char *p;
 	size_t sz;
-	int result;
 
 	TP_CHECK_INITIALIZATION();
 
@@ -95,12 +90,12 @@ tcMainArIdent(void)
 
 	TS_OPEN_MEMORY(e, ar_file);
 
-	result = TET_PASS;
 	sz = (size_t) 0xdeadc0de;
 	if ((p = elf_getident(e, &sz)) == NULL ||
 	    sz != SARMAG || strncmp(p, ARMAG, SARMAG))
-		result = TET_FAIL;
-	tet_result(result);
+		tet_result(TET_FAIL);
+
+	tet_result(TET_PASS);
 
 	(void) elf_end(e);
 }
@@ -116,7 +111,6 @@ tcMainElfIdent(void)
 	Elf *e;
 	char *p;
 	size_t sz;
-	int result;
 
 	TP_CHECK_INITIALIZATION();
 
@@ -125,13 +119,13 @@ tcMainElfIdent(void)
 
 	TS_OPEN_MEMORY(e, elf_file);
 
-	result = TET_PASS;
 	sz = (size_t) 0xdeadc0de;
 	if ((p = elf_getident(e, &sz)) == NULL ||
 	    sz != EI_NIDENT ||
 	    memcmp(elf_file, p, sz))
-		result = TET_FAIL;
-	tet_result(result);
+		tet_result(TET_FAIL);
+
+	tet_result(TET_PASS);
 
 	(void) elf_end(e);
 }
@@ -145,7 +139,6 @@ tcMainUnknownData(void)
 	Elf *e;
 	char *p;
 	size_t sz;
-	int result;
 
 	TP_CHECK_INITIALIZATION();
 
@@ -154,13 +147,13 @@ tcMainUnknownData(void)
 
 	TS_OPEN_MEMORY(e, unknown_data);
 
-	result = TET_PASS;
 	sz = (size_t) 0xdeadc0de;
 	if ((p = elf_getident(e, &sz)) == NULL ||
 	    sz != sizeof(unknown_data) ||
 	    memcmp(p, unknown_data, sizeof(unknown_data)))
-		result = TET_FAIL;
-	tet_result(result);
+		tet_result(TET_FAIL);
+
+	tet_result(TET_PASS);
 
 	(void) elf_end(e);
 }

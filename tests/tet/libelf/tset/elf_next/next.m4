@@ -72,7 +72,6 @@ tcArgsNonAr`'TOUPPER($1)(void)
 {
 	Elf *e;
 	Elf_Cmd c;
-	int result;
 
 	TP_CHECK_INITIALIZATION();
 
@@ -80,13 +79,12 @@ tcArgsNonAr`'TOUPPER($1)(void)
 
 	TS_OPEN_MEMORY(e, $1);
 
-	result = TET_PASS;
 	if ((c = elf_next(e)) != ELF_C_NULL)
 		TP_FAIL("\"$1\" c=%d, != ELF_C_NULL", c);
 
 	(void) elf_end(e);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }')
 
 FN(notar)
@@ -107,13 +105,12 @@ define(`FN',`
 void
 tcArArchive$1(void)
 {
-	int error, fd, i, result;
+	int error, fd, i;
 	Elf_Cmd c;
 	Elf *a, *e;
 
 	TP_ANNOUNCE("correctly iterates through \"a$1.ar\" with $2 members.");
 
-	result = TET_UNRESOLVED;
 	a = e = NULL;
 	fd = -1;
 	i = 0;
@@ -133,7 +130,6 @@ tcArArchive$1(void)
 		goto done;
 	}
 
-	result = TET_PASS;
 	if (i != $2)
 		TP_FAIL("i=%d expected $2.", i);
 
@@ -143,7 +139,7 @@ tcArArchive$1(void)
 	if (fd != -1)
 		(void) close(fd);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }')
 
 FN(1, 2) dnl text files with short names

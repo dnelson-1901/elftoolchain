@@ -63,7 +63,6 @@ define(`_TP_DECLARATIONS',`
 	Elf *ar, *member;
 	Elf_Arhdr *arh;')
 define(`_TP_PROLOGUE',`
-	result = TET_UNRESOLVED;
 	fd = -1;
 	ar = member = NULL;
 

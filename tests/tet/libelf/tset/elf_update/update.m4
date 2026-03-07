@@ -64,7 +64,7 @@ static char rawdata[] = "This is not an ELF file.";
 void
 tcArgsNull(void)
 {
-	int error, result;
+	int error;
 	off_t offset;
 
 	TP_CHECK_INITIALIZATION();
@@ -77,16 +77,12 @@ tcArgsNull(void)
 		goto done;
 	}
 
-	if ((error = elf_errno()) != ELF_E_ARGUMENT) {
+	if ((error = elf_errno()) != ELF_E_ARGUMENT)
 		TP_FAIL("elf_update() did not fail with ELF_E_ARGUMENT; "
 		    "error=%d \"%s\".", error, elf_errmsg(error));
-		goto done;
-	}
-
-	result = TET_PASS;
 
  done:
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
