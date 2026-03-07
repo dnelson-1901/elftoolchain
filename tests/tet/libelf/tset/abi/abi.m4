@@ -43,22 +43,17 @@ define(`FN',`
 void
 tcCheck$1(void)
 {
-	int result;
 	const size_t nconst = sizeof($2) / sizeof ($2[0]);
 	size_t n;
 
 	TP_ANNOUNCE("Check " $3 " values");
 
-	result = TET_FAIL;
-
 	for (n = 0; n < nconst; n++)
 		if ($2[n].symbol != $2[n].value)
-			goto done;
+			TP_FAIL("ABI mismatch n=%zu symbol=%zu expected=%zu",
+			    n, $2[n].symbol, $2[n].value);
 
-	result = TET_PASS;
-
-done:
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 ')
 

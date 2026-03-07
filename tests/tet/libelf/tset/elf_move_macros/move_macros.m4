@@ -44,7 +44,6 @@ pushdef(FMT,ifelse($1,32,`%" PRIu32 "',`%" PRIu64 "'))dnl
 void
 tcElf$1_M_macros(void)
 {
-	int result = TET_PASS;
 	TYPE t;
 	
 	TP_ANNOUNCE("Test ELF$1_M_* macros.");
@@ -87,7 +86,7 @@ tcElf$1_M_macros(void)
 		TP_FAIL("M_INFO() failed: expected 0xAABB00DD, actual 0x`'FMT", t);
 	}
 	
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 popdef(`FMT')dnl
 popdef(`TYPE')dnl

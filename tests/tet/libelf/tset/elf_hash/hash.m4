@@ -79,13 +79,11 @@ tpCheckHash(void)
 {
 	unsigned long h;
 	struct htab *ht;
-	int result;
 	char *tmp;
 
 	tet_infoline("assertion: check elf_hash() against several constant "
 	    "strings.");
 
-	result = TET_PASS;
 	for (ht = htab; ht->s; ht++) {
 		if ((h = elf_hash(ht->s)) != ht->h) {
 			if ((tmp = malloc(4 * strlen(ht->s) + 1)) != NULL) {
@@ -94,8 +92,8 @@ tpCheckHash(void)
 				    "expected 0x%x.", tmp, h, ht->h);
 				free(tmp);
 			}
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 		}
 	}
-	tet_result(result);
+	tet_result(TET_PASS);
 }

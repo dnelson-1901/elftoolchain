@@ -44,17 +44,16 @@ include(`elfts.m4')
 void
 tcNullGelfGetNullElf(void)
 {
-	int result;
 	GElf_Ehdr dst;
 
 	TP_CHECK_INITIALIZATION();
 
 	TP_ANNOUNCE("gelf_getehdr(NULL,*) fails with ELF_E_ARGUMENT");
 
-	result = TET_PASS;
 	if (gelf_getehdr(NULL,&dst) != NULL || elf_errno() != ELF_E_ARGUMENT)
-		result = TET_FAIL;
-	tet_result(result);
+		tet_result(TET_FAIL);
+
+	tet_result(TET_PASS);
 }
 
 void
@@ -105,8 +104,8 @@ tcNonElfFails(void)
 void
 tcBadElfVersion(void)
 {
-	int err, result;
 	Elf *e;
+	int err;
 	void *eh;
 	GElf_Ehdr d;
 	char badelf[sizeof(badelftemplate)];
@@ -124,14 +123,12 @@ tcBadElfVersion(void)
 
 	TS_OPEN_MEMORY(e,badelf);
 
-	result = TET_PASS;
-
 	if ((eh = gelf_getehdr(e, &d)) != NULL)
 		TP_FAIL("gelf_getehdr() succeeded unexpectedly.");
 	else if ((err = elf_errno()) != ELF_E_VERSION)
 		TP_FAIL("error=%d.", err);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 	
 	(void) elf_end(e);
 }
@@ -139,8 +136,8 @@ tcBadElfVersion(void)
 void
 tcMalformedElf(void)
 {
-	int err, result;
 	Elf *e;
+	int err;
 	void *eh;
 	GElf_Ehdr d;
 	char badelf[sizeof(badelftemplate)];
@@ -157,14 +154,12 @@ tcMalformedElf(void)
 
 	TS_OPEN_MEMORY(e, badelf);
 
-	result = TET_PASS;
-
 	if ((eh = gelf_getehdr(e, &d)) != NULL)
 		TP_FAIL("gelf_getehdr() succeeded unexpectedly.");
 	else if ((err = elf_errno()) != ELF_E_HEADER)
 		TP_FAIL("error=%d.", err);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 
 	(void) elf_end(e);
 }
@@ -180,7 +175,7 @@ static char *filenames[] = {
 void
 tcGoodElfValid(void)
 {
-	int fd, result;
+	int fd;
 	GElf_Ehdr d1, *eh;
 	Elf *e;
 	char *fn;
@@ -192,7 +187,6 @@ tcGoodElfValid(void)
 	    "a pointer to the passed in structure, filled with the correct "
 	    "contents");
 
-	result = TET_PASS;
 	e = NULL;
 	fd = -1;
 
@@ -204,13 +198,13 @@ tcGoodElfValid(void)
 		if ((eh = gelf_getehdr(e, &d1)) == NULL) {
 			tet_printf("fail: gelf_getehdr(%s): %s.", *fn,
 			    elf_errmsg(-1));
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 
 		if (eh != &d1) {
 			tet_printf("fail: gelf_getehdr() return != argument.");
-			result = TET_FAIL;
+			tet_result(TET_FAIL);
 			goto done;
 		}
 
@@ -218,9 +212,6 @@ tcGoodElfValid(void)
 		class = (i <= 1) ? ELFCLASS32 : ELFCLASS64;
 
 		CHECK_EHDR(eh, data, class);
-
-		if (result != TET_PASS)
-			break;
 
 		(void) elf_end(e);	e = NULL;
 		(void) close(fd);	fd = -1;
@@ -231,7 +222,8 @@ tcGoodElfValid(void)
 		(void) elf_end(e);
 	if (fd != -1)
 		(void) close(fd);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }
 
 void
@@ -265,9 +257,6 @@ tcDupCalls(void)
 
 		COMPARE_EHDR(*fn, d1, d2);
 
-		if (result != TET_PASS)
-			goto done;
-
 		(void) elf_end(e);	e = NULL;
 		(void) close(fd);	fd = -1;
 	}
@@ -281,4 +270,3 @@ tcDupCalls(void)
 	tet_result(result);
 
 }
-

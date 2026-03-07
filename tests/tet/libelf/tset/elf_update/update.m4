@@ -94,7 +94,7 @@ tcArgsBadCmd(void)
 {
 	Elf *e;
 	Elf_Cmd c;
-	int error, result;
+	int error;
 	off_t offset;
 
 	TP_CHECK_INITIALIZATION();
@@ -103,8 +103,7 @@ tcArgsBadCmd(void)
 
 	TS_OPEN_MEMORY(e, rawdata);
 
-	result = TET_PASS;
-	for (c = ELF_C_NULL; result == TET_PASS && c < ELF_C_NUM; c++) {
+	for (c = ELF_C_NULL; c < ELF_C_NUM; c++) {
 		if (c == ELF_C_WRITE || c == ELF_C_NULL) /* legal values */
 			continue;
 		if ((offset = elf_update(e, c)) != (off_t) -1)
@@ -117,7 +116,7 @@ tcArgsBadCmd(void)
 	}
 
 	(void) elf_end(e);
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -129,14 +128,13 @@ void
 tcArgsNonElf$1(void)
 {
 	Elf *e;
-	int error, fd, result;
+	int error, fd;
 	off_t offset;
 
 	TP_CHECK_INITIALIZATION();
 
 	TP_ANNOUNCE("elf_update(non-elf,ELF_C_$1) returns ELF_E_ARGUMENT.");
 
-	result = TET_UNRESOLVED;
 	e = NULL;
 	fd = -1;
 
@@ -155,8 +153,6 @@ tcArgsNonElf$1(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
  done:
 	if (e)
 		(void) elf_end(e);
@@ -164,7 +160,7 @@ tcArgsNonElf$1(void)
 		(void) close(fd);
 	(void) unlink(TS_NEWFILE);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }')
 
 FN(`NULL')
@@ -182,7 +178,7 @@ tcMemElfWrite$1$2(void)
 {
 	Elf *e;
 	off_t offset;
-	int error, result;
+	int error;
 	char elf[sizeof(Elf64_Ehdr)]; /* larger of the Ehdr variants */
 
 	TP_CHECK_INITIALIZATION();
@@ -190,7 +186,6 @@ tcMemElfWrite$1$2(void)
 	TP_ANNOUNCE("TOUPPER($2)$1: ELF_C_WRITE with in-memory objects "
 	    "returns ELF_E_MODE.");
 
-	result = TET_UNRESOLVED;
 	e = NULL;
 
 	_TS_READ_FILE("newehdr.$2$1", elf, sizeof(elf), goto done;);
@@ -209,11 +204,10 @@ tcMemElfWrite$1$2(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
  done:
 	(void) elf_end(e);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }')
 
 FN(`32', `lsb')
@@ -231,7 +225,6 @@ void
 tcMemElfNull$1$2(void)
 {
 	Elf *e;
-	int result;
 	size_t fsz;
 	off_t offset;
 	char elf[sizeof(Elf64_Ehdr)];
@@ -241,7 +234,6 @@ tcMemElfNull$1$2(void)
 	TP_ANNOUNCE("TOUPPER($2)$1: ELF_C_NULL updates in-memory objects.");
 
 	e = NULL;
-	result = TET_UNRESOLVED;
 
 	_TS_READ_FILE("newehdr.$2$1", elf, sizeof(elf), goto done;);
 
@@ -252,7 +244,6 @@ tcMemElfNull$1$2(void)
 		goto done;
 	}
 
-	result = TET_PASS;
 	offset = elf_update(e, ELF_C_NULL);
 	if (offset < 0) {
 		TP_FAIL("offset=%jd, error=\"%s\".", (intmax_t) offset,
@@ -265,7 +256,8 @@ tcMemElfNull$1$2(void)
  done:
 	if (e)
 		(void) elf_end(e);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }')
 
 FN(`32', `lsb')
@@ -282,7 +274,7 @@ define(`FN',`
 void
 tcClassMismatch$1$2(void)
 {
-	int error, fd, result;
+	int error, fd;
 	off_t offset;
 	Elf *e;
 	Elf$1_Ehdr *eh;
@@ -291,7 +283,6 @@ tcClassMismatch$1$2(void)
 
 	TP_ANNOUNCE("TOUPPER($2)$1: a class-mismatch is detected.");
 
-	result = TET_UNRESOLVED;
 	e = NULL;
 	fd = -1;
 
@@ -317,14 +308,13 @@ tcClassMismatch$1$2(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
  done:
 	if (e)
 		(void) elf_end(e);
 	if (fd != -1)
 		(void) close(fd);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }')
 
 FN(`32', `lsb')
@@ -341,7 +331,7 @@ define(`FN',`
 void
 tcByteOrderChange$1$2(void)
 {
-	int error, fd, result;
+	int error, fd;
 	Elf *e;
 	off_t offset;
 	Elf$1_Ehdr *eh;
@@ -350,7 +340,6 @@ tcByteOrderChange$1$2(void)
 
 	TP_ANNOUNCE("TOUPPER($2)$1: byte order changes are rejected.");
 
-	result = TET_UNRESOLVED;
 	e = NULL;
 	fd = -1;
 
@@ -375,14 +364,13 @@ tcByteOrderChange$1$2(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
  done:
 	if (e)
 		(void) elf_end(e);
 	if (fd != -1)
 		(void) close(fd);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }')
 
 FN(`32', `lsb')
@@ -399,7 +387,7 @@ define(`FN',`
 void
 tcUnsupportedVersion$1$2(void)
 {
-	int error, fd, result;
+	int error, fd;
 	off_t offset;
 	Elf *e;
 	Elf$1_Ehdr *eh;
@@ -408,7 +396,6 @@ tcUnsupportedVersion$1$2(void)
 
 	TP_ANNOUNCE("TOUPPER($2)$1: version changes are rejected.");
 
-	result = TET_UNRESOLVED;
 	e = NULL;
 	fd = -1;
 
@@ -433,14 +420,13 @@ tcUnsupportedVersion$1$2(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
  done:
 	if (e)
 		(void) elf_end(e);
 	if (fd != -1)
 		(void) close(fd);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }')
 
 FN(`32', `lsb')
@@ -457,7 +443,7 @@ define(`FN',`
 void
 tcSequenceFdDoneWrite$1(void)
 {
-	int error, fd, result;
+	int error, fd;
 	off_t offset;
 	Elf *e;
 	Elf$1_Ehdr *eh;
@@ -467,7 +453,6 @@ tcSequenceFdDoneWrite$1(void)
 	TP_ANNOUNCE("*$1: elf_update(ELF_C_WRITE) after an elf_cntl(FDDONE) "
 	    "is rejected.");
 
-	result = TET_UNRESOLVED;
 	e = NULL;
 	fd = -1;
 
@@ -495,14 +480,13 @@ tcSequenceFdDoneWrite$1(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
  done:
 	if (e)
 		(void) elf_end(e);
 	if (fd != -1)
 		(void) close(fd);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }')
 
 FN(32)
@@ -518,7 +502,7 @@ define(`FN',`
 void
 tcSequenceFdDoneNull$1(void)
 {
-	int fd, result;
+	int fd;
 	off_t offset;
 	size_t fsz;
 	Elf *e;
@@ -529,7 +513,6 @@ tcSequenceFdDoneNull$1(void)
 	TP_ANNOUNCE("elf_update(ELF_C_NULL) after an elf_cntl(FDDONE) "
 	    "succeeds.");
 
-	result = TET_UNRESOLVED;
 	e = NULL;
 	fd = -1;
 
@@ -561,14 +544,13 @@ tcSequenceFdDoneNull$1(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
  done:
 	if (e)
 		(void) elf_end(e);
 	if (fd != -1)
 		(void) close(fd);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }')
 
 FN(32)
@@ -611,7 +593,7 @@ define(`FN',`
 void
 tcUpdate$1$2(void)
 {
-	int fd, result;
+	int fd;
 	off_t offset;
 	size_t esz, fsz, psz, roundup, ssz;
 	Elf$1_Shdr *sh;
@@ -625,7 +607,6 @@ tcUpdate$1$2(void)
 
 	TP_ANNOUNCE("TOUPPER($2)$1: elf_update() creates a legal ELF file.");
 
-	result = TET_UNRESOLVED;
 	fd = -1;
 	e = NULL;
 
@@ -704,7 +685,7 @@ tcUpdate$1$2(void)
 	(void) elf_end(e);	e = NULL;
 	(void) close(fd);	fd = -1;
 
-	result = elfts_compare_files("u1.$2$1", TS_NEWFILE);
+	tet_result(elfts_compare_files("u1.$2$1", TS_NEWFILE));
 
  done:
 	if (e)
@@ -713,7 +694,7 @@ tcUpdate$1$2(void)
 		(void) close(fd);
 	(void) unlink(TS_NEWFILE);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }')
 
 FN(32,`lsb')
@@ -729,7 +710,7 @@ define(`FN',`
 void
 tcSectionType$2$1(void)
 {
-	int error, fd, result;
+	int error, fd;
 	off_t offset;
 	Elf *e;
 	Elf_Scn *scn;
@@ -739,7 +720,6 @@ tcSectionType$2$1(void)
 
 	TP_ANNOUNCE("TOUPPER($2)$1: unsupported section types are rejected.");
 
-	result = TET_UNRESOLVED;
 	e = NULL;
 	fd = -1;
 
@@ -772,14 +752,13 @@ tcSectionType$2$1(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
  done:
 	if (e)
 		(void) elf_end(e);
 	if (fd != -1)
 		(void) close(fd);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }')
 
 FN(32,`lsb')
@@ -821,7 +800,7 @@ define(`FN',`
 void
 tcSectionTypeOSUserProcDefined_$2$1(void)
 {
-	int fd, result;
+	int fd;
 	off_t offset;
 	Elf *e;
 	Elf_Data *d;
@@ -833,7 +812,6 @@ tcSectionTypeOSUserProcDefined_$2$1(void)
 	TP_ANNOUNCE("TOUPPER($2)$1: user, OS and processor specific "
 	    "section types are accepted.") ;
 
-	result = TET_UNRESOLVED;
 	e = NULL;
 	fd = -1;
 
@@ -852,14 +830,13 @@ tcSectionTypeOSUserProcDefined_$2$1(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
  done:
 	if (e)
 		(void) elf_end(e);
 	if (fd != -1)
 		(void) close(fd);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }')
 
 FN(32,`lsb')
@@ -879,7 +856,7 @@ define(`FN',`pushdef(`SZ',$1)dnl
 void
 tc$3_$2$1(void)
 {
-	int error, fd, result;
+	int error, fd;
 	off_t offset;
 	Elf *e;
 	Elf_Data *d;
@@ -891,7 +868,6 @@ tc$3_$2$1(void)
 	TP_ANNOUNCE("TOUPPER($2)$1: data descriptors with " $6
 	    " are rejected.");
 
-	result = TET_UNRESOLVED;
 	e = NULL;
 	fd = -1;
 
@@ -933,14 +909,13 @@ tc$3_$2$1(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
  done:
 	if (e)
 		(void) elf_end(e);
 	if (fd != -1)
 		(void) close(fd);
-	tet_result(result);
+
+	tet_result(TET_PASS);
 }
 popdef(`SZ')')
 
@@ -988,7 +963,7 @@ tcRdWrShdrIdempotent$2$1(void)
 	struct stat sb;
 	size_t strtabidx;
 	Elf_Scn *strtabscn;
-	int error, tfd, result;
+	int error, tfd;
 	GElf_Shdr strtabshdr;
 	char *srcfile = "newscn.$2$1", *tfn;
 	char *reffile = "newscn2.$2$1";
@@ -998,7 +973,6 @@ tcRdWrShdrIdempotent$2$1(void)
 	TP_ANNOUNCE("TOUPPER($2)$1: (liblayout) a no-op update of section "
 	    "headers works as expected");
 
-	result = TET_UNRESOLVED;
 	e = NULL;
 	tfn = NULL;
 	tfd = -1;
@@ -1067,7 +1041,7 @@ tcRdWrShdrIdempotent$2$1(void)
 
 	e = NULL;
 	/* Compare against the original. */
-	result = elfts_compare_files(reffile, tfn);
+	tet_result(elfts_compare_files(reffile, tfn));
 
  done:
 	if (e)
@@ -1078,8 +1052,6 @@ tcRdWrShdrIdempotent$2$1(void)
 		(void) unlink(tfn);
 		free(tfn);
 	}
-		
-	tet_result(result);
 }')
 
 FN(32,`lsb')
@@ -1104,7 +1076,7 @@ tcRdWrShdrIdempotentAppLayout$2$1(void)
 	size_t strtabidx;
 	Elf_Scn *strtabscn;
 	unsigned int flags;
-	int error, tfd, result;
+	int error, tfd;
 	GElf_Shdr strtabshdr;
 	char *srcfile = "newscn.$2$1", *tfn;
 
@@ -1113,7 +1085,6 @@ tcRdWrShdrIdempotentAppLayout$2$1(void)
 	TP_ANNOUNCE("TOUPPER($2)$1: (applayout) a no-op update of section "
 	    "headers works as expected");
 
-	result = TET_UNRESOLVED;
 	e = NULL;
 	tfn = NULL;
 	tfd = -1;
@@ -1190,7 +1161,7 @@ tcRdWrShdrIdempotentAppLayout$2$1(void)
 
 	e = NULL;
 	/* Compare against the original. */
-	result = elfts_compare_files(srcfile, tfn);
+	tet_result(elfts_compare_files(srcfile, tfn));
 
  done:
 	if (e)
@@ -1201,7 +1172,6 @@ tcRdWrShdrIdempotentAppLayout$2$1(void)
 		(void) unlink(tfn);
 		free(tfn);
 	}
-	tet_result(result);
 }')
 
 FN(32,`lsb')
@@ -1254,7 +1224,7 @@ tcMixedBuffer_$2$1(void)
 {
 	Elf *e;
 	Elf_Scn *scn, *strscn;
-	int fd, result;
+	int fd;
 	Elf$1_Ehdr *ehdr;
 	Elf$1_Shdr *shdr, *strshdr;
 	Elf_Data *data1, *data2, *data3, *data4;
@@ -1265,7 +1235,6 @@ tcMixedBuffer_$2$1(void)
 	TP_ANNOUNCE("TOUPPER($2)$1: sections with mixed data work "
 	    "as expected");
 
-	result = TET_UNRESOLVED;
 	e = NULL;
 	fd = -1;
 
@@ -1391,7 +1360,7 @@ tcMixedBuffer_$2$1(void)
 		(void) close(fd);
 	(void) unlink(TS_NEWFILE);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }')
 
 FN(32,`lsb')
@@ -1410,7 +1379,7 @@ void
 tcRdWrModeNoOp_$1$2(void)
 {
 	struct stat sb;
-	int error, fd, result;
+	int error, fd;
 	Elf *e;
 	Elf$1_Ehdr *eh;
 	const char *srcfile = "rdwr.$2$1";
@@ -1422,7 +1391,6 @@ tcRdWrModeNoOp_$1$2(void)
 	TP_ANNOUNCE("TOUPPER($2)$1: elf_update() without flagged changes "
 	    "is a no-op");
 
-	result = TET_UNRESOLVED;
 	e = NULL;
 	fd = -1;
 	tfn = NULL;
@@ -1483,7 +1451,7 @@ tcRdWrModeNoOp_$1$2(void)
 	(void) close(fd);
 
 	/* compare against the original */
-	result = elfts_compare_files(srcfile, tfn);
+	tet_result(elfts_compare_files(srcfile, tfn));
 
  done:
 	if (e)
@@ -1494,7 +1462,6 @@ tcRdWrModeNoOp_$1$2(void)
 		(void) unlink(tfn);
 		free(tfn);
 	}
-	tet_result(result);
 }')
 
 FN(32,lsb)
@@ -1512,7 +1479,7 @@ define(`FN',`
 void
 tcRdWrModeNoDataChange_$1$2(void)
 {
-	int error, fd, result;
+	int error, fd;
 	Elf *e;
 	Elf_Scn *scn;
 	const char *srcfile = "rdwr.$2$1";
@@ -1525,7 +1492,6 @@ tcRdWrModeNoDataChange_$1$2(void)
 	TP_ANNOUNCE("TOUPPER($2)$1: elf_update() with no data changes "
 	    "is a no-op");
 
-	result = TET_UNRESOLVED;
 	e = NULL;
 	fd = -1;
 	tfn = NULL;
@@ -1592,7 +1558,7 @@ tcRdWrModeNoDataChange_$1$2(void)
 	(void) close(fd);
 
 	/* compare against the original */
-	result = elfts_compare_files(srcfile, tfn);
+	tet_result(elfts_compare_files(srcfile, tfn));
 
  done:
 	if (e)
@@ -1603,7 +1569,6 @@ tcRdWrModeNoDataChange_$1$2(void)
 		(void) unlink(tfn);
 		free(tfn);
 	}
-	tet_result(result);
 }')
 
 FN(32,lsb)
@@ -1621,7 +1586,7 @@ define(`FN',`
 void
 tcRdWrModeEhdrChange_$1$2(void)
 {
-	int error, fd, result;
+	int error, fd;
 	unsigned int flag;
 	struct stat sb;
 	Elf *e;
@@ -1636,7 +1601,6 @@ tcRdWrModeEhdrChange_$1$2(void)
 	TP_ANNOUNCE("TOUPPER($2)$1: elf_update() updates a changed "
 	    "header correctly");
 
-	result = TET_UNRESOLVED;
 	e = NULL;
 	fd = -1;
 	tfn = NULL;
@@ -1707,7 +1671,7 @@ tcRdWrModeEhdrChange_$1$2(void)
 	(void) close(fd);
 
 	/* compare against the reference */
-	result = elfts_compare_files(reffile, tfn);
+	tet_result(elfts_compare_files(reffile, tfn));
 
  done:
 	if (e)
@@ -1718,7 +1682,6 @@ tcRdWrModeEhdrChange_$1$2(void)
 		(void) unlink(tfn);
 		free(tfn);
 	}
-	tet_result(result);
 }
 ')
 
@@ -1739,7 +1702,7 @@ define(`FN',`
 void
 tcRdWrExtendSection_$1$2(void)
 {
-	int error, fd, result;
+	int error, fd;
 	struct stat sb;
 	Elf *e;
 	Elf_Scn *scn;
@@ -1754,7 +1717,6 @@ tcRdWrExtendSection_$1$2(void)
 	TP_ANNOUNCE("TOUPPER($2)$1: elf_update() deals with an "
 	    "extended section correctly");
 
-	result = TET_UNRESOLVED;
 	e = NULL;
 	fd = -1;
 	tfn = NULL;
@@ -1831,7 +1793,7 @@ tcRdWrExtendSection_$1$2(void)
 	(void) close(fd);
 
 	/* compare against the reference */
-	result = elfts_compare_files(reffile, tfn);
+	tet_result(elfts_compare_files(reffile, tfn));
 
  done:
 	if (e)
@@ -1842,7 +1804,6 @@ tcRdWrExtendSection_$1$2(void)
 		(void) unlink(tfn);
 		free(tfn);
 	}
-	tet_result(result);
 }
 ')
 
@@ -1860,7 +1821,7 @@ define(`FN',`
 void
 tcRdWrShrinkSection_$1$2(void)
 {
-	int error, fd, result;
+	int error, fd;
 	struct stat sb;
 	Elf *e;
 	Elf_Scn *scn;
@@ -1875,7 +1836,6 @@ tcRdWrShrinkSection_$1$2(void)
 	TP_ANNOUNCE("TOUPPER($2)$1: elf_update() deals with an "
 	    "shrunk section correctly");
 
-	result = TET_UNRESOLVED;
 	e = NULL;
 	fd = -1;
 	tfn = NULL;
@@ -1957,7 +1917,7 @@ tcRdWrShrinkSection_$1$2(void)
 	(void) close(fd);
 
 	/* compare against the reference */
-	result = elfts_compare_files(reffile, tfn);
+	tet_result(elfts_compare_files(reffile, tfn));
 
  done:
 	if (e)
@@ -1968,7 +1928,6 @@ tcRdWrShrinkSection_$1$2(void)
 		(void) unlink(tfn);
 		free(tfn);
 	}
-	tet_result(result);
 }
 ')
 
@@ -1987,7 +1946,7 @@ define(`FN',`
 void
 tcEhdrPhdrCollision$1$2(void)
 {
-	int error, fd, result, flags;
+	int error, fd, flags;
 	off_t offset;
 	Elf$1_Ehdr *eh;
 	Elf$1_Phdr *ph;
@@ -1999,7 +1958,6 @@ tcEhdrPhdrCollision$1$2(void)
 	TP_ANNOUNCE("TOUPPER($2)$1: an overlap of the ehdr and phdr is "
 	    "detected.");
 
-	result = TET_UNRESOLVED;
 	fd = -1;
 	e = NULL;
 
@@ -2051,8 +2009,6 @@ tcEhdrPhdrCollision$1$2(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
  done:
 	if (e)
 		(void) elf_end(e);
@@ -2060,7 +2016,7 @@ tcEhdrPhdrCollision$1$2(void)
 		(void) close(fd);
 	(void) unlink(TS_NEWFILE);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 ')
 
@@ -2074,7 +2030,7 @@ define(`FN',`
 void
 tcShdrPhdrCollision$1$2(void)
 {
-	int error, fd, result, flags;
+	int error, fd, flags;
 	off_t offset;
 	Elf$1_Ehdr *eh;
 	Elf$1_Phdr *ph;
@@ -2087,7 +2043,6 @@ tcShdrPhdrCollision$1$2(void)
 	TP_ANNOUNCE("TOUPPER($2)$1: an overlap of the shdr and phdr is "
 	    "detected.");
 
-	result = TET_UNRESOLVED;
 	fd = -1;
 	e = NULL;
 
@@ -2143,8 +2098,6 @@ tcShdrPhdrCollision$1$2(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
  done:
 	if (e)
 		(void) elf_end(e);
@@ -2152,7 +2105,7 @@ tcShdrPhdrCollision$1$2(void)
 		(void) close(fd);
 	(void) unlink(TS_NEWFILE);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 ')
 
@@ -2171,7 +2124,7 @@ define(`FN',`
 void
 tcShdrSectionCollision$1$2(void)
 {
-	int error, fd, result, flags;
+	int error, fd, flags;
 	off_t offset;
 	Elf$1_Ehdr *eh;
 	Elf$1_Shdr *sh;
@@ -2184,7 +2137,6 @@ tcShdrSectionCollision$1$2(void)
 	TP_ANNOUNCE("TOUPPER($2)$1: an overlap of the shdr and a section is "
 	    "detected.");
 
-	result = TET_UNRESOLVED;
 	fd = -1;
 	e = NULL;
 
@@ -2246,8 +2198,6 @@ tcShdrSectionCollision$1$2(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
  done:
 	if (e)
 		(void) elf_end(e);
@@ -2255,7 +2205,7 @@ tcShdrSectionCollision$1$2(void)
 		(void) close(fd);
 	(void) unlink(TS_NEWFILE);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 ')
 
@@ -2273,7 +2223,7 @@ define(`FN',`
 void
 tcSectionOverlap$1$2(void)
 {
-	int error, fd, result, flags;
+	int error, fd, flags;
 	Elf$1_Ehdr *eh;
 	Elf$1_Shdr *sh;
 	Elf_Scn *scn;
@@ -2287,7 +2237,6 @@ tcSectionOverlap$1$2(void)
 	TP_ANNOUNCE("TOUPPER($2)$1: an overlap between two sections is "
 	    "detected.");
 
-	result = TET_UNRESOLVED;
 	fd = -1;
 	e = NULL;
 
@@ -2392,8 +2341,6 @@ tcSectionOverlap$1$2(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
  done:
 	if (e)
 		(void) elf_end(e);
@@ -2401,7 +2348,7 @@ tcSectionOverlap$1$2(void)
 		(void) close(fd);
 	(void) unlink(TS_NEWFILE);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 ')
 

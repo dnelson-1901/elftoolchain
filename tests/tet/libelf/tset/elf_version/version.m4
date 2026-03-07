@@ -117,13 +117,11 @@ tcValueErrorNoChange(void)
 void
 tcValidValuesAreOk(void)
 {
-	int result;
 	unsigned int old_version, new_version;
 
 	TP_ANNOUNCE("setting the ELF version to a legal value"
 	    "passes");
 
-	result = TET_UNRESOLVED;
 	old_version = elf_version(EV_NONE);
 
 	if (old_version == EV_NONE) {
@@ -145,10 +143,8 @@ tcValidValuesAreOk(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
 done:
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*

@@ -39,7 +39,6 @@ include(`elfts.m4')
 void
 tcElf32_R_macros(void)
 {
-	int result = TET_PASS;
 	Elf32_Word t;
 	
 	TP_ANNOUNCE("Verify ELF32_R_* macros.");
@@ -82,13 +81,12 @@ tcElf32_R_macros(void)
 		TP_FAIL("R_TYPE() failed: expected 0xDD, actual 0x%X", t);
 	}
 	
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 void
 tcElf64_R_macros(void)
 {
-	int result = TET_PASS;
 	Elf64_Xword t;
 	
 	TP_ANNOUNCE("Verify ELF64_R_* macros.");
@@ -137,5 +135,5 @@ tcElf64_R_macros(void)
 			"actual 0x%lX", t);
 	}
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }

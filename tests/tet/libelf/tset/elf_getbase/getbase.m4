@@ -47,7 +47,6 @@ static char elf_file[] = "\177ELF\001\001\001	\001\000\000\000\000"
 void
 tcNonMemberElf(void)
 {
-	int result;
 	off_t off;
 	Elf *e;
 
@@ -57,11 +56,10 @@ tcNonMemberElf(void)
 
 	TS_OPEN_MEMORY(e, elf_file);
 
-	result = TET_PASS;
 	if ((off = elf_getbase(e)) != (off_t) 0)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
-	tet_result(result);
+	tet_result(TET_PASS);
 	(void) elf_end(e);
 }
 
@@ -74,7 +72,6 @@ changequote
 void
 tcNonMemberAr(void)
 {
-	int result;
 	off_t off;
 	Elf *e;
 
@@ -84,12 +81,11 @@ tcNonMemberAr(void)
 
 	TS_OPEN_MEMORY(e, ar_file);
 
-	result = TET_PASS;
-
 	if ((off = elf_getbase(e)) != (off_t) 0)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
-	tet_result(result);
+	tet_result(TET_PASS);
+
 	(void) elf_end(e);
 }
 

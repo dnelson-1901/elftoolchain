@@ -58,20 +58,19 @@ static char elf_file[] = "\177ELF\001\001\001	\001\000\000\000\000"
 void
 tcInvalidNull(void)
 {
-	int error, result, ret;
+	int error, ret;
 
 	TP_ANNOUNCE("elf_cntl(NULL,...) fails with ELF_E_ARGUMENT.");
 
 	TP_CHECK_INITIALIZATION();
 
-	result = TET_PASS;
 	if ((ret = elf_cntl(NULL, ELF_C_FDREAD)) != -1) {
 		TP_FAIL("elf_cntl() succeeded unexpectedly, ret=%d.", ret);
 	} else if ((error = elf_errno()) != ELF_E_ARGUMENT)
 		TP_FAIL("elf_cntl() failed with an unexpected error \"%s\".",
 		    elf_errmsg(error));
 
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /* 
@@ -81,7 +80,7 @@ void
 tcInvalidInvalid(void)
 {
 	Elf *e;
-	int c, error, result, ret;
+	int c, error, ret;
 
 	TP_ANNOUNCE("elf_cntl(e,[INVALID]) fails with ELF_E_ARGUMENT.");
 
@@ -90,7 +89,6 @@ tcInvalidInvalid(void)
 	TS_OPEN_MEMORY(e, elf_file);
 
 	ret = error = 0;
-	result = TET_PASS;
 	for (c = ELF_C_FIRST-1; c <= ELF_C_LAST; c++) {
 		if (c == ELF_C_FDDONE || c == ELF_C_FDREAD)
 			continue;
@@ -106,7 +104,7 @@ tcInvalidInvalid(void)
 	}
 
 	(void) elf_end(e);
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -116,7 +114,6 @@ void
 tcReadFDREAD(void)
 {
 	Elf *e;
-	int result;
 
 	TP_ANNOUNCE("elf_cntl(e,FDREAD) for a read-only descriptor succeeds.");
 
@@ -124,13 +121,12 @@ tcReadFDREAD(void)
 
 	TS_OPEN_MEMORY(e, elf_file);
 
-	result = TET_PASS;
 	if (elf_cntl(e, ELF_C_FDREAD) != 0)
 		TP_FAIL("elf_cntl() failed unexpectedly: \"%s\".",
 		    elf_errmsg(-1));
 
 	(void) elf_end(e);
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -195,7 +191,7 @@ tcWriteFDREAD(void)
 {
 	Elf *e;
 	char *pathname;
-	int err, fd, result, ret;
+	int err, fd, ret;
 
 	e = NULL;
 	fd = -1;
@@ -228,15 +224,13 @@ tcWriteFDREAD(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
  done:
 	if (e)
 		(void) elf_end(e);
 
  	delete_temporary_file(fd, pathname);
 	
-	tet_result(result);
+	tet_result(TET_PASS);
 }
 
 /*
@@ -249,7 +243,7 @@ tcWriteFDDONE(void)
 	Elf *e;
 	Elf32_Ehdr *eh;
 	char *pathname;
-	int err, fd, result;
+	int err, fd;
 	off_t ret;
 
 	e = NULL;
@@ -297,10 +291,8 @@ tcWriteFDDONE(void)
 		goto done;
 	}
 
-	result = TET_PASS;
-
  done:
-	tet_result(result);
+	tet_result(TET_PASS);
 
 	if (e)
 		(void) elf_end(e);
