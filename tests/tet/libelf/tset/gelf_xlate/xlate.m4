@@ -28,6 +28,7 @@
 
 #include <gelf.h>
 #include <libelf.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
 #include <unistd.h>
@@ -48,33 +49,30 @@ IC_REQUIRES_VERSION_INIT();
 #define	TS_XLATESZ	64
 #include "xlate_c_template.c"
 
-static int
-check_gelf_xlate(Elf_Data *xlator(Elf *e,Elf_Data *d, const Elf_Data *s, unsigned int enc),
-    Elf *e, int ed, Elf_Data *dst, Elf_Data *src, struct testdata *td, int ncopies)
+static bool
+check_gelf_xlate(
+    Elf_Data *xlator(Elf *e,Elf_Data *d, const Elf_Data *s, unsigned int enc),
+    Elf *e, int ed, Elf_Data *dst, Elf_Data *src, struct testdata *td,
+    int ncopies, int sz)
 {
 	Elf_Data *dstret;
-	int result;
-	size_t msz;
-
-	msz = td->tsd_msz;
-	result = TET_UNRESOLVED;
 
 	/* Invoke translator */
 	if ((dstret = xlator(e, dst, src, ed)) != dst) {
 		TP_FAIL("\"%s\" " __XSTRING(TC_XLATETOM)
 		    ": %s", td->tsd_name, elf_errmsg(-1));
-		return (result);
+		return (false);
 	}
 
 	/* Check return parameters. */
-	if (dst->d_type != td->tsd_type || dst->d_size != msz*ncopies) {
+	if (dst->d_type != td->tsd_type || dst->d_size != sz*ncopies) {
 		TP_FAIL("\"%s\" type(ret=%d,expected=%d) "
 		    "size (ret=%d,expected=%d).", td->tsd_name,
-		    dst->d_type,  td->tsd_type, dst->d_size, msz*ncopies);
-		return (result);
+		    dst->d_type,  td->tsd_type, dst->d_size, sz*ncopies);
+		return (false);
 	}
 
-	return (TET_PASS);
+	return (true);
 }
 
 static const char *testfns[] = {
@@ -85,43 +83,40 @@ static const char *testfns[] = {
 	NULL
 };
 
-static int
-tcDriver(int (*tf)(const char *fn, Elf *e))
+static void
+tcDriver(void (*tf)(const char *fn, Elf *e))
 {
-	int fd, result;
+	int fd;
 	Elf *e;
 	const char **fn;
 
-	result = TET_PASS;
-	for (fn = testfns; result == TET_PASS && *fn; fn++) {
+	for (fn = testfns; *fn; fn++) {
 
 		_TS_OPEN_FILE(e,*fn,ELF_C_READ,fd,{});
 
-		if (e == NULL) {
-			result = TET_UNRESOLVED;
-			break;
-		}
+		if (e == NULL)
+			continue;
 
-		result = (*tf)(*fn, e);
+		(*tf)(*fn, e);
 
 		(void) elf_end(e);
 		(void) close(fd);
 	}
 
-	return (result);
+	return;
 }
 
 /*
  * Check byte conversions:
  */
 
-static int
+static void
 _tcByte(const char *fn, Elf *e)
 {
 	size_t sz;
+	int i, offset;
 	Elf_Data dst, src;
 	unsigned char *ref;
-	int i, offset, result;
 	char *filebuf, *membuf, *t;
 
 	filebuf = NULL;
@@ -242,36 +237,34 @@ _tcByte(const char *fn, Elf *e)
 		}
 	}
 
-	result = TET_PASS;
-
+	tet_result(TET_PASS);
+	
  done:
 	if (membuf)
 		free(membuf);
 	if (filebuf)
 		free(filebuf);
 
-	return (result);
+	tet_result(TET_PASS);
 }
 
 void
 tcXlateByte(void)
 {
-	tet_result(tcDriver(_tcByte));
+	tcDriver(_tcByte);
 }
 
-static int
+static void
 _tpToM(const char *fn, Elf *e)
 {
 	Elf_Data dst, src;
 	struct testdata *td;
 	size_t fsz, msz;
-	int i, offset, result;
+	int i, offset;
 	char *srcbuf, *membuf, *t;
 
 	srcbuf = NULL;	/* file data (bytes) */
 	membuf = NULL;	/* memory data (struct) */
-
-	result = TET_PASS;
 
 	td = gelf_getclass(e) == ELFCLASS32 ? tests32  : tests64;
 
@@ -327,9 +320,8 @@ _tpToM(const char *fn, Elf *e)
 			}
 			(void) memset(membuf, 0, NCOPIES*msz);
 
-			if ((result = check_gelf_xlate(gelf_xlatetom,e,
-				 ELFDATA2LSB, &dst,&src,td,NCOPIES)) !=
-			    TET_PASS)
+			if (!check_gelf_xlate(gelf_xlatetom, e, ELFDATA2LSB,
+			    &dst, &src, td, NCOPIES, msz))
 				goto done;
 
 			/*
@@ -357,9 +349,8 @@ _tpToM(const char *fn, Elf *e)
 				t += fsz;
 			}
 			(void) memset(membuf, 0, NCOPIES*msz);
-			if ((result = check_gelf_xlate(gelf_xlatetom,e,
-				 ELFDATA2MSB, &dst,&src,td,NCOPIES)) !=
-			    TET_PASS)
+			if (!check_gelf_xlate(gelf_xlatetom, e, ELFDATA2MSB,
+			    &dst, &src, td, NCOPIES, msz))
 				goto done;
 
 			/* compare the retrieved data with the canonical value */
@@ -385,33 +376,31 @@ _tpToM(const char *fn, Elf *e)
 	if (membuf)
 		free(membuf);
 
-	return (result);
+	tet_result(TET_PASS);
 }
 
 void
 tcXlateToM(void)
 {
-	tet_result(tcDriver(_tpToM));
+	tcDriver(_tpToM);
 }
 
 /*
  * Check non-byte conversions from memory to file.
  */
-static int
+static void
 _tpToF(const char *fn, Elf *e)
 {
 	Elf_Data dst, src;
 	struct testdata *td;
 	size_t fsz, msz;
-	int i, offset, result;
+	int i, offset;
 	char *filebuf, *membuf, *t;
 
 	filebuf = NULL;	/* file data (bytes) */
 	membuf = NULL;	/* memory data (struct) */
 
 	td = gelf_getclass(e) == ELFCLASS32 ? tests32 : tests64;
-
-	result = TET_PASS;
 
 	/* Loop over all types */
 	for (; td->tsd_name; td++) {
@@ -469,10 +458,9 @@ _tpToF(const char *fn, Elf *e)
 			dst.d_size    = fsz * NCOPIES;
 			dst.d_version = EV_CURRENT;
 
-			if ((result = check_gelf_xlate(gelf_xlatetof, e,
-				ELFDATA2LSB, &dst, &src, td, NCOPIES)) !=
-			    TET_PASS)
-				goto done;
+			if (!check_gelf_xlate(gelf_xlatetof, e, ELFDATA2LSB,
+			    &dst, &src, td, NCOPIES, fsz))
+				goto check_msb;
 
 			/* compare converted data to canonical form */
 			t = filebuf + offset;
@@ -485,6 +473,7 @@ _tpToF(const char *fn, Elf *e)
 				t += fsz;
 			}
 
+check_msb:
 			/*
 			 * Check MSB conversion.
 			 */
@@ -499,10 +488,9 @@ _tpToF(const char *fn, Elf *e)
 			dst.d_size    = fsz * NCOPIES;
 			dst.d_version = EV_CURRENT;
 
-			if ((result = check_gelf_xlate(gelf_xlatetof, e,
-				 ELFDATA2MSB, &dst, &src, td, NCOPIES)) ==
-			    TET_PASS)
-				goto done;
+			if (!check_gelf_xlate(gelf_xlatetof, e, ELFDATA2MSB,
+			    &dst, &src, td, NCOPIES, fsz))
+				continue;
 
 			/* compare converted data to canonical form */
 			t = filebuf + offset;
@@ -527,13 +515,13 @@ _tpToF(const char *fn, Elf *e)
 	if (membuf)
 		free(membuf);
 
-	return (result);
+	tet_result(TET_PASS);
 }
 
 void
 tcXlateToF(void)
 {
-	tet_result(tcDriver(_tpToF));
+	tcDriver(_tpToF);
 }
 
 
@@ -541,64 +529,58 @@ tcXlateToF(void)
  * Various checks for invalid arguments.
  */
 
-static int
+static void
 _tpNullArgs(const char *fn, Elf *e)
 {
 	Elf_Data ed;
-	int result;
 
 	TP_ANNOUNCE("gelf_xlatetof(%s)/gelf_xlatetom(%s)"
 	    " with NULL arguments fails with ELF_E_ARGUMENT.",
 	    fn, fn);
 
-	result = TET_PASS;
-
 	if (gelf_xlatetof(NULL, NULL, NULL, ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_ARGUMENT)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
 	if (gelf_xlatetof(e, NULL, &ed, ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_ARGUMENT)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
 	if (gelf_xlatetof(e, &ed, NULL, ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_ARGUMENT)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
 	if (gelf_xlatetom(NULL, NULL, NULL, ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_ARGUMENT)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
 	if (gelf_xlatetom(e, NULL, &ed, ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_ARGUMENT)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
 	if (gelf_xlatetom(e, &ed, NULL, ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_ARGUMENT)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
-	return (result);
+	tet_result(TET_PASS);
 }
 
 void
 tcArgsNull(void)
 {
-	tet_result(tcDriver(_tpNullArgs));
+	tcDriver(_tpNullArgs);
 }
 
 
-static int
+static void
 _tpBadType(const char *fn, Elf *e)
 {
 	Elf_Data ed, es;
-	int result;
 	char buf[1024];
 
 	TP_ANNOUNCE("gelf_xlatetof(%s)/"
 	    "gelf_xlatetom(%s) with an out of range type "
 	    "fails with ELF_E_DATA.", fn, fn);
-
-	result = TET_PASS;
 
 	es.d_version = ed.d_version = EV_CURRENT;
 	es.d_buf     = ed.d_buf = buf;
@@ -608,71 +590,67 @@ _tpBadType(const char *fn, Elf *e)
 
 	if (gelf_xlatetof(e, &ed, &es, ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_DATA)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
 	if (gelf_xlatetom(e, &ed, &es, ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_DATA)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
 	es.d_type = ELF_T_NUM;
 
 	if (gelf_xlatetof(e, &ed, &es, ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_DATA)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
 	if (gelf_xlatetom(e, &ed, &es, ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_DATA)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
-	return (result);
+	tet_result(TET_PASS);
 }
 
 void
 tcArgsBadType(void)
 {
-	tet_result(tcDriver(_tpBadType));
+	tcDriver(_tpBadType);
 }
 
-static int
+static void
 _tpBadEncoding(const char *fn, Elf *e)
 {
 	Elf_Data ed, es;
-	int result;
 
 	TP_ANNOUNCE("gelf_xlatetof/"
 	    "gelf_xlatetom(%s)(*,*,BADENCODING) "
 	    "fails with ELF_E_ARGUMENT.", fn);
 
-	result = TET_PASS;
-
 	if (gelf_xlatetof(e, &ed, &es, ELFDATANONE-1) != NULL ||
 	    elf_errno() != ELF_E_ARGUMENT)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 	else if (gelf_xlatetof(e, &ed, &es, ELFDATA2MSB+1) != NULL ||
 	    elf_errno() != ELF_E_ARGUMENT)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
 	if (gelf_xlatetom(e, &ed, &es, ELFDATANONE-1) != NULL ||
 	    elf_errno() != ELF_E_ARGUMENT)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 	else if (gelf_xlatetom(e, &ed, &es, ELFDATA2MSB+1) != NULL ||
 	    elf_errno() != ELF_E_ARGUMENT)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
-	return (result);
+	tet_result(TET_PASS);
 }
 
 void
 tcArgsBadEncoding(void)
 {
-	tet_result(tcDriver(_tpBadEncoding));
+	tcDriver(_tpBadEncoding);
 }
 
-static int
+static void
 _tpDstSrcVersion(const char *fn, Elf *e)
 {
 	Elf_Data ed, es;
-	int result;
 	char buf[sizeof(int)];
 
 	TP_ANNOUNCE("gelf_xlateto[fm](%s) with unequal src,dst versions "
@@ -684,37 +662,34 @@ _tpDstSrcVersion(const char *fn, Elf *e)
 	es.d_version = EV_CURRENT;
 	ed.d_version = EV_NONE;
 
-	result = TET_PASS;
-
 	if (gelf_xlatetof(e, &ed, &es, ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_UNIMPL)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
 	if (gelf_xlatetom(e, &ed, &es, ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_UNIMPL)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
-	return (result);
+	tet_result(TET_PASS);
 }
 
 void
 tcArgsDstSrcVersion(void)
 {
-	tet_result(tcDriver(_tpDstSrcVersion));
+	tcDriver(_tpDstSrcVersion);
 }
 
 /*
  * Check for an unimplemented type.
  */
-static int
+static void
 _tpUnimplemented(const char *fn, Elf *e)
 {
 	Elf_Data ed, es;
-	int i, result;
 	char *buf;
+	int i;
 
 	buf = NULL;
-	result = TET_UNRESOLVED;
 
 	TP_ANNOUNCE("gelf_xlateto[fm](%s) on unimplemented types will "
 	    "fail with ELF_E_UNIMPL.", fn);
@@ -731,8 +706,6 @@ _tpUnimplemented(const char *fn, Elf *e)
 	ed.d_buf = es.d_buf = buf;
 	ed.d_size = es.d_size = 1024;
 	ed.d_version = es.d_version = EV_CURRENT;
-
-	result = TET_PASS;
 
 	for (i = 0; i < ELF_T_NUM; i++) {
 		switch (i) {
@@ -778,29 +751,27 @@ _tpUnimplemented(const char *fn, Elf *e)
 done:
 	if (buf)
 		free(buf);
-	return (result);
+
+	tet_result(TET_PASS);
 }
 
 void
 tcArgsUnimplemented(void)
 {
-	tet_result(tcDriver(_tpUnimplemented));
+	tcDriver(_tpUnimplemented);
 }
 
 /*
  * Check for null buffer pointers.
  */
-static int
+static void
 _tpNullDataPtr(const char *fn, Elf *e)
 {
 	Elf_Data ed, es;
-	int result;
 	char buf[sizeof(int)];
 
 	TP_ANNOUNCE("gelf_xlateto[fm](%s) with a null "
 	    "src,dst buffer pointer fails with ELF_E_DATA.", fn);
-
-	result = TET_PASS;
 
 	es.d_type    = ELF_T_BYTE;
 	es.d_size    = ed.d_size = sizeof(buf);
@@ -811,46 +782,44 @@ _tpNullDataPtr(const char *fn, Elf *e)
 	ed.d_buf     = buf;
 	if (gelf_xlatetof(e, &ed, &es, ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_DATA)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
 	if (gelf_xlatetom(e, &ed, &es, ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_DATA)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
 	es.d_buf     = buf;
 	ed.d_buf     = NULL;
 	if (gelf_xlatetof(e, &ed, &es, ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_DATA)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
 	if (gelf_xlatetom(e, &ed, &es, ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_DATA)
-		result = TET_FAIL;
+		tet_result(TET_FAIL);
 
-	return (result);
+	tet_result(TET_PASS);
 }
 
 void
 tcBufferNullDataPtr(void)
 {
-	tet_result(tcDriver(_tpNullDataPtr));
+	tcDriver(_tpNullDataPtr);
 }
 
 /*
  * Misaligned data.
  */
 
-static int
+static void
 _tpMisaligned(const char *fn, Elf *e)
 {
 	Elf_Data ed, es;
-	int result;
 	size_t fsz, msz;
 	char *sb, *db;
 	struct testdata *td;
 
 	sb = db = NULL;
-	result = TET_UNRESOLVED;
 
 	TP_ANNOUNCE("\"%s\" misaligned buffers are rejected with "
 	    "ELF_E_DATA.", fn);
@@ -860,8 +829,6 @@ _tpMisaligned(const char *fn, Elf *e)
 		TP_UNRESOLVED("malloc() failed.");
 		goto done;
 	}
-
-	result = TET_PASS;
 
 	td = gelf_getclass(e) == ELFCLASS32 ? tests32 : tests64;
 
@@ -904,23 +871,23 @@ done:
 		free(sb);
 	if (db)
 		free(db);
-	return (result);
+
+	tet_result(TET_PASS);
 }
 
 void
 tcBufferMisaligned(void)
 {
-	tet_result(tcDriver(_tpMisaligned));
+	tcDriver(_tpMisaligned);
 }
 
 /*
  * Overlapping buffers.
  */
-static int
+static void
 _tpOverlap(const char *fn, Elf *e)
 {
 	Elf_Data ed, es;
-	int result;
 	char buf[sizeof(int)];
 
 	TP_ANNOUNCE("\"%s\" overlapping buffers are rejected with "
@@ -930,8 +897,6 @@ _tpOverlap(const char *fn, Elf *e)
 	es.d_version = ed.d_version = EV_CURRENT;
 	es.d_size = ed.d_size = sizeof(buf);
 	es.d_type = ELF_T_BYTE;
-
-	result = TET_PASS;
 
 	if (gelf_xlatetof(e, &ed, &es, ELFDATANONE) != NULL ||
 	    elf_errno() != ELF_E_DATA) {
@@ -946,23 +911,22 @@ _tpOverlap(const char *fn, Elf *e)
 	}
 
 done:
-	return (result);
+	tet_result(TET_PASS);
 }
 
 void
 tcBufferOverlap(void)
 {
-	tet_result(tcDriver(_tpOverlap));
+	tcDriver(_tpOverlap);
 }
 
 /*
  * Non-integral number of src elements.
  */
-static int
+static void
 _tpSrcExtra(const char *fn, Elf *e)
 {
 	Elf_Data ed, es;
-	int result;
 	size_t fsz, msz;
 	char *sb, *db;
 	struct testdata *td;
@@ -976,8 +940,6 @@ _tpSrcExtra(const char *fn, Elf *e)
 		TP_UNRESOLVED("malloc() failed.");
 		goto done;
 	}
-
-	result = TET_PASS;
 
 	td = gelf_getclass(e) == ELFCLASS32 ? tests32 : tests64;
 
@@ -1015,25 +977,22 @@ done:
 	if (db)
 		free(db);
 
-	return (result);
+	tet_result(TET_PASS);
 }
 
 void
 tcBufferSrcExtra(void)
 {
-	tet_result(tcDriver(_tpSrcExtra));
+	tcDriver(_tpSrcExtra);
 }
 
-static int
+static void
 _tpDstTooSmall(const char *fn, Elf *e)
 {
 	Elf_Data ed, es;
-	int result;
 	struct testdata *td;
 	size_t fsz, msz;
 	char buf[1024];
-
-	result = TET_PASS;
 
 	TP_ANNOUNCE("\"%s\" too small destination buffers are "
 	    "rejected with ELF_E_DATA.", fn);
@@ -1066,20 +1025,20 @@ _tpDstTooSmall(const char *fn, Elf *e)
 	}
 
 done:
-	return (result);
+	tet_result(TET_PASS);
 }
 
 void
 tcBufferDstTooSmall(void)
 {
-	tet_result(tcDriver(_tpDstTooSmall));
+	tcDriver(_tpDstTooSmall);
 }
 
-static int
+static void
 _tpSharedBufferByte(const char *fn, Elf *e)
 {
 	size_t sz;
-	int i, result;
+	int i;
 	char *membuf, *t;
 	Elf_Data dst, src;
 	unsigned char *ref;
@@ -1106,10 +1065,8 @@ _tpSharedBufferByte(const char *fn, Elf *e)
 
 	if ((membuf = malloc(sz * NCOPIES)) == NULL) {
 		TP_UNRESOLVED("\"%s\" malloc() failed.", fn);
-		return (TET_UNRESOLVED);
+		return;
 	}
-
-	result = TET_PASS;
 
 	t = membuf;
 	for (i = 0; i < NCOPIES; i++)
@@ -1165,30 +1122,28 @@ _tpSharedBufferByte(const char *fn, Elf *e)
 	if (membuf)
 		free(membuf);
 
-	return (result);
+	tet_result(TET_PASS);
 }
 
 
 void
 tcBufferSharedBufferByte(void)
 {
-	tet_result(tcDriver(_tpSharedBufferByte));
+	tcDriver(_tpSharedBufferByte);
 }
 
-static int
+static void
 _tpToMShared(const char *fn, Elf *e)
 {
 	Elf_Data dst, src;
 	struct testdata *td;
 	size_t fsz, msz;
-	int i, r, result;
+	int i, r;
 	char *membuf, *t;
 
 	membuf = NULL;
 
 	td = gelf_getclass(e) == ELFCLASS32 ? tests32 : tests64;
-
-	result = TET_PASS;
 
 	for (; td->tsd_name; td++) {
 
@@ -1273,28 +1228,28 @@ _tpToMShared(const char *fn, Elf *e)
  done:
 	if (membuf)
 		free(membuf);
-	return (result);
+
+	tet_result(TET_PASS);
 }
 
 void
 tcXlateToMShared(void)
 {
-	tet_result(tcDriver(_tpToMShared));
+	tcDriver(_tpToMShared);
 }
 
-static int
+static void
 _tpToFShared(const char *fn, Elf *e)
 {
 	Elf_Data dst, src;
 	struct testdata *td;
 	size_t fsz, msz;
-	int i, result;
+	int i;
 	char *membuf, *t;
 
 	membuf = NULL;
 
 	td = gelf_getclass(e) == ELFCLASS32 ? tests32 : tests64;
-	result = TET_PASS;
 
 	for (; td->tsd_name; td++) {
 
@@ -1348,11 +1303,12 @@ _tpToFShared(const char *fn, Elf *e)
  done:
 	if (membuf)
 		free(membuf);
-	return (result);
+
+	tet_result(TET_PASS);
 }
 
 void
 tcXlateToFShared(void)
 {
-	tet_result(tcDriver(_tpToFShared));
+	tcDriver(_tpToFShared);
 }
