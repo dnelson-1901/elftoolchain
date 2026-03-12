@@ -65,7 +65,8 @@ check_gelf_xlate(
 	}
 
 	/* Check return parameters. */
-	if (dst->d_type != td->tsd_type || dst->d_size != sz*ncopies) {
+	if (dst->d_type != td->tsd_type ||
+	    dst->d_size != (uint64_t) sz*ncopies) {
 		TP_FAIL("\"%s\" type(ret=%d,expected=%d) "
 		    "size (ret=%d,expected=%d).", td->tsd_name,
 		    dst->d_type,  td->tsd_type, dst->d_size, sz*ncopies);
