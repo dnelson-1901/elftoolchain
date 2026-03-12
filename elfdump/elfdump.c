@@ -49,6 +49,8 @@
 #include <archive_entry.h>
 #endif
 
+#include "elftc_get_program_name.h"
+
 #include "_elftc.h"
 
 ELFTC_VCSID("$Id$");

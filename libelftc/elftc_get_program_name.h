@@ -22,36 +22,21 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
+ *
+ * $Id$
  */
 
-#include <stdlib.h>
+#ifndef	_ELFTC_GET_PROGRAM_NAME_H_
+#define	_ELFTC_GET_PROGRAM_NAME_H_
 
-#include "elftc_get_program_name.h"
-
-#include "_elftc.h"
-
-ELFTC_VCSID("$Id$");
-
-const char *
-elftc_get_program_name(void)
-{
-#if defined(__APPLE__) || defined(__DragonFly__) || defined(__FreeBSD__) || \
-    defined(__minix) || defined(__NetBSD__) || defined(__OpenBSD__)
-	/*
-	 * Use getprogname(3) on these systems.
-	 */
-	const char *program_name = getprogname();
-
-	return (program_name != NULL ? program_name : "-unknown-");
-#elif defined(__GLIBC__) || defined(__linux__)
-	/*
-	 * GLIBC based systems have a global 'char *' pointer referencing
-	 * the executable's name.
-	 */
-	extern const char *program_invocation_short_name;
-
-	return program_invocation_short_name;
-#else
-#error	Unsupported build environment
+#ifdef __cplusplus
+extern "C" {
 #endif
+
+const char	*elftc_get_program_name(void);
+
+#ifdef __cplusplus
 }
+#endif
+
+#endif	/* _ELFTC_GET_PROGRAM_NAME_H_ */

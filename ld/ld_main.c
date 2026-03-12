@@ -37,6 +37,8 @@
 #include "ld_path.h"
 #include "ld_symbols.h"
 
+#include "elftc_get_program_name.h"
+
 ELFTC_VCSID("$Id$");
 
 static struct ld _ld;

@@ -32,6 +32,8 @@
 #include "ld_options.h"
 #include "ld_output.h"
 
+#include "elftc_get_program_name.h"
+
 ELFTC_VCSID("$Id$");
 
 /*

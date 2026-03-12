@@ -46,6 +46,8 @@
 #include <time.h>
 #include <unistd.h>
 
+#include "elftc_get_program_name.h"
+
 #include "_elftc.h"
 
 ELFTC_VCSID("$Id$");

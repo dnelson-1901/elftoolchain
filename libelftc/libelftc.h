@@ -78,7 +78,6 @@ int		elftc_demangle(const char *_mangledname, char *_buffer,
     size_t _bufsize, unsigned int _flags);
 const char	*elftc_get_machine_description(unsigned int _e_machine);
 const char	*elftc_get_machine_name(unsigned int _e_machine);
-const char	*elftc_get_program_name(void);
 const char	*elftc_get_relocation_type_name(unsigned int _e_machine,
     unsigned int _r_value);
 const char	*elftc_reloc_type_str(unsigned int mach, unsigned int type);

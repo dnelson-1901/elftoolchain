@@ -72,6 +72,7 @@
 #include <sysexits.h>
 
 #include "ar.h"
+#include "elftc_get_program_name.h"
 
 ELFTC_VCSID("$Id$");
 

@@ -38,7 +38,9 @@
 #include <string.h>
 #include <sysexits.h>
 
+#include "elftc_get_program_name.h"
 #include "uthash.h"
+
 #include "_elftc.h"
 
 ELFTC_VCSID("$Id$");
