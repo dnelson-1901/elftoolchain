@@ -46,6 +46,11 @@ run-test:	.PHONY ${PROG}
 debug-test:	.PHONY ${PROG}
 	TET_ROOT=${TET_ROOT} ${DEBUGGER:Ugdb} ${.OBJDIR}/${PROG}
 
+memcheck-test:	.PHONY ${PROG}
+	TET_ROOT=${TET_ROOT} \
+	    ${MEMCHECK:Uvalgrind --leak-check=full --show-leak-kinds=all} \
+	    ${.OBJDIR}/${PROG}
+
 .if defined(GENERATE_TEST_SCAFFOLDING)
 _TC_SRC=	${.OBJDIR}/tc.c				# Test driver.
 _TC_SCN=	tet_scen				# Scenario file.
