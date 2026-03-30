@@ -37,10 +37,10 @@
 include(`elfts.m4')
 
 void
-tcUnknownMachine(void)
+tcInvalidMachine(void)
 {
 	TP_ANNOUNCE("elftc_get_machine() returns a null pointer for an "
-	    "unknown machine");
+	    "invalid EM_* value");
 
 	/* Ask for the machine name for an unknown EM_* value. */
 	const char *machine_name = elftc_get_machine_name(~0U);
@@ -335,6 +335,26 @@ tcReservedValues(void)
 
 	tet_printf("I: Checked %d reserved EM_* values.", reserved_name_count);
 	
+	tet_result(TET_PASS);
+}
+
+/*
+ * Check for upstream additions to the EM_* list that are not known
+ * to this set of tests.
+ */
+void
+tcUntestedValue(void)
+{
+	TP_ANNOUNCE(`"Check for EM_* values not tested by these tests."');
+
+	const unsigned int boundary_value =
+	    sizeof(gABI_names) / sizeof(gABI_names[0]);
+	const char *machine_name = elftc_get_machine_name(boundary_value);
+
+	if (machine_name)
+		TP_FAIL("elftc_get_machine_name() unexpectedly returned "
+		    "\"%s\" for value %u.", machine_name, boundary_value);
+
 	tet_result(TET_PASS);
 }
 
