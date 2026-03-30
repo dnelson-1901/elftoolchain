@@ -1413,6 +1413,8 @@ _(EM_SW64,             268U,
 	`Wuxi Institute of Advanced Technology SW64')
 _(EM_AIECTRLCODE,      269U,
 	`AMD/Xilinx AIEngine ctrlcode')
+_(EM_PPU,              270U,
+	`T-Head PPU')
 __(`	', ` Historical and experimental values. ')
 _(EM_ALPHA_HISTORICAL, 0x9026U,
 	`Prior value used by GNU and NetBSD')
