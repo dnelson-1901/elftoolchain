@@ -17,10 +17,10 @@
 .\" FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
 .\" DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
 .\" OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-.\" HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- \" CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
- \" OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- \" EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+.\" HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+.\" LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+.\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+.\" SUCH DAMAGE.
 .\"
 .\" $Id$
 .\"
@@ -73,9 +73,13 @@ In this mode, the
 .Nm
 utility transforms source code, expanding match pattern between the
 tokens
-.Dq Li "[ISA["
+.Do
+[ISA[
+.Dc
 and
-.Dq Li "]ISA]"
+.Do
+]ISA]
+.Dc
 into the appropriate code for matching instruction streams.
 The section
 .Sx "Matching Instructions"
@@ -201,7 +205,7 @@ Print a version identifier and exit.
 The behavior of the
 .Nm
 utility is affected by the following environemnt variables:
-.Bl -tag
+.Bl -tag -width indent
 .It Ev ISAPATH
 Specifies a colon-separated set of directories tp be used when
 searching for instruction specifications.
@@ -219,9 +223,7 @@ use:
 .Pp
 To expand instruction decoding templates in the file
 .Pa a.m ,
-assuming a generic
-.Tn AVR
-CPU, and generating a C source file, use:
+assuming a generic AVR CPU, and generating a C source file, use:
 .D1 isa -a avr -D < a.m > a.c
 .Sh SEE ALSO
 .Xr elf 3 ,
@@ -235,7 +237,7 @@ Elftoolchain project.
 .\" TODO Reword the above when the target release is finalized.
 .Sh AUTHORS
 The
-.Xr isa 1
+.Nm
 utility was written by
 .An Joseph Koshy Aq Mt jkoshy@users.sourceforge.net .
 .Sh BUGS
