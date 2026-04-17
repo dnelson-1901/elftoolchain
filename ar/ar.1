@@ -239,13 +239,13 @@ Synonymous with option
 .Fl b .
 .It Fl j
 This option is accepted for compatibility with the
-.Tn FreeBSD
+.Fx
 version of the
 .Nm
 utility, but is ignored.
 .It Fl l
 This option is accepted for compatibility with GNU
-.Xr ar 1 ,
+.Nm ,
 but is ignored.
 .It Fl m
 Move archive members specified by arguments
@@ -424,7 +424,7 @@ of extraction unless the
 option was specified.
 .It Fl z
 This option is accepted for compatibility with the
-.Tn FreeBSD
+.Fx
 version of the
 .Nm
 utility, but is ignored.
@@ -455,13 +455,13 @@ Arguments may be separated by commas or blanks.
 .Pp
 Empty lines are allowed and are ignored.
 Long lines are continued by ending them with the
-.Dq Li +
+.Dq "+"
 character.
 .Pp
 The
-.Dq Li *
+.Dq "*"
 and
-.Dq Li "\;"
+.Dq ";"
 characters start a comment.
 Comments extend till the end of the line.
 .Pp
@@ -476,7 +476,7 @@ Commands understood by the
 .Nm
 utility are:
 .Bl -tag -width indent
-.It Ic addlib Ar archive | Ic addlib Ar archive Pq Ar member Oo Li , Ar member Oc Ns ...
+.It Ic addlib Ar archive | Ic addlib Ar archive Pq Ar member Oo , Ar member Oc Ns ...
 Add the contents of the archive named by argument
 .Ar archive
 to the current archive.
@@ -485,7 +485,7 @@ If specific members are named using the arguments
 then those members are added to the current archive.
 If no members are specified, the entire contents of the archive
 are added to the current archive.
-.It Ic addmod Ar member Oo Li , Ar member Oc Ns ...
+.It Ic addmod Ar member Oo , Ar member Oc Ns ...
 Add the files named by arguments
 .Ar member
 to the current archive.
@@ -499,11 +499,11 @@ If the named archive already exists, it will be overwritten
 when the
 .Ic save
 command is issued.
-.It Ic delete Ar module Oo Li , Ar member Oc Ns ...
+.It Ic delete Ar module Oo , Ar member Oc Ns ...
 Delete the modules named by the arguments
 .Ar member
 from the current archive.
-.It Ic directory Ar archive Po Ar member Oo Li , Ar member Oc Ns ... Pc Op Ar outputfile
+.It Ic directory Ar archive Po Ar member Oo , Ar member Oc Ns ... Pc Op Ar outputfile
 List each named module in the archive.
 The format of the output depends on the verbosity setting set using
 the
@@ -517,7 +517,7 @@ Exit successfully from the
 .Nm
 utility.
 Any unsaved changes to the current archive will be discarded.
-.It Ic extract Ar member Oo Li , Ar member Oc Ns ...
+.It Ic extract Ar member Oo , Ar member Oc Ns ...
 Extract the members named by the arguments
 .Ar member
 from the current archive.
@@ -527,7 +527,7 @@ Display the contents of the current archive in verbose style.
 Open the archive named by argument
 .Ar archive
 and make it the current archive.
-.It Ic replace Ar member Oo Li , Ar member Oc Ns ...
+.It Ic replace Ar member Oo , Ar member Oc Ns ...
 Replace named members in the current archive with the files specified
 by arguments
 .Ar member .
