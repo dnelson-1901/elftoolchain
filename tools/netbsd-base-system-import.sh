@@ -69,7 +69,7 @@ if [ -z "${srcdir}" ]; then
   [ "$verbose" = YES ] && \
       echo Checkout ${svnrev+"revision @${svnrev}"} into \"${svncheckout}\".
   (cd ${svncheckout} && \
-       svn checkout ${elftoolchain_svn}${svnrev+"@${svnrev}"} trunk) || \
+       svn -q checkout ${elftoolchain_svn}${svnrev+"@${svnrev}"} trunk) || \
       err "SVN checkout failed."
   srcdir=${svncheckout}/trunk
 fi
