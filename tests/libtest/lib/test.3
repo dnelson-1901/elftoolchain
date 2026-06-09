@@ -24,7 +24,7 @@
 .\"
 .\" $Id$
 .\"
-.Dd January 21, 2019
+.Dd June 9, 2026
 .Dt TEST 3
 .Os
 .Sh NAME
@@ -71,20 +71,20 @@ Test cases are associated the following:
 .It
 An optional human-readable test case description.
 .It
-An optional test case set up function.
-If specified, this set up function would be invoked prior to any test
+An optional test case setup function.
+If specified, this setup function would be invoked prior to any test
 function contained in the test case.
-The set up function can allocate and initialize test-specific state, to be
+The setup function can allocate and initialize test-specific state, to be
 passed to test functions.
-If no set up function is specified for the test case, a default (no-op)
+If no setup function is specified for the test case, a default (no-op)
 function will be supplied.
 .It
-An optional test case tear down function.
-The tear down function will be invoked after all test functions have been
+An optional test case teardown function.
+The teardown function will be invoked after all test functions have been
 invoked.
 It would be responsible for deallocating any resources that its corresponding
-set up function had allocated.
-If no tear down function is specified for a test case, a default no-op
+setup function had allocated.
+If no teardown function is specified for a test case, a default no-op
 function will be supplied.
 .It
 An optional set of tags for the test case.
