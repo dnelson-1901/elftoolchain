@@ -33,10 +33,10 @@
 /*
  * Function prototypes.
  */
-enum test_case_status tc_setup_helloworld(test_case_state *);
-enum test_case_status tc_teardown_helloworld(test_case_state);
-enum test_result tf_helloworld_sayhello(test_case_state);
-enum test_result tf_helloworld_saygoodbye(test_case_state);
+enum test_case_status tc_setup_helloworld(test_case_state_t *);
+enum test_case_status tc_teardown_helloworld(test_case_state_t);
+enum test_result tf_helloworld_sayhello(test_case_state_t);
+enum test_result tf_helloworld_saygoodbye(test_case_state_t);
 
 /*
  * This source defines a single test case named 'helloworld' containing a
@@ -83,7 +83,7 @@ TEST_CASE_DESCRIPTION(helloworld) = "A description for a test case.";
  * case setup functions.
  */
 enum test_case_status
-tc_setup_helloworld(test_case_state *state)
+tc_setup_helloworld(test_case_state_t *state)
 {
 	(void) state;
 	return (TEST_CASE_OK);
@@ -94,7 +94,7 @@ tc_setup_helloworld(test_case_state *state)
  * case teardown functions.
  */
 enum test_case_status
-tc_teardown_helloworld(test_case_state state)
+tc_teardown_helloworld(test_case_state_t state)
 {
 	(void) state;
 	return (TEST_CASE_OK);
@@ -120,14 +120,14 @@ TEST_CASE_TAGS(helloworld) = {
  * Function names prefixed with 'tf_' name test functions.
  */
 enum test_result
-tf_helloworld_sayhello(test_case_state state)
+tf_helloworld_sayhello(test_case_state_t state)
 {
 	(void) state;
 	return (TEST_PASS);
 }
 
 enum test_result
-tf_helloworld_saygoodbye(test_case_state state)
+tf_helloworld_saygoodbye(test_case_state_t state)
 {
 	(void) state;
 	return (TEST_PASS);
@@ -159,13 +159,13 @@ TEST_DESCRIPTION(helloworld_saygoodbye) =
  *
  * Tags lists are terminated by a NULL entry.
  */
-test_tags tf_tags_helloworld_sayhello = {
+test_tags_t tf_tags_helloworld_sayhello = {
 	"tag3",
 	"tag4",
 	NULL
 };
 
-test_tags tf_tags_helloworld_saygoodbye = {
+test_tags_t tf_tags_helloworld_saygoodbye = {
 	"tag5",
 	NULL
 };

@@ -61,44 +61,44 @@ enum test_case_status {
 };
 
 /*
- * A 'test_case_state' is a handle to resources shared by the test functions
- * that make up a test case. A test_case_state is allocated by the test case
- * setup function and is deallocated by the test case teardown function.
+ * A 'test_case_state_t' is a handle to resources shared by the test functions
+ * that make up a test case. A 'test_case_state_t' is allocated by the test
+ * case setup function and is deallocated by the test case teardown function.
  *
- * The test(3) framework treats a 'test_case_state' as an opaque value.
+ * The test(3) framework treats a 'test_case_state_t' as an opaque value.
  */
-typedef	void *test_case_state;
+typedef	void *test_case_state_t;
 
 /*
  * Test case and test function descriptions, and convenience macros
  * to define these.
  */
-typedef const char test_case_description[];
+typedef const char test_case_description_t[];
 
 #if	!defined(TEST_CASE_DESCRIPTION)
-#define	TEST_CASE_DESCRIPTION(NAME) test_case_description tc_description_##NAME
+#define	TEST_CASE_DESCRIPTION(NAME) test_case_description_t tc_description_##NAME
 #endif
 
-typedef const char test_description[];
+typedef const char test_description_t[];
 
 #if	!defined(TEST_DESCRIPTION)
-#define	TEST_DESCRIPTION(NAME) test_description tf_description_##NAME
+#define	TEST_DESCRIPTION(NAME) test_description_t tf_description_##NAME
 #endif
 
 /*
  * Test case and test function tags, and convenience macros to define
  * these.
  */
-typedef const char *test_case_tags[];
+typedef const char *test_case_tags_t[];
 
 #if	!defined(TEST_CASE_TAGS)
-#define	TEST_CASE_TAGS(NAME)	test_case_tags tc_tags_##NAME
+#define	TEST_CASE_TAGS(NAME)	test_case_tags_t tc_tags_##NAME
 #endif
 
-typedef const char *test_tags[];
+typedef const char *test_tags_t[];
 
 #if	!defined(TEST_TAGS)
-#define	TEST_TAGS(NAME)		test_tags tf_tags_##NAME
+#define	TEST_TAGS(NAME)		test_tags_t tf_tags_##NAME
 #endif
 
 /*
@@ -116,7 +116,7 @@ typedef const char *test_tags[];
  * no-op setup function will be used.
  */
 typedef	enum test_case_status	test_case_setup_function(
-    test_case_state *state);
+    test_case_state_t *state);
 
 /*
  * A test function.
@@ -126,7 +126,7 @@ typedef	enum test_case_status	test_case_setup_function(
  * its test succeeded or TEST_FAIL otherwise. In the event the test could
  * not be executed, it can return TEST_UNRESOLVED.
  */
-typedef	enum test_result	test_function(test_case_state state);
+typedef	enum test_result	test_function(test_case_state_t state);
 
 /*
  * A test case teardown function.
@@ -138,7 +138,7 @@ typedef	enum test_result	test_function(test_case_state state);
  * had allocated.
  */
 typedef enum test_case_status	test_case_teardown_function(
-    test_case_state state);
+    test_case_state_t state);
 
 #ifdef	__cplusplus
 extern "C" {

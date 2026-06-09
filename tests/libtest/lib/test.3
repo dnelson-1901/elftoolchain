@@ -35,19 +35,15 @@
 .Sh SYNOPSIS
 .In test.h
 .Ft enum test_case_status
-.Fn test_case_setup "test_case_state *state"
+.Fn test_case_setup "test_case_state_t *state"
 .Ft enum test_case_status
-.Fn test_case_teardown "test_case_state state"
+.Fn test_case_teardown "test_case_state_t state"
 .Ft enum test_result
 .Fn test_function "test_case_state state"
-.Vt "const char"
-.Va test_description [] ;
-.Vt "const char *"
-.Va test_tags [] ;
-.Vt "const char"
-.Va test_case_description [] ;
-.Vt "const char *"
-.Va test_case_tags [] ;
+.Vt "typedef const char" test_case_description_t [] ;
+.Vt "typedef const char" test_description_t [] ;
+.Vt "typedef const char *" test_case_tags_t [] ;
+.Vt "typedef const char *" test_tags_t [] ;
 .Sh DESCRIPTION
 The
 .Lb libtest
