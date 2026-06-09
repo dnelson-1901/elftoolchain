@@ -58,7 +58,7 @@ functions contained in a test case named "``helloworld``":
 		return (TEST_FAIL);
 	}
 
-Test cases can define their own set up and tear down functions:
+Test cases can define their own setup and teardown functions:
 
 .. code:: c
 
@@ -79,14 +79,14 @@ Test cases can define their own set up and tear down functions:
 		return (TEST_CASE_OK);
 	}
 
-The set up function for a test case will be invoked prior to any of
-the functions that are part of the test case.  The set up function can
+The setup function for a test case will be invoked prior to any of
+the functions that are part of the test case.  The setup function can
 allocate test-specific state, which is then passed to each test function
 for its use.
 
-The tear down function for a test case will be invoked after the test
+The teardown function for a test case will be invoked after the test
 functions in the test case are invoked.  This function is responsible for
-deallocating the resources allocated by its corresponding set up function.
+deallocating the resources allocated by its corresponding setup function.
 
 Building Tests
 --------------

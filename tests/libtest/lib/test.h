@@ -42,17 +42,17 @@ enum test_result {
 };
 
 /*
- * The return values from test case set up and tear down functions.
+ * The return values from test case setup and teardown functions.
  *
- * - TEST_CASE_OK : The set up or tear down function was successful.
- * - TEST_CASE_ERROR : Set up or tear down actions could not be completed.
+ * - TEST_CASE_OK : The setup or teardown function was successful.
+ * - TEST_CASE_ERROR : The setup or teardown actions could not be completed.
  *
- * If a test case set up function returns TEST_CASE_ERROR then:
+ * If a test case setup function returns TEST_CASE_ERROR then:
  * - The test functions in the test case will not be run.
- * - The test case's tear down function will not be invoked.
+ * - The test case's teardown function will not be invoked.
  * - The test run as a whole will be treated as being in error.
  *
- * If a test case tear down function returns a TEST_CASE_ERROR, then
+ * If a test case teardown function returns a TEST_CASE_ERROR, then
  * the test run as a whole be treated as being in error.
  */
 enum test_case_status {
@@ -63,7 +63,7 @@ enum test_case_status {
 /*
  * A 'test_case_state' is a handle to resources shared by the test functions
  * that make up a test case. A test_case_state is allocated by the test case
- * set up function and is deallocated by the test case tear down function.
+ * setup function and is deallocated by the test case teardown function.
  *
  * The test(3) framework treats a 'test_case_state' as an opaque value.
  */
@@ -102,7 +102,7 @@ typedef const char *test_tags[];
 #endif
 
 /*
- * A test case set up function.
+ * A test case setup function.
  *
  * If defined for a test case, this function will be called prior to
  * the execution of an of the test functions within the test cae. Test
@@ -112,8 +112,8 @@ typedef const char *test_tags[];
  * The function can set '*state' to a memory area holding test state to be
  * passed to test functions.
  *
- * If the test case does not define a set up function, then a default
- * no-op set up function will be used.
+ * If the test case does not define a setup function, then a default
+ * no-op setup function will be used.
  */
 typedef	enum test_case_status	test_case_setup_function(
     test_case_state *state);
@@ -122,19 +122,19 @@ typedef	enum test_case_status	test_case_setup_function(
  * A test function.
  *
  * This function will be invoked with the state that had been set by the
- * test case set up function. The function returns TEST_PASS to report that
+ * test case setup function. The function returns TEST_PASS to report that
  * its test succeeded or TEST_FAIL otherwise. In the event the test could
  * not be executed, it can return TEST_UNRESOLVED.
  */
 typedef	enum test_result	test_function(test_case_state state);
 
 /*
- * A test case tear down function.
+ * A test case teardown function.
  *
  * If defined for a test case, this function will be called after the
  * execution of the test functions in the test case.  It is passed the
- * state that had been allocated by the test case set up function, and is
- * responsible for deallocating the resources that the set up function
+ * state that had been allocated by the test case setup function, and is
+ * responsible for deallocating the resources that the setup function
  * had allocated.
  */
 typedef enum test_case_status	test_case_teardown_function(

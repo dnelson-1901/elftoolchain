@@ -58,8 +58,8 @@ enum test_run_status {
 	TR_STATUS_FAIL = 1,
 
 	/*
-	 * At least one test case reported an error during its set up or tear
-	 * down phase.
+	 * At least one test case reported an error during its setup or teardown
+	 * phase.
 	 */
 	TR_STATUS_ERROR = 2
 };

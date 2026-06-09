@@ -80,7 +80,7 @@ TEST_CASE_DESCRIPTION(helloworld) = "A description for a test case.";
 
 /*
  * Function names prefixed with 'tc_setup_' are assumed to be test
- * case set up functions.
+ * case setup functions.
  */
 enum test_case_status
 tc_setup_helloworld(test_case_state *state)
@@ -91,7 +91,7 @@ tc_setup_helloworld(test_case_state *state)
 
 /*
  * Function names prefixed with 'tc_teardown_' are assumed to be test
- * case tear down functions.
+ * case teardown functions.
  */
 enum test_case_status
 tc_teardown_helloworld(test_case_state state)
