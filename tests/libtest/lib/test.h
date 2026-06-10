@@ -115,7 +115,7 @@ typedef const char *test_tags_t[];
  * If the test case does not define a setup function, then a default
  * no-op setup function will be used.
  */
-typedef	enum test_case_status	test_case_setup_function(
+typedef	enum test_case_status	test_case_setup_function_t(
     test_case_state_t *state);
 
 /*
@@ -126,7 +126,7 @@ typedef	enum test_case_status	test_case_setup_function(
  * its test succeeded or TEST_FAIL otherwise. In the event the test could
  * not be executed, it can return TEST_UNRESOLVED.
  */
-typedef	enum test_result	test_function(test_case_state_t state);
+typedef	enum test_result	test_function_t(test_case_state_t state);
 
 /*
  * A test case teardown function.
@@ -137,7 +137,7 @@ typedef	enum test_result	test_function(test_case_state_t state);
  * responsible for deallocating the resources that the setup function
  * had allocated.
  */
-typedef enum test_case_status	test_case_teardown_function(
+typedef enum test_case_status	test_case_teardown_function_t(
     test_case_state_t state);
 
 #ifdef	__cplusplus

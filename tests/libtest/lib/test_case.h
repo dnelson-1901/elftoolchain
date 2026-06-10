@@ -39,7 +39,7 @@ struct test_function_descriptor {
 	const char	*tf_name;	/* Test name. */
 	const char	*tf_description; /* Test description. */
 	const char	**tf_tags;	/* The tags for the test. */
-	test_function	*tf_func;	/* The function to invoke. */
+	test_function_t	*tf_func;	/* The function to invoke. */
 };
 
 /* A test case, with its associated tests. */

@@ -183,7 +183,7 @@ if ! nm ${*} | sort -k 3 | \
 		test_function_tags[tf_name] = $3
 	}
 	$2 == "T" && $3 ~ "^" prefix_tf {
-		printf("test_function %s;\n", $3)
+		printf("test_function_t %s;\n", $3)
 		tf_name = suffix($3, prefix_tf)
 		test_functions[tf_name] = 1
 	}
