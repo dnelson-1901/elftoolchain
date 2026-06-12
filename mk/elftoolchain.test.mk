@@ -41,6 +41,8 @@ _TEST_OBJS=	${_C_SRCS:S/.c$/.o/g} ${_M4_SRCS:S/.m4$/.o/g}
 _MAKE_SCAFFOLDING=	${TEST_BASE}/bin/make-test-scaffolding
 ${_TC_SRC}:	${_TEST_OBJS}
 	${_MAKE_SCAFFOLDING} -o ${.TARGET} ${.ALLSRC}
+
+CLEANFILES+=	${_TEST_OBJS}
 .endif
 .endif
 
