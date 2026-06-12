@@ -43,9 +43,6 @@ functions contained in a test case named "``helloworld``":
 	/* File: test.c */
 	#include "test.h"
 
-	TEST_CASE_DESCRIPTION(helloworld) =
-	    "A description of the helloworld test case.";
-
 	enum test_result
 	tf_helloworld_hello(testcase_state tcs)
 	{

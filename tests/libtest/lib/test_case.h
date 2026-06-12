@@ -34,19 +34,15 @@
  * test executable.
  */
 
-/* A single test function, with its associated tags and description. */
+/* A single test function. */
 struct test_function_descriptor {
 	const char	*tf_name;	/* Test name. */
-	const char	*tf_description; /* Test description. */
-	const char	**tf_tags;	/* The tags for the test. */
 	test_function_t	*tf_func;	/* The function to invoke. */
 };
 
 /* A test case, with its associated tests. */
 struct test_case_descriptor {
 	const char	*tc_name;	/* Test case name. */
-	const char	*tc_description; /* Test case description. */
-	const char	**tc_tags;	/* Any associated tags. */
 	const struct test_function_descriptor *tc_tests; /* Contained tests. */
 	const int	tc_count;	/* The number of tests. */
 };

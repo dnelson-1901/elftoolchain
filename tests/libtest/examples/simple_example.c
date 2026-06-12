@@ -33,18 +33,16 @@
 /*
  * Function prototypes.
  */
-enum test_case_status tc_setup_helloworld(test_case_state_t *);
-enum test_case_status tc_teardown_helloworld(test_case_state_t);
+bool tc_setup_helloworld(test_case_state_t *);
+bool tc_teardown_helloworld(test_case_state_t);
 enum test_result tf_helloworld_sayhello(test_case_state_t);
 enum test_result tf_helloworld_saygoodbye(test_case_state_t);
 
 /*
  * This source defines a single test case named 'helloworld' containing a
- * single test function named 'sayhello' contained in that test case. At
- * test execution time the test case would be selectable using the tags
- * "tag1" or "tag2", or by its name 'helloworld'.  The test function can
- * be selected using tags "tag3" or "tag4", or by its name
- * 'helloworld_sayhello'.
+ * single test function named 'sayhello' contained in that test case.
+ *
+ * The test function can be selected by its name 'helloworld_sayhello'.
  *
  * Given the object code generated from this file, the
  * 'make-test-scaffolding' utility will prepare the scaffolding needed
@@ -53,68 +51,46 @@ enum test_result tf_helloworld_saygoodbye(test_case_state_t);
  * Specifically the 'make-test-scaffolding' utilit will generate test and
  * test case descriptors equivalent to:
  *
- *   struct test_descriptor test_functions_helloworld[] = {
+ *   struct test_function_descriptor test_functions_helloworld[] = {
  *       {
- *           .t_description = tf_description_helloworld_sayhello,
- *           .t_tags = tf_tags_helloworld_sayhello,
- *           .t_func = tf_helloworld_sayhello
+ *           .tf_name = "helloworld_sayhello",
+ *           .tf_func = tf_helloworld_sayhello
+ *       },
+ *       {
+ *           .tf_name = "helloworld_saygoodbye",
+ *           .tf_func = tf_helloworld_saygoodbye
  *       }
  *   };
  *
  *   struct test_case_descriptor test_cases[] = {
  *       {
- *            .tc_description = tc_description_helloworld,
- *            .tc_tags = tc_tags_helloworld,
+ *            .tc_name = "helloworld",
  *            .tc_tests = test_functions_helloworld
  *       }
  *   };
  */
 
 /*
- * A symbol name prefixed with 'tc_description_' contains a
- * test case description. The TEST_CASE_DESCRIPTION macro offers
- * a convenient way to define such symbols. In the case of the
- * symbol below, the test case named is 'helloworld'.
- */
-TEST_CASE_DESCRIPTION(helloworld) = "A description for a test case.";
-
-/*
  * Function names prefixed with 'tc_setup_' are assumed to be test
  * case setup functions.
  */
-enum test_case_status
+bool
 tc_setup_helloworld(test_case_state_t *state)
 {
 	(void) state;
-	return (TEST_CASE_OK);
+	return (true);
 }
 
 /*
  * Function names prefixed with 'tc_teardown_' are assumed to be test
  * case teardown functions.
  */
-enum test_case_status
+bool
 tc_teardown_helloworld(test_case_state_t state)
 {
 	(void) state;
-	return (TEST_CASE_OK);
+	return (true);
 }
-
-/*
- * Names prefixed with 'tc_tags_' denote the tags associated with test
- * cases. The TESTC_ASE_TAGS macro offers a convenient way to define such
- * symbols.
- *
- * In the example below, all test functions belonging to the test case
- * named 'helloworld' would be associated with tags "tag1" and "tag2".
- *
- * Tags lists are terminated by a NULL entry.
- */
-TEST_CASE_TAGS(helloworld) = {
-	"tag1",
-	"tag2",
-	NULL
-};
 
 /*
  * Function names prefixed with 'tf_' name test functions.
@@ -132,40 +108,3 @@ tf_helloworld_saygoodbye(test_case_state_t state)
 	(void) state;
 	return (TEST_PASS);
 }
-
-/*
- * Names prefixed by 'tf_description_' contain descriptions of test
- * functions (e.g., 'tf_description_helloworld_sayhello' contains the
- * description for test function 'tf_helloworld_sayhello').
- *
- * The TEST_DESCRIPTION macro offers a convenient way to define such
- * symbols.
- */
-TEST_DESCRIPTION(helloworld_sayhello) =
-    "A description for the test function 'tf_helloworld_sayhello'.";
-
-TEST_DESCRIPTION(helloworld_saygoodbye) =
-    "A description for the test function 'tf_helloworld_saygoodbye'.";
-
-/*
- * Names prefixed by 'tf_tags_' contain the tags associated with
- * test functions.
- *
- * In the example below, the tags 'tag3' and 'tag4' are associated
- * with the test function 'tf_helloworld_sayhello'.
- *
- * Alternately, the TEST_TAGS() macro offers a convenient way to
- * define such symbols.
- *
- * Tags lists are terminated by a NULL entry.
- */
-test_tags_t tf_tags_helloworld_sayhello = {
-	"tag3",
-	"tag4",
-	NULL
-};
-
-test_tags_t tf_tags_helloworld_saygoodbye = {
-	"tag5",
-	NULL
-};

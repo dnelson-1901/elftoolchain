@@ -151,20 +151,12 @@ Select test functions whose names match
 .Ar pattern .
 .It Xo
 .Op Li - Ns
-.Li t : Ns Ar pattern
-.Xc
-Select the test cases and test functions associated with
-tags matching
-.Ar pattern .
-.It Xo
-.Op Li - Ns
 .Ar pattern
 .Xc
 If the
-.Li c ,
-.Li f
+.Li c
 or
-.Li t
+.Li f
 qualifiers were not specified, then the pattern is matched
 against the names of test cases.
 .El
@@ -284,15 +276,6 @@ To execute tests in the test case
 alone, use:
 .Bd -literal -offset indent
 tc_example -t 'c:tc1'
-.Ed
-.Pp
-To execute tests in the test case
-.Dq tc1
-but not the test functions associated with tag
-.Li tag1 ,
-use:
-.Bd -literal -offset indent
-tc_example -t 'c:tc1' -t '-t:tag1'
 .Ed
 .Sh DIAGNOSTICS
 Test programs built with the

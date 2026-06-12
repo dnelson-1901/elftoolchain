@@ -34,16 +34,12 @@
 .Lb libtest
 .Sh SYNOPSIS
 .In test.h
-.Ft enum test_case_status
+.Ft bool
 .Fn test_case_setup "test_case_state_t *state"
-.Ft enum test_case_status
+.Ft bool
 .Fn test_case_teardown "test_case_state_t state"
 .Ft enum test_result
 .Fn test_function "test_case_state state"
-.Vt "typedef const char" test_case_description_t [] ;
-.Vt "typedef const char" test_description_t [] ;
-.Vt "typedef const char *" test_case_tags_t [] ;
-.Vt "typedef const char *" test_tags_t [] ;
 .Sh DESCRIPTION
 The
 .Lb libtest
@@ -51,21 +47,11 @@ implements an API for writing tests.
 .Ss Concepts
 Tests are implemented using test functions, where each test function
 verifies a specific assertion about the system being tested.
-Test functions are associated with the following:
-.Bl -bullet -compact
-.It
-An optional human-readable test description.
-.It
-An optional set of tags.
-Tags are used to select or deselect specific tests in a run.
-.El
 .Pp
 Test functions are further grouped into test cases, where a test case
 contains a logical group of assertions about the system under test.
 Test cases are associated the following:
 .Bl -bullet -compact
-.It
-An optional human-readable test case description.
 .It
 An optional test case setup function.
 If specified, this setup function would be invoked prior to any test
@@ -82,10 +68,6 @@ It would be responsible for deallocating any resources that its corresponding
 setup function had allocated.
 If no teardown function is specified for a test case, a default no-op
 function will be supplied.
-.It
-An optional set of tags for the test case.
-These tags are used to select or delect specific test cases in a given test
-run.
 .El
 .Pp
 One or more test cases would be linked with a test driver to form a

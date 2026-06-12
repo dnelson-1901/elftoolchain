@@ -46,14 +46,6 @@ The
 utility expects symbols to be named using the following conventions:
 .Bl -bullet
 .It
-Test case descriptions are named using the
-.Li tc_description_
-prefix, followed by the name of the test case.
-For example, the symbol
-.Sy tc_description_helloworld
-would name the description of a test case named
-.Dq helloworld .
-.It
 Test set up functions are named using a
 .Li tc_setup_
 prefix, followed by the name of a test case.
@@ -70,10 +62,6 @@ For example, the function
 would name the tear down function for a test case named
 .Dq helloworld .
 .It
-Tags for test cases are named using symbols with a
-.Li tc_tags_
-prefix, followed by the name of their test case.
-.It
 Test functions are named using a
 .Li tf_
 prefix, followed by the name for their containing test case and a
@@ -88,10 +76,6 @@ would be associated with the test case named
 A test function that is not associated with a test case will be
 added to a special test case named
 .Dq default .
-.It
-Tags for test functions are named using symbols with a
-.Li tf_tags_
-prefix, followed by the name of their test case.
 .El
 .Pp
 The

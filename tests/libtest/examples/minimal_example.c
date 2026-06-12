@@ -28,7 +28,7 @@
 
 /*
  * This C source defines a single test function named 'tf_helloworld',
- * that is not part of a test case, and lacking a description or tags.
+ * that is not part of a test case.
  *
  * Since no test cases are specified in this file, the test function
  * would be assigned to the default test case (named 'default').

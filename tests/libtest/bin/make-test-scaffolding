@@ -41,13 +41,9 @@ usage()
 }
 
 output_file="tc.c"
-prefix_tc_descr='tc_description_'
 prefix_tc_setup='tc_setup_'
-prefix_tc_tags='tc_tags_'
 prefix_tc_teardown='tc_teardown_'
 prefix_tf='tf_'
-prefix_tf_descr='tf_description_'
-prefix_tf_tags='tf_tags_'
 
 
 args=`getopt o: $*`
@@ -84,13 +80,9 @@ cat <<EOF
 EOF
 
 if ! nm ${*} | sort -k 3 | \
-	awk -v prefix_tc_descr=${prefix_tc_descr} \
-	    -v prefix_tc_setup=${prefix_tc_setup} \
-	    -v prefix_tc_tags=${prefix_tc_tags} \
+	awk -v prefix_tc_setup=${prefix_tc_setup} \
 	    -v prefix_tc_teardown=${prefix_tc_teardown} \
-	    -v prefix_tf=${prefix_tf} \
-	    -v prefix_tf_descr=${prefix_tf_descr} \
-	    -v prefix_tf_tags=${prefix_tf_tags} '
+	    -v prefix_tf=${prefix_tf} '
 	function suffix(value, prefix) {
 		return substr(value, length(prefix) + 1);
 	}
@@ -109,9 +101,6 @@ if ! nm ${*} | sort -k 3 | \
 	function print_test_case_record(tc_name) {
 		printf("\t{\n")
 		printf("\t\t.tc_name = \"%s\",\n", tc_name)
-		printf("\t\t.tc_description = %s,\n",
-		    test_case_descriptions[tc_name])
-		printf("\t\t.tc_tags = %s,\n", test_case_tags[tc_name])
 		tf_name = "test_functions_" tc_name
 		printf("\t\t.tc_tests = %s,\n", tf_name)
 		printf("\t\t.tc_count = sizeof (%s) / sizeof (%s[0]),\n",
@@ -133,11 +122,7 @@ if ! nm ${*} | sort -k 3 | \
 				continue
 			printf("\t{\n")
 			printf("\t\t.tf_name = \"%s\",\n", tf_name)
-			printf("\t\t.tf_description = %s,\n",
-				test_function_descriptions[tf_name])
 			printf("\t\t.tf_func = %s,\n", prefix_tf tf_name)
-			printf("\t\t.tf_tags = %s\n",
-			    test_function_tags[tf_name])
 			printf("\t},\n")
 		}
 		printf("};\n")
@@ -148,40 +133,16 @@ if ! nm ${*} | sort -k 3 | \
 	}
 	BEGIN {
 		DEFAULT = "default"
-		test_case_descriptions[DEFAULT] = "NULL"
-		test_case_tags[DEFAULT] = "NULL"
-	}
-	($2 == "R" || $2 == "D") && $3 ~ "^" prefix_tc_descr {
-		printf("extern test_case_description_t %s;\n", $3)
-		tc_name = suffix($3, prefix_tc_descr)
-		test_cases[tc_name] = 1
-		test_case_descriptions[tc_name] = $3
 	}
 	$2 == "T" && $3 ~ "^" prefix_tc_setup {
 		tc_name = suffix($3, prefix_tc_setup)
 		test_cases[tc_name] = 1
 		test_case_setup[tc_name] = $3
 	}
-	($2 == "R" || $2 == "D") && $3 ~ "^" prefix_tc_tags {
-		printf("extern test_case_tags_t %s;\n", $3)
-		tc_name = suffix($3, prefix_tc_tags)
-		test_cases[tc_name] = 1
-		test_case_tags[tc_name] = $3
-	}
 	$2 == "T" && $3 ~ "^" prefix_tc_teardown {
 		tc_name = suffix($3, prefix_tc_teardown)
 		test_cases[tc_name] = 1
 		test_case_teardown[tc_name] = $3
-	}
-	($2 == "R" || $2 == "D") && $3 ~ "^" prefix_tf_descr {
-		printf("extern test_description_t %s;\n", $3)
-		tf_name = suffix($3, prefix_tf_descr)
-		test_function_descriptions[tf_name] = $3
-	}
-	($2 == "R" || $2 == "D") && $3 ~ "^" prefix_tf_tags {
-		printf("extern test_tags_t %s;\n", $3)
-		tf_name = suffix($3, prefix_tf_tags)
-		test_function_tags[tf_name] = $3
 	}
 	$2 == "T" && $3 ~ "^" prefix_tf {
 		printf("test_function_t %s;\n", $3)
@@ -189,18 +150,6 @@ if ! nm ${*} | sort -k 3 | \
 		test_functions[tf_name] = 1
 	}
 	END {
-		for (tf_name in test_functions) {
-			if (test_function_descriptions[tf_name] == "")
-				test_function_descriptions[tf_name] = "NULL"
-			if (test_function_tags[tf_name] == "")
-				test_function_tags[tf_name] = "NULL"
-		}
-		for (tc_name in test_cases) {
-			if (test_case_descriptions[tc_name] == "")
-				test_case_descriptions[tc_name] = "NULL"
-			if (test_case_tags[tc_name] == "")
-				test_case_tags[tc_name] = "NULL"
-		}
 		for (tc_name in test_cases) {
 			print_test_functions_record(tc_name)
 			delete_test_functions(tc_name)

@@ -60,7 +60,6 @@ ELFTC_VCSID("$Id$");
 enum selection_scope {
 	SCOPE_TEST_CASE = 0,	/* c:STRING */
 	SCOPE_TEST_FUNCTION,	/* f:STRING */
-	SCOPE_TAG,		/* t:STRING */
 };
 
 /* Selection list entry. */
@@ -123,9 +122,6 @@ parse_selection_option(const char *option)
 		break;
 	case 'f':
 		scope = SCOPE_TEST_FUNCTION;
-		break;
-	case 't':
-		scope = SCOPE_TAG;
 		break;
 	default:
 		return (NULL);
@@ -262,68 +258,6 @@ match_test_functions(struct selection_option *option,
 }
 
 /*
- * Helper: returns true if the specified text matches any of the
- * entries in the array 'tags'.
- */
-static bool
-match_tags_helper(const char *pattern, const char *tags[])
-{
-	const char **tag;
-
-	if (!tags)
-		return (false);
-
-	for (tag = tags; *tag && **tag != '\0'; tag++) {
-		if (!fnmatch(pattern, *tag, 0))
-			return (true);
-	}
-
-	return (false);
-}
-
-/*
- * Match tags.
- *
- * Matches against test case tags apply to all the test
- * functions in the test case.
- *
- * Matches against test function tags apply to the matched
- * test function only.
- */
-static void
-match_tags(struct selection_option *option,
-    struct test_case_selector *tcs)
-{
-	const struct test_case_descriptor *tcd;
-	const struct test_function_descriptor *tfd;
-	struct test_function_selector *tfs;
-
-	tcd = tcs->tcs_descriptor;
-
-	/*
-	 * If the tag in the option matches a tag associated with
-	 * a test case, then we set all of the test case's functions
-	 * to the specified selection state.
-	 */
-	if (match_tags_helper(option->so_pattern, tcd->tc_tags)) {
-		STAILQ_FOREACH(tfs, &tcs->tcs_functions, tfs_next)
-			tfs->tfs_is_selected = option->so_select_tests;
-		return;
-	}
-
-	/*
-	 * Otherwise, check the tag against the tags for each function
-	 * in the test case and set the selection state of each matched
-	 * function.
-	 */
-	STAILQ_FOREACH(tfs, &tcs->tcs_functions, tfs_next) {
-		tfd = tfs->tfs_descriptor;
-		if (match_tags_helper(option->so_pattern, tfd->tf_tags))
-			tfs->tfs_is_selected = option->so_select_tests;
-	}
-}
-
-/*
  * Add the selected tests to the test run.
  *
  * The memory used by the options list is returned to the system when this
@@ -378,9 +312,6 @@ select_tests(struct test_run *tr,
 				break;
 			case SCOPE_TEST_FUNCTION:
 				match_test_functions(selection, tcs);
-				break;
-			case SCOPE_TAG:
-				match_tags(selection, tcs);
 				break;
 			}
 		}
@@ -537,27 +468,10 @@ get_test_case_status(const struct test_case_selector *tcs)
 }
 
 /*
- * Helper: print out a comma-separated list of tags.
- */
-static void
-show_tags(int indent, const char *tags[])
-{
-	const char **tag;
-
-	printf("%*c: ", indent, ' ');
-	for (tag = tags; *tag && **tag != '\0';) {
-		printf("%s", *tag++);
-		if (*tag && **tag != '\0')
-			printf(",");
-	}
-	printf("\n");
-}
-
-/*
  * Display a test case descriptor.
  */
 static void
-show_test_case(struct test_run *tr, const struct test_case_selector *tcs)
+show_test_case(const struct test_case_selector *tcs)
 {
 	const struct test_case_descriptor *tcd;
 	int prefix_char;
@@ -566,17 +480,10 @@ show_test_case(struct test_run *tr, const struct test_case_selector *tcs)
 	tcd = tcs->tcs_descriptor;
 
 	printf("C %c %s\n", prefix_char, tcd->tc_name);
-
-	if (tr->tr_verbosity > 0 && tcd->tc_tags != NULL)
-		show_tags(2, tcd->tc_tags);
-
-	if (tr->tr_verbosity > 1 && tcd->tc_description)
-		printf("  & %s\n", tcd->tc_description);
 }
 
 static void
-show_test_function(struct test_run *tr,
-    const struct test_function_selector *tfs)
+show_test_function(const struct test_function_selector *tfs)
 {
 	const struct test_function_descriptor *tfd;
 	int selection_char;
@@ -585,12 +492,6 @@ show_test_function(struct test_run *tr,
 	tfd = tfs->tfs_descriptor;
 
 	printf("  F %c %s\n", selection_char, tfd->tf_name);
-
-	if (tr->tr_verbosity > 0 && tfd->tf_tags != NULL)
-		show_tags(4, tfd->tf_tags);
-
-	if (tr->tr_verbosity > 1 && tfd->tf_description)
-		printf("    & %s\n", tfd->tf_description);
 }
 
 static int
@@ -600,9 +501,9 @@ show_listing(struct test_run *tr)
 	const struct test_function_selector *tfs;
 
 	STAILQ_FOREACH(tcs, &tr->tr_test_cases, tcs_next) {
-		show_test_case(tr, tcs);
+		show_test_case(tcs);
 		STAILQ_FOREACH(tfs, &tcs->tcs_functions, tfs_next)
-			show_test_function(tr, tfs);
+			show_test_function(tfs);
 	}
 
 	return (EXIT_SUCCESS);
