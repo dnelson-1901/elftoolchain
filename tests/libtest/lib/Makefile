@@ -12,4 +12,7 @@ WARNS?=	6
 
 MAN=	test.3
 
+MLINKS+= \
+	test.3 test_result.3
+
 .include "${TOP}/mk/elftoolchain.lib.mk"
