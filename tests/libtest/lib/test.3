@@ -24,7 +24,7 @@
 .\"
 .\" $Id$
 .\"
-.Dd June 9, 2026
+.Dd June 14, 2026
 .Dt TEST 3
 .Os
 .Sh NAME
@@ -34,12 +34,10 @@
 .Lb libtest
 .Sh SYNOPSIS
 .In test.h
-.Ft bool
-.Fn test_case_setup "test_case_state_t *state"
-.Ft bool
-.Fn test_case_teardown "test_case_state_t state"
-.Ft enum test_result
-.Fn test_function "test_case_state state"
+.Vt "typedef void *" test_case_state_t ;
+.Vt "typedef bool" test_case_setup_function_t Ns Pq test_case_state_t *state ;
+.Vt "typedef bool" test_case_teardown_function_t Ns Pq test_case_state_t state ;
+.Vt "typedef enum test_result" test_function_t Ns Pq test_case_state state ;
 .Sh DESCRIPTION
 The
 .Lb libtest
