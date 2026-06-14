@@ -37,48 +37,105 @@
 .Vt "typedef void *" test_case_state_t ;
 .Vt "typedef bool" test_case_setup_function_t Ns Pq test_case_state_t *state ;
 .Vt "typedef bool" test_case_teardown_function_t Ns Pq test_case_state_t state ;
-.Vt "typedef enum test_result" test_function_t Ns Pq test_case_state state ;
+.Vt "typedef void" test_function_t Ns Pq test_case_state state ;
+.Ft void
+.Fn test_result "enum test_result result"
 .Sh DESCRIPTION
 The
 .Lb libtest
-implements an API for writing tests.
-.Ss Concepts
-Tests are implemented using test functions, where each test function
-verifies a specific assertion about the system being tested.
+library implements an API for writing tests intended to be used
+with the
+.Xr test_driver 3
+API.
+.Ss Test Functions
+Tests are implemented using
+.Sq test functions
+of type
+.Vt test_function_t .
+A test function verifies one (or more) assertions about the behavior
+of the software it is meant to test.
+The mapping between the set of assertions covering the behavior of the
+system under test and the test functions in a test suite is described
+by
+.Xr test 5 .
 .Pp
-Test functions are further grouped into test cases, where a test case
-contains a logical group of assertions about the system under test.
-Test cases are associated the following:
-.Bl -bullet -compact
-.It
-An optional test case setup function.
-If specified, this setup function would be invoked prior to any test
-function contained in the test case.
-The setup function can allocate and initialize test-specific state, to be
-passed to test functions.
-If no setup function is specified for the test case, a default (no-op)
-function will be supplied.
-.It
-An optional test case teardown function.
-The teardown function will be invoked after all test functions have been
-invoked.
-It would be responsible for deallocating any resources that its corresponding
-setup function had allocated.
-If no teardown function is specified for a test case, a default no-op
-function will be supplied.
+A test function communicates a test result to the test driver
+by calling
+.Xr test_result 3 .
+A test function needs to call
+.Xr test_result 3
+at least once prior to returning to its caller.
+The supported values for the argument
+.Ar result
+are:
+.Bl -tag -width "Bq Dv TEST_UNRESOLVED"
+.It Dv TEST_PASS
+All of the assertions tested by the test function were true.
+.It Dv TEST_FAIL
+At least one of the assertions tested by the test function was false.
+.It Dv TEST_UNRESOLVED
+The test function could not meaningfully proceed for some reason.
+It is not known whether the assertions tested by the test function are
+true or false.
 .El
+.Ss Setup and Teardown Functions
+Test functions can optionally be associated with a
+.Sq setup function
+of type
+.Vt test_case_setup_function_t
+and a
+.Sq teardown function
+of type
+.Vt test_case_teardown_function_t .
 .Pp
-One or more test cases would be linked with a test driver to form a
-test executable.
-The default test driver supplied allows the test cases and specific tests
-within the executable to be specified on the command line.
+If a setup function exists, it will be called prior to any of its
+associated test functions.
+If a teardown function exists, it will be called after its associated
+test functions are called.
+.Pp
+A setup function allocates resources for the use of test functions,
+and a teardown function releases these resources.
+The setup function can return a pointer to an allocated memory arena
+in the location pointed to by its argument
+.Va "state" .
+This pointer value is passed to test functions when they are invoked,
+and to the teardown function.
+The
+.Lb libtest
+framework treats the pointer setup by a setup function as an opaque
+value.
+.Pp
+Setup and teardown functions return
+.Dv true
+to indicate that their respective operations succeeded.
+If a setup function returns
+.Dv false
+its associated test functions will not be called and test execution
+will proceed to invoking the associated teardown function if a
+teardown function is present.
+A teardown function can return
+.Dv false
+to that the resources allocated by the setup operation were not
+succesfully released.
+.Ss Test Cases
+Related test functions may be grouped into
+.Sq test cases .
+The test functions in a test case share setup and teardown functions.
+.Ss Test Executables
+Test functions are contained in a
+.Sq test executable ,
+usually implemented with the scaffolding provided by
+.Xr test_driver 3 .
 .Ss Scaffolding Generation
 The
 .Xr make-test-scaffolding 1
-script will generate the scaffolding needed to produce a test executable
-from object files containing symbols following its naming conventions.
+script can be used to generate the scaffolding needed to produce a
+test executable from object files containing symbols that follow its
+naming conventions.
 .Sh SEE ALSO
-.Xr make-test-scaffolding 1
+.Xr make-test-scaffolding 1 ,
+.Xr test_driver 3 ,
+.Xr test 5
 .Sh AUTHORS
 The
 .Lb libtest

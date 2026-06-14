@@ -35,8 +35,8 @@
  */
 bool tc_setup_helloworld(test_case_state_t *);
 bool tc_teardown_helloworld(test_case_state_t);
-enum test_result tf_helloworld_sayhello(test_case_state_t);
-enum test_result tf_helloworld_saygoodbye(test_case_state_t);
+void tf_helloworld_sayhello(test_case_state_t);
+void tf_helloworld_saygoodbye(test_case_state_t);
 
 /*
  * This source defines a single test case named 'helloworld' containing a
@@ -95,16 +95,16 @@ tc_teardown_helloworld(test_case_state_t state)
 /*
  * Function names prefixed with 'tf_' name test functions.
  */
-enum test_result
+void
 tf_helloworld_sayhello(test_case_state_t state)
 {
 	(void) state;
-	return (TEST_PASS);
+	test_result(TEST_PASS);
 }
 
-enum test_result
+void
 tf_helloworld_saygoodbye(test_case_state_t state)
 {
 	(void) state;
-	return (TEST_PASS);
+	test_result(TEST_PASS);
 }

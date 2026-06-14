@@ -57,6 +57,8 @@
 ELFTC_VCSID("$Id$");
 #endif
 
+enum test_result test_status = TEST_UNSPECIFIED;
+
 enum selection_scope {
 	SCOPE_TEST_CASE = 0,	/* c:STRING */
 	SCOPE_TEST_FUNCTION,	/* f:STRING */

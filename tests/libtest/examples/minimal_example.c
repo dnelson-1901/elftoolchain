@@ -43,14 +43,14 @@
 /*
  * Function prototypes.
  */
-enum test_result tf_helloworld(test_case_state_t);
+void	tf_helloworld(test_case_state_t);
 
 /*
  * Function names prefixed with 'tf_' name test functions.
  */
-enum test_result
+void
 tf_helloworld(test_case_state_t state)
 {
 	(void) state;
-	return (TEST_PASS);
+	test_result(TEST_PASS);
 }

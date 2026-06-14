@@ -24,6 +24,27 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <assert.h>
+
 #include "test.h"
 
-/* To be implemented. */
+extern enum test_result test_status;
+
+/*
+ * Record test status.
+ */
+void
+test_result(enum test_result result)
+{
+	assert(result >= TEST_PASS);
+	assert(result <= TEST_FAIL);
+
+	/*
+	 * Track the most severe test failure seen so far.
+	 *
+	 * The severity of test failure is encoded by the numeric
+	 * value of the 'result' parameter, so a simple numeric
+	 * comparison suffices.
+	 */
+	if (test_status < result) test_status = result;
+}

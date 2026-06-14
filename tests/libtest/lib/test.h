@@ -30,18 +30,37 @@
 #include <stdbool.h>
 
 /*
- * The return values from test functions.
+ * Values encoding the result of a test.
  *
- * - TEST_PASS : The assertion(s) in the test function passed.
- * - TEST_FAIL : At least one assertion in the test function failed.
- * - TEST_UNRESOLVED : The assertions in the test function could not be
- *                     checked for some reason.
+ * The meaning of these values is:
+ *
+ * - TEST_UNSPECIFIED  A test result is yet to be specified.  Test functions
+ *                     start in this state.
+ * - TEST_PASS         The test succeeded.  Assertions associated with the
+ *                     test are considered to be proven.
+ * - TEST_FAIL         The test failed.  Assertions associated with the test
+ *                     are disproven.
+ * - TEST_UNRESOLVED   The test function could not proceed meaningfully for
+ *                     whatever reason.  Assertions associated with the test
+ *                     are not proven.
+ *
+ * These values are passed to the 'test_result()' API.  Multiple calls to
+ * to 'test_result()' are permitted with the following behavior:
+ *
+ * - A result of TEST_FAIL overrides any prior test status.
+ * - A result of TEST_UNRESOLVED overides a prior TEST_PASS status, but not
+ *   a prior TEST_FAIL status.
+ *
+ * It is a testing error for the test function to return with test state as
+ * TEST_UNSPECIFIED.
  */
 enum test_result {
-	TEST_PASS = 0,
-	TEST_FAIL = 1,
-	TEST_UNRESOLVED = 2
+	TEST_UNSPECIFIED = -1,	/* Initial test state. */
+	TEST_PASS = 0,		/* Test passed. */
+	TEST_UNRESOLVED = 1,	/* Test status is indeterminate. */
+	TEST_FAIL = 2,		/* The test failed. */ 
 };
+
 
 /*
  * A 'test_case_state_t' is a handle to resources shared by the test functions
@@ -53,46 +72,65 @@ enum test_result {
 typedef	void *test_case_state_t;
 
 /*
- * A test case setup function.
+ * The type of a test case setup function.
  *
- * If defined for a test case, this function will be called prior to
- * the execution of an of the test functions within the test case.  The
- * test functions that comprise the test case will not be run if the
- * setup function returns a value other 'true'.
+ * Defining a setup function is optional for a test case.
  *
- * The function can set '*state' to a memory area holding test state to
- * be passed to test functions.
+ * If a setup function is defined, it will be called prior to invoking the
+ * test functions within the test case.
  *
- * If the test case does not define a setup function, then a default
- * no-op setup function will be used and a NULL pointer will be used
- * when invoking the test case's test functions.
+ * This function can set '*_state' to a memory area holding test state to be
+ * passed to test functions.
+ *
+ * The return value from the setup function determines whether the test
+ * functions in the test case are called:
+ *
+ * - A return value of 'true' indicates that test execution should
+ *   proceed.  Test functions in the test case will be invoked with
+ *   the value in '*_state'.
+ * - A return value other than 'true' indicates that setup failed.
+ *   Test functions in the test case will not be invoked, and test case
+ *   execution will proceed directly to the teardown phase.
  */
-typedef bool	test_case_setup_function_t(test_case_state_t *state);
+typedef	bool	test_case_setup_function_t(test_case_state_t *_state);
 
 /*
- * A test function.
+ * The type for a test function.
  *
- * This function will be invoked with the state that had been set by the
- * test case setup function. The function returns TEST_PASS to report that
- * its test succeeded or TEST_FAIL otherwise. In the event the test could
- * not be executed, it can return TEST_UNRESOLVED.
+ * Test functions will be invoked with the state that had been set by the
+ * test case setup function.
+ * 
+ * Test functions are required to call 'test_result()' prior to returning.
  */
-typedef	enum test_result	test_function_t(test_case_state_t state);
+typedef	void	test_function_t(test_case_state_t _state);
 
 /*
- * A test case teardown function.
+ * The type of a test case teardown function.
  *
- * If defined for a test case, this function will be called after the
- * execution of the test functions in the test case.  It is passed the
- * state that had been allocated by the test case setup function, and is
+ * If defined for a test case, this function will be called after
+ * invoking the test functions in the test case.  The function is
  * responsible for deallocating the resources that the setup function
- * had allocated.
+ * had allocated.  It is passed the state that had been allocated by
+ * the test case setup function.
+ *
+ * A return value of 'true' signals that the resources allocated at
+ * setup time were successfully reclaimed.  Any other return value
+ * signals that the test case's resources were not fully reclaimed,
+ * indicating a problem with the test suite itself.
  */
 typedef bool	test_case_teardown_function_t(test_case_state_t state);
 
 #ifdef	__cplusplus
 extern "C" {
 #endif
+
+/*
+ * Report test status to the test framework.
+ *
+ * A test function needs to call 'test_result()' at least once prior to
+ * returning to its caller.
+ */
+void	test_result(enum test_result _result);
 
 /*
  * Write a progress report to the test log.
