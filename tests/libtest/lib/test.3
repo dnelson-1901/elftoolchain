@@ -24,7 +24,7 @@
 .\"
 .\" $Id$
 .\"
-.Dd June 14, 2026
+.Dd June 15, 2026
 .Dt TEST 3
 .Os
 .Sh NAME
@@ -78,6 +78,10 @@ The test function could not meaningfully proceed for some reason.
 It is not known whether the assertions tested by the test function are
 true or false.
 .El
+Multiple calls to
+.Xr test_result 3
+are allowed, with calls supplying a failure result overriding any
+prior calls that had supplied a pass result.
 .Ss Setup and Teardown Functions
 Test functions can optionally be associated with a
 .Sq setup function
