@@ -511,6 +511,33 @@ show_listing(struct test_run *tr)
 	return (EXIT_SUCCESS);
 }
 
+/*
+ * Print a brief help message to stdout.
+ */
+static void
+show_usage(const char *argv0)
+{
+	(void) printf(
+		"Usage: %s [options]\n"
+		"\n"
+		"Run compiled-in tests and report test status.\n"
+		"\n"
+		"Supported options:\n"
+		"  -R DIR       Set the runtime base directory.\n"
+		"  -T SECONDS   Set the test timeout.\n"
+		"  -c ARCHIVE   Copy test results to ARCHIVE.\n"
+		"  -h           Display this help message and exit.\n"
+		"  -l           List selected tests.\n"
+		"  -n NAME      Name the test run.\n"
+		"  -p PATH      Add PATH to the resource search path.\n"
+		"  -s STYLE     Use the specified test execution style.\n"
+		"  -t SELECTOR  Select tests to run.\n"
+		"  -v           Be more verbose.\n",
+		argv0);
+
+	exit(EX_OK);
+}
+
 int
 main(int argc, char **argv)
 {
@@ -525,7 +552,7 @@ main(int argc, char **argv)
 		err(EX_SOFTWARE, "Memory allocation failed.");
 
 	/* Parse arguments. */
-	while ((option = getopt(argc, argv, ":R:T:c:ln:p:s:t:v")) != -1) {
+	while ((option = getopt(argc, argv, ":R:T:c:hln:p:s:t:v")) != -1) {
 		switch (option) {
 		case 'R':	/* Test runtime directory. */
 			if (!test_driver_is_directory(optarg))
@@ -548,6 +575,9 @@ main(int argc, char **argv)
 		case 'c':	/* The archive holding artefacts. */
 			tr->tr_artefact_archive = to_absolute_path(optarg);
 			tr->tr_commandline_flags |= TRF_ARTEFACT_ARCHIVE;
+			break;
+		case 'h':	/* Show usage. */
+			show_usage(argv[0]);
 			break;
 		case 'l':	/* List matching tests. */
 			tr->tr_action = TEST_RUN_LIST;
