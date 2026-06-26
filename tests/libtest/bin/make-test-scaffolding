@@ -113,6 +113,10 @@ if ! nm ${*} | sort -k 3 | \
 				delete test_functions[tf_name]
 		}
 	}
+	function function_suffix(tc_name, tf_name) {
+		if (tc_name == DEFAULT) return tf_name;
+		return suffix(tf_name, tc_name "_")
+	}
 	function print_test_functions_record(tc_name) {
 		printf("struct test_function_descriptor test_functions_%s[]",
 		    tc_name)
@@ -121,7 +125,8 @@ if ! nm ${*} | sort -k 3 | \
 			if (tc_name != matched_test_case(tf_name))
 				continue
 			printf("\t{\n")
-			printf("\t\t.tf_name = \"%s\",\n", tf_name)
+			printf("\t\t.tf_name = \"%s\",\n",
+				function_suffix(tc_name, tf_name))
 			printf("\t\t.tf_func = %s,\n", prefix_tf tf_name)
 			printf("\t},\n")
 		}
