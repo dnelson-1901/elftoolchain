@@ -112,8 +112,10 @@ test_driver_free_run(struct test_run *tr)
 	struct test_case_selector *test_case_entry;
 	struct test_function_selector *function_entry;
 
-	free(tr->tr_runtime_base_directory);
-	free(tr->tr_name);
+	if (tr->tr_runtime_base_directory)
+		free(tr->tr_runtime_base_directory);
+	if (tr->tr_name)
+		free(tr->tr_name);
 	if (tr->tr_artefact_archive)
 		free(tr->tr_artefact_archive);
 

@@ -153,7 +153,7 @@ struct test_run {
 	/* The desired verbosity level. */
 	int			tr_verbosity;
 
-	/* An optional name assigned by the user for this test run. */
+	/* The name for this test run. */
 	char			*tr_name;
 
 	/*
