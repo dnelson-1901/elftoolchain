@@ -25,8 +25,9 @@
  */
 
 /*
- * This file defines a "main()" that invokes (or lists) the tests that were
- * linked into the current executable.
+ * This file defines a "main()" that invokes (or lists) the tests that
+ * were linked into the current executable, based on command-line
+ * options specified.
  */
 
 #include <sys/param.h>
@@ -58,85 +59,6 @@ ELFTC_VCSID("$Id$");
 #endif
 
 enum test_result test_status = TEST_UNSPECIFIED;
-
-enum selection_scope {
-	SCOPE_TEST_CASE = 0,	/* c:STRING */
-	SCOPE_TEST_FUNCTION,	/* f:STRING */
-};
-
-/* Selection list entry. */
-struct selection_option {
-	STAILQ_ENTRY(selection_option)	so_next;
-
-	/* The text to use for matching. */
-	const char	*so_pattern;
-
-	/*
-	 * Whether matched test and test cases should be selected
-	 * (if false) or deselected (if true).
-	 */
-	bool		so_select_tests;
-
-	/* The kind of information to match. */
-	enum selection_scope	so_selection_scope;
-};
-
-/* All selection options specified. */
-STAILQ_HEAD(selection_option_list, selection_option);
-
-static struct selection_option *
-parse_selection_option(const char *option)
-{
-	int scope_char;
-	bool select_tests;
-	enum selection_scope scope;
-	struct selection_option *so;
-
-	scope_char = '\0';
-	select_tests = true;
-	scope = SCOPE_TEST_CASE;
-
-	/* Deselection patterns start with a '-'. */
-	if (*option == '-') {
-		select_tests = false;
-		option++;
-	}
-
-	/*
-	 * If a scope was not specified, the selection scope defaults
-	 * to SCOPE_TEST_CASE.
-	 */
-	if (strchr(option, ':') == NULL)
-		scope_char = 'c';
-	else {
-		scope_char = *option++;
-		if (*option != ':')
-			return (NULL);
-		option++;	/* Skip over the ':'. */
-	}
-
-	if (*option == '\0')
-		return (NULL);
-
-	switch (scope_char) {
-	case 'c':
-		scope = SCOPE_TEST_CASE;
-		break;
-	case 'f':
-		scope = SCOPE_TEST_FUNCTION;
-		break;
-	default:
-		return (NULL);
-	}
-
-	if ((so = calloc(1, sizeof(*so))) == NULL)
-		return (NULL);
-	so->so_pattern = option;
-	so->so_selection_scope = scope;
-	so->so_select_tests = select_tests;
-
-	return (so);
-}
 
 /* Test execution styles. */
 struct style_entry {
@@ -215,126 +137,6 @@ parse_execution_time(const char *option, long *execution_time) {
 	*execution_time = value;
 
 	return (true);
-}
-
-/*
- * Match the names of test cases.
- *
- * In the event of a match, then the selection state specifed in
- * 'option' is applied to all the test functions in the test case.
- */
-static void
-match_test_cases(struct selection_option *option,
-    struct test_case_selector *tcs)
-{
-	const struct test_case_descriptor *tcd;
-	struct test_function_selector *tfs;
-
-	tcd = tcs->tcs_descriptor;
-
-	if (fnmatch(option->so_pattern, tcd->tc_name, 0))
-		return;
-
-	STAILQ_FOREACH(tfs, &tcs->tcs_functions, tfs_next)
-		tfs->tfs_is_selected = option->so_select_tests;
-}
-
-/*
- * Match the names of test functions.
- */
-static void
-match_test_functions(struct selection_option *option,
-    struct test_case_selector *tcs)
-{
-	struct test_function_selector *tfs;
-	const struct test_function_descriptor *tfd;
-
-	STAILQ_FOREACH(tfs, &tcs->tcs_functions, tfs_next) {
-		tfd = tfs->tfs_descriptor;
-
-		if (fnmatch(option->so_pattern, tfd->tf_name, 0))
-			continue;
-
-		tfs->tfs_is_selected = option->so_select_tests;
-	}
-}
-
-/*
- * Add the selected tests to the test run.
- *
- * The memory used by the options list is returned to the system when this
- * function completes.
- */
-static void
-select_tests(struct test_run *tr,
-    struct selection_option_list *selections)
-{
-	int i, j;
-	struct selection_option *selection;
-	const struct test_case_descriptor *tcd;
-	struct test_case_selector *tcs;
-	struct test_function_selector *tfs;
-	bool default_selection_state;
-	int selected_count;
-
-	default_selection_state = STAILQ_EMPTY(selections);
-
-	/*
-	 * Set up runtime descriptors.
-	 */
-	for (i = 0; i < test_case_count; i++) {
-		if ((tcs = calloc(1, sizeof(*tcs))) == NULL)
-			err(EX_OSERR, "cannot allocate a test-case selector");
-		STAILQ_INSERT_TAIL(&tr->tr_test_cases, tcs, tcs_next);
-		STAILQ_INIT(&tcs->tcs_functions);
-
-		tcd = &test_cases[i];
-
-		tcs->tcs_descriptor = tcd;
-
-		for (j = 0; j < tcd->tc_count; j++) {
-			if ((tfs = calloc(1, sizeof(*tfs))) == NULL)
-				err(EX_OSERR, "cannot allocate a test "
-				    "function selector");
-			STAILQ_INSERT_TAIL(&tcs->tcs_functions, tfs, tfs_next);
-
-			tfs->tfs_descriptor = tcd->tc_tests + j;
-			tfs->tfs_is_selected = default_selection_state;
-		}
-	}
-
-	/*
-	 * Set or reset the selection state based on the options.
-	 */
-	STAILQ_FOREACH(selection, selections, so_next) {
-		STAILQ_FOREACH(tcs, &tr->tr_test_cases, tcs_next) {
-			switch (selection->so_selection_scope) {
-			case SCOPE_TEST_CASE:
-				match_test_cases(selection, tcs);
-				break;
-			case SCOPE_TEST_FUNCTION:
-				match_test_functions(selection, tcs);
-				break;
-			}
-		}
-	}
-
-	/*
-	 * Determine the count of tests selected, for each test case.
-	 */
-	STAILQ_FOREACH(tcs, &tr->tr_test_cases, tcs_next) {
-		selected_count = 0;
-		STAILQ_FOREACH(tfs, &tcs->tcs_functions, tfs_next)
-			selected_count += tfs->tfs_is_selected;
-		tcs->tcs_selected_count = selected_count;
-	}
-
-	/* Free up the selection list. */
-	while (!STAILQ_EMPTY(selections)) {
-		selection = STAILQ_FIRST(selections);
-		STAILQ_REMOVE_HEAD(selections, so_next);
-		free(selection);
-	}
 }
 
 /*
@@ -445,61 +247,14 @@ show_run_trailer(const struct test_run *tr)
 #undef	INFOLINE
 #undef	FIELD_HEADER_WIDTH
 
-/*
- * Helper: returns a character indicating the selection status for
- * a test case.  This character is as follows:
- *
- * - "*" all test functions in the test case were selected.
- * - "+" some test functions in the test case were selected.
- * - "-" no test functions from the test case were selected.
- */
-static int
-get_test_case_status(const struct test_case_selector *tcs)
-{
-	if (tcs->tcs_selected_count == 0)
-		return '-';
-	if (tcs->tcs_selected_count == tcs->tcs_descriptor->tc_count)
-		return '*';
-	return '?';
-}
-
-/*
- * Display a test case descriptor.
- */
-static void
-show_test_case(const struct test_case_selector *tcs)
-{
-	const struct test_case_descriptor *tcd;
-	int prefix_char;
-
-	prefix_char = get_test_case_status(tcs);
-	tcd = tcs->tcs_descriptor;
-
-	printf("C %c %s\n", prefix_char, tcd->tc_name);
-}
-
-static void
-show_test_function(const struct test_function_selector *tfs)
-{
-	const struct test_function_descriptor *tfd;
-	int selection_char;
-
-	selection_char = tfs->tfs_is_selected ? '*' : '-';
-	tfd = tfs->tfs_descriptor;
-
-	printf("  F %c %s\n", selection_char, tfd->tf_name);
-}
-
 static int
 show_listing(struct test_run *tr)
 {
-	const struct test_case_selector *tcs;
-	const struct test_function_selector *tfs;
+	const struct test_function_entry *tfe;
 
-	STAILQ_FOREACH(tcs, &tr->tr_test_cases, tcs_next) {
-		show_test_case(tcs);
-		STAILQ_FOREACH(tfs, &tcs->tcs_functions, tfs_next)
-			show_test_function(tfs);
+	STAILQ_FOREACH(tfe, &tr->tr_functions, tfe_next) {
+		const char selection_char = tfe->tfe_is_selected ? '+' : '-';
+		printf("%c %s\n", selection_char, tfe->tfe_canonical_name);
 	}
 
 	return (EXIT_SUCCESS);
@@ -512,7 +267,7 @@ static void
 show_usage(const char *argv0)
 {
 	(void) printf(
-		"Usage: %s [options]\n"
+		"Usage: %s [options] [test-selector...]\n"
 		"\n"
 		"Run compiled-in tests and report test status.\n"
 		"\n"
@@ -525,7 +280,6 @@ show_usage(const char *argv0)
 		"  -n NAME      Name the test run.\n"
 		"  -p PATH      Add PATH to the resource search path.\n"
 		"  -s STYLE     Use the specified test execution style.\n"
-		"  -t SELECTOR  Select tests to run.\n"
 		"  -v           Be more verbose.\n",
 		argv0);
 
@@ -538,15 +292,12 @@ main(int argc, char **argv)
 	struct test_run *tr;
 	int exit_code, option;
 	enum test_run_style run_style;
-	struct selection_option *selector;
-	struct selection_option_list selections =
-	    STAILQ_HEAD_INITIALIZER(selections);
 
 	if ((tr = test_driver_allocate_run()) == NULL)
 		err(EX_SOFTWARE, "Memory allocation failed.");
 
 	/* Parse arguments. */
-	while ((option = getopt(argc, argv, ":R:T:c:hln:p:s:t:v")) != -1) {
+	while ((option = getopt(argc, argv, ":R:T:c:hln:p:s:v")) != -1) {
 		switch (option) {
 		case 'R':	/* Test runtime directory. */
 			if (!test_driver_is_directory(optarg))
@@ -597,13 +348,6 @@ main(int argc, char **argv)
 			tr->tr_style = run_style;
 			tr->tr_commandline_flags |= TRF_EXECUTION_STYLE;
 			break;
-		case 't':	/* Test selection option. */
-			if ((selector = parse_selection_option(optarg)) == NULL)
-				errx(EX_USAGE, "option -%c: argument \"%s\" "
-				    "is not a valid selection pattern.",
-				    option, optarg);
-			STAILQ_INSERT_TAIL(&selections, selector, so_next);
-			break;
 		case 'v':
 			tr->tr_verbosity++;
 			break;
@@ -621,17 +365,28 @@ main(int argc, char **argv)
 		}
 	}
 
-	/*
-	 * Set unset fields of the test run descriptor to their
-	 * defaults.
-	 */
-	if (!test_driver_finish_run_initialization(tr, argv[0]))
+	if (!test_driver_finish_run_initialization(tr, argv[0], optind < argc))
 		err(EX_SOFTWARE, "cannot initialize test driver");
+	
+	/*
+	 * If there are selectors present, apply them in sequence to
+	 * the list of tests.
+	 */
+	for (int n = optind; n < argc; n++) {
+		const char *pattern = argv[n];
+		/* Deselection patterns start with a '^'. */
+		const bool is_deselection = (*pattern == '^');
+		if (is_deselection) pattern++;
+		if (*pattern == '\0')	/* Empty patterns are not allowed. */
+			errx(EX_USAGE, "empty test-selector specified.");
 
-	/* Choose tests and test cases to act upon. */
-	select_tests(tr, &selections);
-
-	assert(STAILQ_EMPTY(&selections));
+		struct test_function_entry *tfe = NULL;
+		STAILQ_FOREACH(tfe, &tr->tr_functions, tfe_next) {
+			if (fnmatch(pattern, tfe->tfe_canonical_name, 0))
+				continue; /* Name did not match. */
+			tfe->tfe_is_selected = !is_deselection;
+		}
+	}
 
 	if (tr->tr_verbosity > 0)
 		show_run_header(tr);

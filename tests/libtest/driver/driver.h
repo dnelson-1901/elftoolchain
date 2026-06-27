@@ -46,27 +46,23 @@
 /* The completion status for a test run */
 enum test_run_status {
 	/*
-	 * All test cases were successfully invoked, and all their contained
-	 * test purposes passed.
+	 * All selected test functions were successfully invoked and
+	 * passed.
 	 */
 	TR_PASS = 0,
 
 	/*
-	 * All test cases were successfully invoked but at least one test
-	 * function reported a failure.
+	 * At least one test function reported a non-PASS status, or
+	 * at least one selected test failed to execute either due to
+	 * an internal failure, or due to its test case setup/teardown
+	 * functions failing.
 	 */
 	TR_FAIL = 1,
-
-	/*
-	 * At least one test case reported an error during its setup or teardown
-	 * phase.
-	 */
-	TR_ERROR = 2
 };
 
 /*
  * The 'style' of the run determines the manner in which the test
- * executable reports test status.
+ * executable reports test status, and emits logs.
  */
 enum test_run_style {
 	/* Libtest semantics. */
@@ -83,33 +79,42 @@ enum test_run_style {
 };
 
 /*
- * Structures used for selecting tests.
- */
-struct test_function_selector {
-	const struct test_function_descriptor *tfs_descriptor;
-
-	STAILQ_ENTRY(test_function_selector) tfs_next;
-	int	tfs_is_selected;
-};
-
-STAILQ_HEAD(test_function_selector_list, test_function_selector);
-
-struct test_case_selector {
-	const struct test_case_descriptor	*tcs_descriptor;
-	STAILQ_ENTRY(test_case_selector)	tcs_next;
-	struct test_function_selector_list	tcs_functions;
-	int					tcs_selected_count;
-};
-
-/*
  * The action being requested of the test driver.
  */
 enum test_run_action {
 	TRA_EXECUTE,	/* Execute the selected tests. */
-	TRA_LIST,	/* Only list tests. */
+	TRA_LIST,	/* List selected tests. */
 };
 
-STAILQ_HEAD(test_case_selector_list, test_case_selector);
+/*
+ * A test function in the executable.
+ */
+struct test_function_entry {
+	STAILQ_ENTRY(test_function_entry) tfe_next;
+	
+	/*
+	 * The function descriptor in the test object.
+	 */
+	const struct test_function_descriptor *tfe_descriptor;
+
+	/*
+	 * The test case descriptor for this function.
+	 */
+	const struct test_case_descriptor *tfe_test_case;
+	
+	/*
+	 * The canonical name for the function.  Test selectors match
+	 * against this name.
+	 */
+	char *tfe_canonical_name;
+
+	/*
+	 * The result of the application of test selectors.
+	 */
+	bool	tfe_is_selected;
+};
+
+STAILQ_HEAD(test_function_list, test_function_entry);
 
 /*
  * Runtime directories to look up data files.
@@ -185,8 +190,10 @@ struct test_run {
 	 */
 	struct test_search_path_list tr_search_path;
 
-	/* All tests selected for this run. */
-	struct	test_case_selector_list	tr_test_cases;
+	/*
+	 * All tests in the test executable.
+	 */
+	struct test_function_list tr_functions;
 };
 
 #ifdef	__cplusplus
@@ -197,8 +204,8 @@ bool		test_driver_add_search_path(struct test_run *,
     const char *search_path);
 void		test_driver_free_run(struct test_run *);
 bool		test_driver_is_directory(const char *);
-bool		test_driver_finish_run_initialization(struct test_run *,
-    const char *argv0);
+bool		test_driver_finish_run_initialization(struct test_run *_tr,
+    const char *_argv0, bool _has_selectors);
 #ifdef	__cplusplus
 }
 #endif

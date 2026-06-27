@@ -42,6 +42,7 @@
 #include <sysexits.h>
 
 #include "driver.h"
+#include "test_case.h"
 
 #if defined(ELFTC_VCSID)
 ELFTC_VCSID("$Id$");
@@ -94,9 +95,9 @@ test_driver_allocate_run(void)
 		return (NULL);
 	tr->tr_action = TRA_EXECUTE;
 	tr->tr_style = TRS_LIBTEST;
-	STAILQ_INIT(&tr->tr_test_cases);
 	STAILQ_INIT(&tr->tr_search_path);
-
+	STAILQ_INIT(&tr->tr_functions);
+	
 	return (tr);
 }
 
@@ -108,10 +109,6 @@ test_driver_allocate_run(void)
 void
 test_driver_free_run(struct test_run *tr)
 {
-	struct test_search_path_entry *path_entry;
-	struct test_case_selector *test_case_entry;
-	struct test_function_selector *function_entry;
-
 	if (tr->tr_runtime_base_directory)
 		free(tr->tr_runtime_base_directory);
 	if (tr->tr_name)
@@ -121,27 +118,19 @@ test_driver_free_run(struct test_run *tr)
 
 	/* Free the search path list. */
 	while (!STAILQ_EMPTY(&tr->tr_search_path)) {
-		path_entry = STAILQ_FIRST(&tr->tr_search_path);
+		struct test_search_path_entry *tsp =
+		    STAILQ_FIRST(&tr->tr_search_path);
 		STAILQ_REMOVE_HEAD(&tr->tr_search_path, tsp_next);
-		free(path_entry);
+		free(tsp);
 	}
 
-	/* Free the test selector list. */
-	while (!STAILQ_EMPTY(&tr->tr_test_cases)) {
-		test_case_entry = STAILQ_FIRST(&tr->tr_test_cases);
-		STAILQ_REMOVE_HEAD(&tr->tr_test_cases, tcs_next);
-
-		/* Free the linked test functions. */
-		while (!STAILQ_EMPTY(&test_case_entry->tcs_functions)) {
-			function_entry =
-			    STAILQ_FIRST(&test_case_entry->tcs_functions);
-			STAILQ_REMOVE_HEAD(&test_case_entry->tcs_functions,
-			    tfs_next);
-
-			free(function_entry);
-		}
-
-		free(test_case_entry);
+	/* Free the test function list. */
+	while (!STAILQ_EMPTY(&tr->tr_functions)) {
+		struct test_function_entry *tfe =
+		    STAILQ_FIRST(&tr->tr_functions);
+		STAILQ_REMOVE_HEAD(&tr->tr_functions, tfe_next);
+		free(tfe->tfe_canonical_name);
+		free(tfe);
 	}
 
 	free(tr);
@@ -184,7 +173,8 @@ test_driver_add_search_paths(struct test_run *tr)
  * Populate unset fields of a struct test_run with defaults.
  */
 bool
-test_driver_finish_run_initialization(struct test_run *tr, const char *argv0)
+test_driver_finish_run_initialization(
+	struct test_run *tr, const char *argv0, bool has_selectors)
 {
 	struct timeval tv;
 	char *argv0_copy;
@@ -223,7 +213,50 @@ test_driver_finish_run_initialization(struct test_run *tr, const char *argv0)
 	}
 
 	test_driver_add_search_paths(tr);
-	
+
+	/*
+	 * Prepare the list of test functions in the executable.
+	 */
+	for (int n = 0; n < test_case_count; n++) {
+		const struct test_case_descriptor *tcd = &test_cases[n];
+		const size_t tc_namelen = strlen(tcd->tc_name);
+
+		for (int m = 0; m < tcd->tc_count; m++) {
+			struct test_function_entry *tfe =
+			    calloc(1, sizeof(*tfe));
+			if (tfe == NULL)
+				err(EX_OSERR, "cannot allocate function entry");
+			STAILQ_INSERT_TAIL(&tr->tr_functions, tfe, tfe_next);
+			
+			/*
+			 * Construct the canonical name for the test function.
+			 *
+			 * The canonical name for the function
+			 * consists of the name of its test case, a
+			 * colon and its own name: i.e., TCNAME + ":"
+			 * + TFNAME.
+			 */
+			const struct test_function_descriptor *tfd =
+			    &tcd->tc_tests[m];
+			const size_t canonical_name_size = tc_namelen +
+			    /* ':' */ 1 + strlen(tfd->tf_name) + 1 /* '\0' */;
+			tfe->tfe_canonical_name = malloc(canonical_name_size);
+			if (tfe->tfe_canonical_name == NULL)
+				err(EX_OSERR, "memory allocation failed.");
+			const size_t nbytes = snprintf(tfe->tfe_canonical_name,
+			    canonical_name_size, "%s:%s", tcd->tc_name,
+			    tfd->tf_name);
+			assert(nbytes < canonical_name_size);
+
+			/*
+			 * Fill in the remaining members of the entry.
+			 */
+			tfe->tfe_descriptor = tfd;
+			tfe->tfe_test_case = tcd;
+			tfe->tfe_is_selected = !has_selectors;
+		}
+	}
+
 	return (true);
 }
 
@@ -239,3 +272,4 @@ test_driver_is_directory(const char *path)
 		return false;
 	return S_ISDIR(sb.st_mode);
 }
+
