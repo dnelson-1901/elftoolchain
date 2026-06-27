@@ -253,8 +253,8 @@ show_listing(struct test_run *tr)
 	const struct test_function_entry *tfe;
 
 	STAILQ_FOREACH(tfe, &tr->tr_functions, tfe_next) {
-		const char selection_char = tfe->tfe_is_selected ? '+' : '-';
-		printf("%c %s\n", selection_char, tfe->tfe_canonical_name);
+		if (tfe->tfe_is_selected)
+			printf("%s\n", tfe->tfe_canonical_name);
 	}
 
 	return (EXIT_SUCCESS);
@@ -368,6 +368,9 @@ main(int argc, char **argv)
 	if (!test_driver_finish_run_initialization(tr, argv[0], optind < argc))
 		err(EX_SOFTWARE, "cannot initialize test driver");
 	
+	if (tr->tr_verbosity > 0)
+		show_run_header(tr);
+
 	/*
 	 * If there are selectors present, apply them in sequence to
 	 * the list of tests.
@@ -380,16 +383,24 @@ main(int argc, char **argv)
 		if (*pattern == '\0')	/* Empty patterns are not allowed. */
 			errx(EX_USAGE, "empty test-selector specified.");
 
+		if (tr->tr_verbosity > 0)
+			printf("I . %-24s \"%s\"\n", "test-selector", argv[n]);
+
 		struct test_function_entry *tfe = NULL;
 		STAILQ_FOREACH(tfe, &tr->tr_functions, tfe_next) {
 			if (fnmatch(pattern, tfe->tfe_canonical_name, 0))
 				continue; /* Name did not match. */
+			if (tfe->tfe_is_selected == !is_deselection)
+				continue; /* No change to selection status. */
+			if (tr->tr_verbosity > 0) {
+				printf("I . %-24s %c %s\n",
+				    "test-selection-state",
+				    is_deselection ? '-' : '+',
+				    tfe->tfe_canonical_name);
+			}
 			tfe->tfe_is_selected = !is_deselection;
 		}
 	}
-
-	if (tr->tr_verbosity > 0)
-		show_run_header(tr);
 
 	/* Perform the requested action. */
 	switch (tr->tr_action) {
