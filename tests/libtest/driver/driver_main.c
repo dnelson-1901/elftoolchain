@@ -385,9 +385,6 @@ show_run_header(const struct test_run *tr)
 	time_t start_time;
 	struct test_search_path_entry *path_entry;
 
-	if (tr->tr_verbosity == 0)
-		return;
-
 	INFOLINE("test-run-name", tr->tr_commandline_flags & TRF_NAME,
 	    "%s\n", tr->tr_name);
 
@@ -437,9 +434,6 @@ static void
 show_run_trailer(const struct test_run *tr)
 {
 	time_t end_time;
-
-	if (tr->tr_verbosity == 0)
-		return;
 
 	if (tr->tr_action == TRA_EXECUTE) {
 		end_time = time(NULL);
@@ -639,7 +633,8 @@ main(int argc, char **argv)
 
 	assert(STAILQ_EMPTY(&selections));
 
-	show_run_header(tr);
+	if (tr->tr_verbosity > 0)
+		show_run_header(tr);
 
 	/* Perform the requested action. */
 	switch (tr->tr_action) {
@@ -653,7 +648,8 @@ main(int argc, char **argv)
 		exit_code = EX_UNAVAILABLE;
 	}
 
-	show_run_trailer(tr);
+	if (tr->tr_verbosity > 0)
+		show_run_trailer(tr);
 
 	test_driver_free_run(tr);
 
