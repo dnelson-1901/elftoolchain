@@ -92,8 +92,8 @@ test_driver_allocate_run(void)
 
 	if ((tr = calloc(1, sizeof(struct test_run))) == NULL)
 		return (NULL);
-	tr->tr_action = TEST_RUN_EXECUTE;
-	tr->tr_style = TR_STYLE_LIBTEST;
+	tr->tr_action = TRA_EXECUTE;
+	tr->tr_style = TRS_LIBTEST;
 	STAILQ_INIT(&tr->tr_test_cases);
 	STAILQ_INIT(&tr->tr_search_path);
 

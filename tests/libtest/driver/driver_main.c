@@ -145,9 +145,9 @@ struct style_entry {
 };
 
 static const struct style_entry known_styles[] = {
-	{ TR_STYLE_LIBTEST, "libtest" },
-	{ TR_STYLE_TAP, "tap" },
-	{ TR_STYLE_ATF, "atf" }
+	{ TRS_LIBTEST, "libtest" },
+	{ TRS_TAP, "tap" },
+	{ TRS_ATF, "atf" }
 };
 
 /*
@@ -426,7 +426,7 @@ show_run_header(const struct test_run *tr)
 	printf("I %% %-*s %d\n", FIELD_NAME_WIDTH, "test-case-count",
 	    test_case_count);
 
-	if (tr->tr_action == TEST_RUN_EXECUTE) {
+	if (tr->tr_action == TRA_EXECUTE) {
 		start_time = time(NULL);
 		printf("I %% %-*s %s", FIELD_NAME_WIDTH,
 		    "test-run-start-time", ctime(&start_time));
@@ -441,7 +441,7 @@ show_run_trailer(const struct test_run *tr)
 	if (tr->tr_verbosity == 0)
 		return;
 
-	if (tr->tr_action == TEST_RUN_EXECUTE) {
+	if (tr->tr_action == TRA_EXECUTE) {
 		end_time = time(NULL);
 		printf("I %% %-*s %s", FIELD_NAME_WIDTH, "test-run-end-time",
 		    asctime(localtime(&end_time)));
@@ -580,7 +580,7 @@ main(int argc, char **argv)
 			show_usage(argv[0]);
 			break;
 		case 'l':	/* List matching tests. */
-			tr->tr_action = TEST_RUN_LIST;
+			tr->tr_action = TRA_LIST;
 			break;
 		case 'n':	/* Test run name. */
 			if (tr->tr_name)
@@ -643,11 +643,11 @@ main(int argc, char **argv)
 
 	/* Perform the requested action. */
 	switch (tr->tr_action) {
-	case TEST_RUN_LIST:
+	case TRA_LIST:
 		exit_code = show_listing(tr);
 		break;
 
-	case TEST_RUN_EXECUTE:
+	case TRA_EXECUTE:
 	default:
 		/* Not yet implemented. */
 		exit_code = EX_UNAVAILABLE;

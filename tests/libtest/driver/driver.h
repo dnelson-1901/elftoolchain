@@ -49,19 +49,19 @@ enum test_run_status {
 	 * All test cases were successfully invoked, and all their contained
 	 * test purposes passed.
 	 */
-	TR_STATUS_PASS = 0,
+	TR_PASS = 0,
 
 	/*
 	 * All test cases were successfully invoked but at least one test
 	 * function reported a failure.
 	 */
-	TR_STATUS_FAIL = 1,
+	TR_FAIL = 1,
 
 	/*
 	 * At least one test case reported an error during its setup or teardown
 	 * phase.
 	 */
-	TR_STATUS_ERROR = 2
+	TR_ERROR = 2
 };
 
 /*
@@ -70,16 +70,16 @@ enum test_run_status {
  */
 enum test_run_style {
 	/* Libtest semantics. */
-	TR_STYLE_LIBTEST,
+	TRS_LIBTEST,
 
 	/*
 	 * Be compatible with the Test Anything Protocol
 	 * (http://testanything.org/).
 	 */
-	TR_STYLE_TAP,
+	TRS_TAP,
 
 	/* Be compatible with NetBSD ATF(9). */
-	TR_STYLE_ATF
+	TRS_ATF
 };
 
 /*
@@ -105,8 +105,8 @@ struct test_case_selector {
  * The action being requested of the test driver.
  */
 enum test_run_action {
-	TEST_RUN_EXECUTE,	/* Execute the selected tests. */
-	TEST_RUN_LIST,		/* Only list tests. */
+	TRA_EXECUTE,	/* Execute the selected tests. */
+	TRA_LIST,	/* Only list tests. */
 };
 
 STAILQ_HEAD(test_case_selector_list, test_case_selector);
