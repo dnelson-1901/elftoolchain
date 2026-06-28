@@ -45,6 +45,9 @@ struct test_case_descriptor {
 	const char	*tc_name;	/* Test case name. */
 	const struct test_function_descriptor *tc_tests; /* Contained tests. */
 	const int	tc_count;	/* The number of tests. */
+	/* Setup and teardown functions. */
+	test_case_setup_function_t	*tc_setup;
+	test_case_teardown_function_t	*tc_teardown;
 };
 
 /* All test cases linked into the test binary. */
