@@ -99,12 +99,19 @@ if ! nm ${*} | sort -k 3 | \
 		return DEFAULT
 	}
 	function print_test_case_record(tc_name) {
+		if (!test_case_setup[tc_name])
+			test_case_setup[tc_name] = "NULL"
+		if (!test_case_teardown[tc_name])
+			test_case_teardown[tc_name] = "NULL"
 		printf("\t{\n")
 		printf("\t\t.tc_name = \"%s\",\n", tc_name)
 		tf_name = "test_functions_" tc_name
 		printf("\t\t.tc_tests = %s,\n", tf_name)
 		printf("\t\t.tc_count = sizeof (%s) / sizeof (%s[0]),\n",
 		    tf_name, tf_name)
+		printf("\t\t.tc_setup = %s,\n", test_case_setup[tc_name])
+		printf("\t\t.tc_teardown = %s,\n",
+		    test_case_teardown[tc_name]);
 		printf("\t},\n")
 	}
 	function delete_test_functions(tc_name) {
@@ -143,11 +150,13 @@ if ! nm ${*} | sort -k 3 | \
 		tc_name = suffix($3, prefix_tc_setup)
 		test_cases[tc_name] = 1
 		test_case_setup[tc_name] = $3
+		printf("test_case_setup_function_t\t%s;\n", $3);
 	}
 	$2 == "T" && $3 ~ "^" prefix_tc_teardown {
 		tc_name = suffix($3, prefix_tc_teardown)
 		test_cases[tc_name] = 1
 		test_case_teardown[tc_name] = $3
+		printf("test_case_teardown_function_t\t%s;\n", $3);
 	}
 	$2 == "T" && $3 ~ "^" prefix_tf {
 		printf("test_function_t %s;\n", $3)
