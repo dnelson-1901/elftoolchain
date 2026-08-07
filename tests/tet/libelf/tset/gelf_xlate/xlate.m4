@@ -535,6 +535,8 @@ _tpNullArgs(const char *fn, Elf *e)
 {
 	Elf_Data ed;
 
+	(void) memset(&ed, 0, sizeof(ed));
+
 	TP_ANNOUNCE("gelf_xlatetof(%s)/gelf_xlatetom(%s)"
 	    " with NULL arguments fails with ELF_E_ARGUMENT.",
 	    fn, fn);
@@ -579,6 +581,8 @@ _tpBadType(const char *fn, Elf *e)
 	Elf_Data ed, es;
 	char buf[1024];
 
+	(void) memset(&es, 0, sizeof(es));
+
 	TP_ANNOUNCE("gelf_xlatetof(%s)/"
 	    "gelf_xlatetom(%s) with an out of range type "
 	    "fails with ELF_E_DATA.", fn, fn);
@@ -620,6 +624,8 @@ static void
 _tpBadEncoding(const char *fn, Elf *e)
 {
 	Elf_Data ed, es;
+
+	(void) memset(&es, 0, sizeof(es));
 
 	TP_ANNOUNCE("gelf_xlatetof/"
 	    "gelf_xlatetom(%s)(*,*,BADENCODING) "
