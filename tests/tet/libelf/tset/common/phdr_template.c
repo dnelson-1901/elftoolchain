@@ -263,10 +263,11 @@ tcElf_tpCorruptEhdr(void)
 
 	result = TET_PASS;
 
-	if ((ph = TS_ICFUNC(e)) != NULL ||
-	    (err = (elf_errno() != ELF_E_HEADER))) {
-		tet_printf("fail: \"%s\" (ph %p, error %d)", fn, (void *) ph,
-		    err);
+	if ((ph = TS_ICFUNC(e)) != NULL) {
+		tet_printf("fail: \"%s\" ph=%p", fn, (void *) ph);
+		result = TET_FAIL;
+	} else if ((err = (elf_errno() != ELF_E_HEADER))) {
+		tet_printf("fail: \"%s\" error %d", fn, err);
 		result = TET_FAIL;
 	}
 	(void) elf_end(e);
