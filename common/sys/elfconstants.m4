@@ -1415,6 +1415,10 @@ _(EM_AIECTRLCODE,      269U,
 	`AMD/Xilinx AIEngine ctrlcode')
 _(EM_PPU,              270U,
 	`T-Head PPU')
+_(EM_LST,              271U,
+	`Lisuan Technology Co., Ltd.')
+_(EM_CHILI,            272U,
+	`OpenAI Chili architecture')
 __(`	', ` Historical and experimental values. ')
 _(EM_ALPHA_HISTORICAL, 0x9026U,
 	`Prior value used by GNU and NetBSD')
