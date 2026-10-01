@@ -271,6 +271,8 @@ static const char *gABI_names[] = {
 	[268]	= "EM_SW64",
 	[269]	= "EM_AIECTRLCODE",
 	[270]	= "EM_PPU",
+	[271]   = "EM_LST",
+	[272]   = "EM_CHILI",
 };
 
 /*
